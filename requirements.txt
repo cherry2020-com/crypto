@@ -6,3 +6,4 @@ PyYAML
 aiohttp_jinja2
 aiopg
 aiomysql
+aiohttp_debugtoolbar

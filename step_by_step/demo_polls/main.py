@@ -13,6 +13,8 @@ import aiohttp_jinja2
 import jinja2
 from aiohttp import web
 import sqlalchemy as sa
+import aiohttp_debugtoolbar
+from aiohttp_debugtoolbar import toolbar_middleware_factory
 
 from settings import PROJECT_ROOT
 from utils import load_config
@@ -25,13 +27,14 @@ from routes import setup_routes
 def init():
     loop = asyncio.get_event_loop()
     # setup application and extensions
-    app = web.Application(loop=loop)
+    app = web.Application(loop=loop, middlewares=[toolbar_middleware_factory])
+    aiohttp_debugtoolbar.setup(app)
     conf = load_config(str(pathlib.Path(PROJECT_ROOT) / 'config' / 'polls.yaml'))
     app['config'] = conf
     create_db(app)
     # setup Jinja2 template renderer
-    # aiohttp_jinja2.setup(
-    #     app, loader=jinja2.PackageLoader('step_by_step.demo_polls', 'templates'))
+    aiohttp_jinja2.setup(
+        app, loader=jinja2.PackageLoader('step_by_step.demo_polls', 'templates'))
     # create connection to the database
     app.on_startup.append(init_db)
     # shutdown db connection on exit

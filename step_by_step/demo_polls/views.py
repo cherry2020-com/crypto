@@ -17,3 +17,10 @@ async def hello(request):
     return web.Response(
         text="Hello [{}], world\n[{}]".format(name, reverse_url))
 
+
+class MyView(web.View):
+    async def get(self):
+        return await get_resp(self.request)
+
+    async def post(self):
+        return await post_resp(self.request)
