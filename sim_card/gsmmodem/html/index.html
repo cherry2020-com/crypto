@@ -1,0 +1,267 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to python-gsmmodem’s documentation! &#8212; python-gsmmodem 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-python-gsmmodem-s-documentation">
+<h1>Welcome to python-gsmmodem’s documentation!<a class="headerlink" href="#welcome-to-python-gsmmodem-s-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="python-gsmmodem">
+<h1>python-gsmmodem<a class="headerlink" href="#python-gsmmodem" title="Permalink to this headline">¶</a></h1>
+<p><em>GSM modem module for Python</em></p>
+<p>python-gsmmodem is a module that allows easy control of a GSM modem attached
+to the system. It also includes a couple of useful commandline utilities for
+interacting with a GSM modem.</p>
+<p>Its features include:</p>
+<ul class="simple">
+<li>simple methods for sending SMS messages, checking signal level, etc</li>
+<li>easy-to-use API for starting and responding to USSD sessions and making voice
+calls</li>
+<li>handling incoming phone calls and received SMS messages via callback methods</li>
+<li>support for SMS PDU and text mode</li>
+<li>support for tracking SMS status reports</li>
+<li>wraps AT command errors into Python exceptions by default</li>
+<li>modular design; you easily issue your own AT commands to the modem (with
+error  checking), or read/write directly from/to the modem if you prefer</li>
+<li>comprehensive test suite</li>
+</ul>
+<p>Bundled utilities:</p>
+<ul class="simple">
+<li><strong>GSMTerm</strong>: an easy-to-use serial terminal for communicating with an
+attached GSM modem. It features command completion, built-in help for many AT
+commands, history, context-aware prompt, etc.</li>
+<li><strong>sendsms.py</strong>: a simple command line script to send SMS messages</li>
+<li><strong>identify-modem.py</strong>: simple utility to identify attached modem. Can also be
+used to provide debug information used for development of python-gsmmodem.</li>
+</ul>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Python 2.6 or later</li>
+<li>pyserial</li>
+</ul>
+</div>
+<div class="section" id="how-to-install-this-package">
+<h2>How to install this package<a class="headerlink" href="#how-to-install-this-package" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways to install <code class="docutils literal"><span class="pre">python-gsmmodem</span></code>:</p>
+<div class="section" id="automatic-installation">
+<h3>Automatic installation<a class="headerlink" href="#automatic-installation" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">gsmmodem</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://www.pip-installer.org">pip</a> will automatically download and install
+all dependencies, as required. You can also utilise <code class="docutils literal"><span class="pre">easy_install</span></code> in the
+same manner as using <code class="docutils literal"><span class="pre">pip</span></code> above.</p>
+<p>If you are utilising <code class="docutils literal"><span class="pre">python-gsmmodem</span></code> as part of another project,
+add it to your <code class="docutils literal"><span class="pre">install_requires</span></code> section of your <code class="docutils literal"><span class="pre">setup.py</span></code> file and
+upon your project’s installation, it will be pulled in automatically.</p>
+</div>
+<div class="section" id="manual-installation">
+<h3>Manual installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h3>
+<p>Download and extract the <code class="docutils literal"><span class="pre">python-gsmmodem</span></code> archive from <a class="reference external" href="https://pypi.python.org/pypi/python-gsmmodem">PyPI</a> for the current release
+version, or clone from <a class="reference external" href="https://github.com/faucamp/python-gsmmodem">GitHub</a>.
+Next, do this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal"><span class="pre">python-gsmmodem</span></code> relies on <code class="docutils literal"><span class="pre">pyserial</span></code> for serial communications:
+<a class="reference external" href="http://pyserial.sourceforge.net">http://pyserial.sourceforge.net</a></p>
+</div>
+</div>
+<div class="section" id="testing-the-package">
+<h2>Testing the package<a class="headerlink" href="#testing-the-package" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://travis-ci.org/faucamp/python-gsmmodem"><img alt="Build Status" src="https://travis-ci.org/faucamp/python-gsmmodem.png?branch=master" /></a> <a class="reference external" href="https://coveralls.io/r/faucamp/python-gsmmodem"><img alt="Coverage Status" src="https://coveralls.io/repos/faucamp/python-gsmmodem/badge.png?branch=master" /></a></p>
+<p>To run all unit tests, do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">test</span>
+</pre></div>
+</div>
+<p>Unit test code coverage information may be generated by using <a class="reference external" href="https://pypi.python.org/pypi/coverage/">coverage</a>. You can execute it directly from
+setup.py by doing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">coverage</span>
+</pre></div>
+</div>
+<p>This will run all unit tests and report on code coverage statistics.</p>
+</div>
+<div class="section" id="building-documentation">
+<h2>Building documentation<a class="headerlink" href="#building-documentation" title="Permalink to this headline">¶</a></h2>
+<p>This package contains <a class="reference external" href="http://sphinx-doc.org">Sphinx</a>-based documentation.
+To manually build or test the documentation locally, do the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">faucamp</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">gsmmodem</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">python</span><span class="o">-</span><span class="n">gsmmodem</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">.</span><span class="p">[</span><span class="n">doc</span><span class="p">]</span>
+<span class="n">cd</span> <span class="n">doc</span>
+<span class="n">make</span> <span class="n">html</span>
+</pre></div>
+</div>
+<p>For true isolation, you may wish to run the above commands within a
+<a class="reference external" href="http://www.virtualenv.org/">virtualenv</a>, which will help you manage
+this development installation.</p>
+</div>
+<div class="section" id="license-information">
+<h2>License information<a class="headerlink" href="#license-information" title="Permalink to this headline">¶</a></h2>
+<p>Copyright (C) 2013 Francois Aucamp
+See AUTHORS for all authors and contact information.</p>
+<dl class="docutils">
+<dt>License: GNU Lesser General Public License, version 3 or later; see COPYING</dt>
+<dd>included in this archive for details.</dd>
+</dl>
+<span class="target" id="module-gsmmodem"></span><p>Package that allows easy control of an attached GSM modem</p>
+<p>The main class for controlling a modem is GsmModem, which can be imported
+directly from this module.</p>
+<p>Other important and useful classes are:
+gsmmodem.modem.IncomingCall: wraps an incoming call and passed to the incoming call hanndler callback function
+gsmmodem.modem.ReceivedSms: wraps a received SMS message and passed to the sms received hanndler callback function
+gsmmodem.modem.SentSms: returned when sending SMS messages; used for tracking the status of the SMS message</p>
+<p>All python-gsmmodem-specific exceptions are defined in the gsmmodem.modem.exceptions package.</p>
+<p>&#64;author: Francois Aucamp &lt;<a class="reference external" href="mailto:francois&#46;aucamp&#37;&#52;&#48;gmail&#46;com">francois<span>&#46;</span>aucamp<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;
+&#64;license: LGPLv3+</p>
+</div>
+</div>
+<div class="section" id="examples-and-api">
+<h1>Examples and API<a class="headerlink" href="#examples-and-api" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#dial-callback">Dial Callback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#dial-polling">Dial Polling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#incoming-call-handling">Incoming Call Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#sms-handling">SMS Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#ussd-sessions">USSD Sessions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-gsmmodem.modem">GSM Modem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-gsmmodem.serial_comms">Serial Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-gsmmodem.pdu">PDU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-gsmmodem.util">Utilities</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to python-gsmmodem’s documentation!</a></li>
+<li><a class="reference internal" href="#python-gsmmodem">python-gsmmodem</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#how-to-install-this-package">How to install this package</a><ul>
+<li><a class="reference internal" href="#automatic-installation">Automatic installation</a></li>
+<li><a class="reference internal" href="#manual-installation">Manual installation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#testing-the-package">Testing the package</a></li>
+<li><a class="reference internal" href="#building-documentation">Building documentation</a></li>
+<li><a class="reference internal" href="#license-information">License information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples-and-api">Examples and API</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">Examples</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>

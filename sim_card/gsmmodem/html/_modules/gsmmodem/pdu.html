@@ -1,0 +1,912 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gsmmodem.pdu &#8212; python-gsmmodem 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">python-gsmmodem 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gsmmodem.pdu</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot; SMS PDU encoding methods &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">codecs</span><span class="o">,</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">tzinfo</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">EncodingError</span>
+
+<span class="c1"># For Python 3 support</span>
+<span class="n">PYTHON_VERSION</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">PYTHON_VERSION</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">MAX_INT</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span>
+    <span class="n">dictItemsIter</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">items</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+    <span class="n">unichr</span> <span class="o">=</span> <span class="nb">chr</span>
+    <span class="n">toByteArray</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;hex_codec&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bytes</span> <span class="k">else</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;ascii&#39;</span><span class="p">),</span> <span class="s1">&#39;hex_codec&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="o">==</span> <span class="nb">str</span> <span class="k">else</span> <span class="n">x</span>
+    <span class="n">rawStrToByteArray</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;latin-1&#39;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span> <span class="c1">#pragma: no cover</span>
+    <span class="n">MAX_INT</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxint</span>
+    <span class="n">dictItemsIter</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="n">iteritems</span>
+    <span class="n">toByteArray</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">unicode</span><span class="p">)</span> <span class="k">else</span> <span class="n">x</span>
+    <span class="n">rawStrToByteArray</span> <span class="o">=</span> <span class="nb">bytearray</span>
+
+<span class="c1"># Tables can be found at: http://en.wikipedia.org/wiki/GSM_03.38#GSM_7_bit_default_alphabet_and_extension_table_of_3GPP_TS_23.038_.2F_GSM_03.38</span>
+<span class="n">GSM7_BASIC</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;@£$¥èéùìòÇ</span><span class="se">\n</span><span class="s1">Øø</span><span class="se">\r</span><span class="s1">ÅåΔ_ΦΓΛΩΠΨΣΘΞ</span><span class="se">\x1b</span><span class="s1">ÆæßÉ !</span><span class="se">\&quot;</span><span class="s1">#¤%&amp;</span><span class="se">\&#39;</span><span class="s1">()*+,-./0123456789:;&lt;=&gt;?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ`¿abcdefghijklmnopqrstuvwxyzäöñüà&#39;</span><span class="p">)</span>
+<span class="n">GSM7_EXTENDED</span> <span class="o">=</span> <span class="p">{</span><span class="nb">chr</span><span class="p">(</span><span class="mh">0xFF</span><span class="p">):</span> <span class="mh">0x0A</span><span class="p">,</span>
+                 <span class="c1">#CR2: chr(0x0D),</span>
+                 <span class="s1">&#39;^&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x14</span><span class="p">),</span>
+                 <span class="c1">#SS2: chr(0x1B),</span>
+                 <span class="s1">&#39;{&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x28</span><span class="p">),</span>
+                 <span class="s1">&#39;}&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x29</span><span class="p">),</span>
+                 <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">:</span> <span class="nb">chr</span><span class="p">(</span><span class="mh">0x2F</span><span class="p">),</span>
+                 <span class="s1">&#39;[&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x3C</span><span class="p">),</span>
+                 <span class="s1">&#39;~&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x3D</span><span class="p">),</span>
+                 <span class="s1">&#39;]&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x3E</span><span class="p">),</span>
+                 <span class="s1">&#39;|&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x40</span><span class="p">),</span>
+                 <span class="s1">&#39;€&#39;</span><span class="p">:</span>  <span class="nb">chr</span><span class="p">(</span><span class="mh">0x65</span><span class="p">)}</span>
+<span class="c1"># Maximum message sizes for each data coding</span>
+<span class="n">MAX_MESSAGE_LENGTH</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0x00</span><span class="p">:</span> <span class="mi">160</span><span class="p">,</span> <span class="c1"># GSM-7</span>
+                      <span class="mh">0x04</span><span class="p">:</span> <span class="mi">140</span><span class="p">,</span> <span class="c1"># 8-bit</span>
+                      <span class="mh">0x08</span><span class="p">:</span> <span class="mi">70</span><span class="p">}</span>  <span class="c1"># UCS2</span>
+
+<div class="viewcode-block" id="SmsPduTzInfo"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.SmsPduTzInfo">[docs]</a><span class="k">class</span> <span class="nc">SmsPduTzInfo</span><span class="p">(</span><span class="n">tzinfo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Simple implementation of datetime.tzinfo for handling timestamp GMT offsets specified in SMS PDUs &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pduOffsetStr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        :param pduOffset: 2 semi-octet timezone offset as specified by PDU (see GSM 03.40 spec)</span>
+<span class="sd">        :type pduOffset: str </span>
+<span class="sd">        </span>
+<span class="sd">        Note: pduOffsetStr is optional in this constructor due to the special requirement for pickling</span>
+<span class="sd">        mentioned in the Python docs. It should, however, be used (or otherwise pduOffsetStr must be</span>
+<span class="sd">        manually set)</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">pduOffsetStr</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setPduOffsetStr</span><span class="p">(</span><span class="n">pduOffsetStr</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_setPduOffsetStr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pduOffsetStr</span><span class="p">):</span>
+        <span class="c1"># See if the timezone difference is positive/negative by checking MSB of first semi-octet</span>
+        <span class="n">tzHexVal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pduOffsetStr</span><span class="p">,</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tzHexVal</span> <span class="o">&amp;</span> <span class="mh">0x80</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># positive</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pduOffsetStr</span><span class="p">)</span> <span class="o">*</span> <span class="mi">15</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># negative</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:0&gt;2X}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tzHexVal</span> <span class="o">&amp;</span> <span class="mh">0x7F</span><span class="p">))</span> <span class="o">*</span> <span class="o">-</span><span class="mi">15</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="nf">utcoffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_offset</span>
+    
+<div class="viewcode-block" id="SmsPduTzInfo.dst"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.SmsPduTzInfo.dst">[docs]</a>    <span class="k">def</span> <span class="nf">dst</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; We do not have enough info in the SMS PDU to implement daylight savings time &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="InformationElement"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.InformationElement">[docs]</a><span class="k">class</span> <span class="nc">InformationElement</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; User Data Header (UDH) Information Element (IE) implementation</span>
+<span class="sd">     </span>
+<span class="sd">    This represents a single field (&quot;information element&quot;) in the PDU&#39;s</span>
+<span class="sd">    User Data Header. The UDH itself contains one or more of these</span>
+<span class="sd">    information elements.</span>
+<span class="sd">    </span>
+<span class="sd">    If the IEI (IE identifier) is recognized, the class will automatically</span>
+<span class="sd">    specialize into one of the subclasses of InformationElement, </span>
+<span class="sd">    e.g. Concatenation or PortAddress, allowing the user to easily</span>
+<span class="sd">    access the specific (and useful) attributes of these special cases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span> <span class="c1">#iei, ieLen, ieData):</span>
+        <span class="sd">&quot;&quot;&quot; Causes a new InformationElement class, or subclass</span>
+<span class="sd">        thereof, to be created. If the IEI is recognized, a specific</span>
+<span class="sd">        subclass of InformationElement is returned &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">targetClass</span> <span class="o">=</span> <span class="n">IEI_CLASS_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;iei&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">targetClass</span> <span class="o">=</span> <span class="n">IEI_CLASS_MAP</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;iei&#39;</span><span class="p">],</span> <span class="bp">cls</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">InformationElement</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">InformationElement</span><span class="p">,</span> <span class="n">targetClass</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">targetClass</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iei</span><span class="p">,</span> <span class="n">ieLen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ieData</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">iei</span> <span class="c1"># IEI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataLength</span> <span class="o">=</span> <span class="n">ieLen</span> <span class="c1"># IE Length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ieData</span> <span class="ow">or</span> <span class="p">[]</span> <span class="c1"># raw IE data</span>
+        
+<div class="viewcode-block" id="InformationElement.decode"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.InformationElement.decode">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">byteIter</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Decodes a single IE at the current position in the specified</span>
+<span class="sd">        byte iterator </span>
+<span class="sd">        </span>
+<span class="sd">        :return: An InformationElement (or subclass) instance for the decoded IE</span>
+<span class="sd">        :rtype: InformationElement, or subclass thereof</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">iei</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+        <span class="n">ieLen</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+        <span class="n">ieData</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">ieLen</span><span class="p">):</span>
+            <span class="n">ieData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">InformationElement</span><span class="p">(</span><span class="n">iei</span><span class="p">,</span> <span class="n">ieLen</span><span class="p">,</span> <span class="n">ieData</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="InformationElement.encode"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.InformationElement.encode">[docs]</a>    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Encodes this IE and returns the resulting bytes &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataLength</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+    
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Exposes the IE&#39;s total length (including the IEI and IE length octet) in octets &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataLength</span> <span class="o">+</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="Concatenation"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.Concatenation">[docs]</a><span class="k">class</span> <span class="nc">Concatenation</span><span class="p">(</span><span class="n">InformationElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; IE that indicates SMS concatenation.</span>
+
+<span class="sd">    This implementation handles both 8-bit and 16-bit concatenation</span>
+<span class="sd">    indication, and exposes the specific useful details of this</span>
+<span class="sd">    IE as instance variables.</span>
+
+<span class="sd">    Exposes:</span>
+
+<span class="sd">    reference</span>
+<span class="sd">        CSMS reference number, must be same for all the SMS parts in the CSMS</span>
+<span class="sd">    parts</span>
+<span class="sd">        total number of parts. The value shall remain constant for every short</span>
+<span class="sd">        message which makes up the concatenated short message. If the value is zero then</span>
+<span class="sd">        the receiving entity shall ignore the whole information element</span>
+<span class="sd">    number</span>
+<span class="sd">        this part&#39;s number in the sequence. The value shall start at 1 and</span>
+<span class="sd">        increment for every short message which makes up the concatenated short message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iei</span><span class="o">=</span><span class="mh">0x00</span><span class="p">,</span> <span class="n">ieLen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ieData</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Concatenation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">iei</span><span class="p">,</span> <span class="n">ieLen</span><span class="p">,</span> <span class="n">ieData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ieData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iei</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span> <span class="c1"># 8-bit reference</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">ieData</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># 0x08: 16-bit reference</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">|</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parts</span> <span class="o">=</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">&gt;</span> <span class="mh">0xFF</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mh">0x08</span> <span class="c1"># 16-bit reference</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mh">0x00</span> <span class="c1"># 8-bit reference</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">reference</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parts</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataLength</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Concatenation</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PortAddress"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.PortAddress">[docs]</a><span class="k">class</span> <span class="nc">PortAddress</span><span class="p">(</span><span class="n">InformationElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; IE that indicates an Application Port Addressing Scheme.</span>
+<span class="sd">    </span>
+<span class="sd">    This implementation handles both 8-bit and 16-bit concatenation</span>
+<span class="sd">    indication, and exposes the specific useful details of this</span>
+<span class="sd">    IE as instance variables.</span>
+<span class="sd">    </span>
+<span class="sd">    Exposes:</span>
+<span class="sd">    destination: The destination port number</span>
+<span class="sd">    source: The source port number</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iei</span><span class="o">=</span><span class="mh">0x04</span><span class="p">,</span> <span class="n">ieLen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ieData</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PortAddress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">iei</span><span class="p">,</span> <span class="n">ieLen</span><span class="p">,</span> <span class="n">ieData</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ieData</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">iei</span> <span class="o">==</span> <span class="mh">0x04</span><span class="p">:</span> <span class="c1"># 8-bit port addressing scheme</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">ieData</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># 0x05: 16-bit port addressing scheme</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">=</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">|</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span> <span class="o">|</span> <span class="n">ieData</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&gt;</span> <span class="mh">0xFF</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&gt;</span> <span class="mh">0xFF</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mh">0x05</span> <span class="c1"># 16-bit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destination</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mh">0x04</span> <span class="c1"># 8-bit</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">destination</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataLength</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">PortAddress</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span></div>
+
+
+<span class="c1"># Map of recognized IEIs</span>
+<span class="n">IEI_CLASS_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="mh">0x00</span><span class="p">:</span> <span class="n">Concatenation</span><span class="p">,</span> <span class="c1"># Concatenated short messages, 8-bit reference number</span>
+                 <span class="mh">0x08</span><span class="p">:</span> <span class="n">Concatenation</span><span class="p">,</span> <span class="c1"># Concatenated short messages, 16-bit reference number</span>
+                 <span class="mh">0x04</span><span class="p">:</span> <span class="n">PortAddress</span><span class="p">,</span> <span class="c1"># Application port addressing scheme, 8 bit address</span>
+                 <span class="mh">0x05</span><span class="p">:</span> <span class="n">PortAddress</span> <span class="c1"># Application port addressing scheme, 16 bit address</span>
+                <span class="p">}</span>
+
+
+<div class="viewcode-block" id="Pdu"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.Pdu">[docs]</a><span class="k">class</span> <span class="nc">Pdu</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Encoded SMS PDU. Contains raw PDU data and related meta-information &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tpduLength</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Constructor</span>
+<span class="sd">        :param data: the raw PDU data (as bytes)</span>
+<span class="sd">        :type data: bytearray</span>
+<span class="sd">        :param tpduLength: Length (in bytes) of the TPDU</span>
+<span class="sd">        :type tpduLength: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tpduLength</span> <span class="o">=</span> <span class="n">tpduLength</span>
+    
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">PYTHON_VERSION</span>
+        <span class="k">if</span> <span class="n">PYTHON_VERSION</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;hex&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1">#pragma: no cover</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;hex_codec&#39;</span><span class="p">),</span> <span class="s1">&#39;ascii&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> </div>
+
+
+<div class="viewcode-block" id="encodeSmsSubmitPdu"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.encodeSmsSubmitPdu">[docs]</a><span class="k">def</span> <span class="nf">encodeSmsSubmitPdu</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">reference</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">validity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smsc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">requestStatusReport</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rejectDuplicates</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sendFlash</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Creates an SMS-SUBMIT PDU for sending a message with the specified text to the specified number</span>
+<span class="sd">    </span>
+<span class="sd">    :param number: the destination mobile number</span>
+<span class="sd">    :type number: str</span>
+<span class="sd">    :param text: the message text</span>
+<span class="sd">    :type text: str</span>
+<span class="sd">    :param reference: message reference number (see also: rejectDuplicates parameter)</span>
+<span class="sd">    :type reference: int</span>
+<span class="sd">    :param validity: message validity period (absolute or relative)</span>
+<span class="sd">    :type validity: datetime.timedelta (relative) or datetime.datetime (absolute)</span>
+<span class="sd">    :param smsc: SMSC number to use (leave None to use default)</span>
+<span class="sd">    :type smsc: str</span>
+<span class="sd">    :param rejectDuplicates: Flag that controls the TP-RD parameter (messages with same destination and reference may be rejected if True)</span>
+<span class="sd">    :type rejectDuplicates: bool</span>
+<span class="sd">            </span>
+<span class="sd">    :return: A list of one or more tuples containing the SMS PDU (as a bytearray, and the length of the TPDU part</span>
+<span class="sd">    :rtype: list of tuples</span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+    <span class="n">tpduFirstOctet</span> <span class="o">=</span> <span class="mh">0x01</span> <span class="c1"># SMS-SUBMIT PDU</span>
+    <span class="k">if</span> <span class="n">validity</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Validity period format (TP-VPF) is stored in bits 4,3 of the first TPDU octet</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">validity</span><span class="p">)</span> <span class="o">==</span> <span class="n">timedelta</span><span class="p">:</span>
+            <span class="c1"># Relative (TP-VP is integer)</span>
+            <span class="n">tpduFirstOctet</span> <span class="o">|=</span> <span class="mh">0x10</span> <span class="c1"># bit4 == 1, bit3 == 0</span>
+            <span class="n">validityPeriod</span> <span class="o">=</span> <span class="p">[</span><span class="n">_encodeRelativeValidityPeriod</span><span class="p">(</span><span class="n">validity</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">validity</span><span class="p">)</span> <span class="o">==</span> <span class="n">datetime</span><span class="p">:</span>
+            <span class="c1"># Absolute (TP-VP is semi-octet encoded date)</span>
+            <span class="n">tpduFirstOctet</span> <span class="o">|=</span> <span class="mh">0x18</span> <span class="c1"># bit4 == 1, bit3 == 1</span>
+            <span class="n">validityPeriod</span> <span class="o">=</span> <span class="n">_encodeTimestamp</span><span class="p">(</span><span class="n">validity</span><span class="p">)</span> 
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;&quot;validity&quot; must be of type datetime.timedelta (for relative value) or datetime.datetime (for absolute value)&#39;</span><span class="p">)</span>        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">validityPeriod</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rejectDuplicates</span><span class="p">:</span>
+        <span class="n">tpduFirstOctet</span> <span class="o">|=</span> <span class="mh">0x04</span> <span class="c1"># bit2 == 1</span>
+    <span class="k">if</span> <span class="n">requestStatusReport</span><span class="p">:</span>
+        <span class="n">tpduFirstOctet</span> <span class="o">|=</span> <span class="mh">0x20</span> <span class="c1"># bit5 == 1</span>
+    
+    <span class="c1"># Encode message text and set data coding scheme based on text contents</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">encodedText</span> <span class="o">=</span> <span class="n">encodeGsm7</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="c1"># Cannot encode text using GSM-7; use UCS2 instead</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="mh">0x08</span> <span class="c1"># UCS2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="mh">0x00</span> <span class="c1"># GSM-7    </span>
+        
+    <span class="c1"># Check if message should be concatenated</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">MAX_MESSAGE_LENGTH</span><span class="p">[</span><span class="n">alphabet</span><span class="p">]:</span>
+        <span class="c1"># Text too long for single PDU - add &quot;concatenation&quot; User Data Header</span>
+        <span class="n">concatHeaderPrototype</span> <span class="o">=</span> <span class="n">Concatenation</span><span class="p">()</span>
+        <span class="n">concatHeaderPrototype</span><span class="o">.</span><span class="n">reference</span> <span class="o">=</span> <span class="n">reference</span>
+        <span class="n">pduCount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">/</span> <span class="n">MAX_MESSAGE_LENGTH</span><span class="p">[</span><span class="n">alphabet</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">concatHeaderPrototype</span><span class="o">.</span><span class="n">parts</span>  <span class="o">=</span> <span class="n">pduCount</span>
+        <span class="n">tpduFirstOctet</span> <span class="o">|=</span> <span class="mh">0x40</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">concatHeaderPrototype</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">pduCount</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="c1"># Construct required PDU(s)</span>
+    <span class="n">pdus</span> <span class="o">=</span> <span class="p">[]</span>    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">pduCount</span><span class="p">):</span>
+        <span class="n">pdu</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">smsc</span><span class="p">:</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_encodeAddressField</span><span class="p">(</span><span class="n">smsc</span><span class="p">,</span> <span class="n">smscField</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span> <span class="c1"># Don&#39;t supply an SMSC number - use the one configured in the device </span>
+    
+        <span class="n">udh</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">concatHeaderPrototype</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">concatHeader</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">concatHeaderPrototype</span><span class="p">)</span>
+            <span class="n">concatHeader</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">alphabet</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span>
+                <span class="n">pduText</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">153</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">153</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">alphabet</span> <span class="o">==</span> <span class="mh">0x08</span><span class="p">:</span>
+                <span class="n">pduText</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">67</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">67</span><span class="p">]</span>
+            <span class="n">udh</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">concatHeader</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pduText</span> <span class="o">=</span> <span class="n">text</span>
+        
+        <span class="n">udhLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">udh</span><span class="p">)</span>        
+        
+        <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tpduFirstOctet</span><span class="p">)</span>
+        <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span> <span class="c1"># message reference</span>
+        <span class="c1"># Add destination number    </span>
+        <span class="n">pdu</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">_encodeAddressField</span><span class="p">(</span><span class="n">number</span><span class="p">))</span>
+        <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mh">0x00</span><span class="p">)</span> <span class="c1"># Protocol identifier - no higher-level protocol</span>
+    
+        <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alphabet</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">sendFlash</span> <span class="k">else</span> <span class="p">(</span><span class="mh">0x10</span> <span class="k">if</span> <span class="n">alphabet</span> <span class="o">==</span> <span class="mh">0x00</span> <span class="k">else</span> <span class="mh">0x18</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">validityPeriod</span><span class="p">:</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">validityPeriod</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">alphabet</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span> <span class="c1"># GSM-7</span>
+            <span class="n">encodedText</span> <span class="o">=</span> <span class="n">encodeGsm7</span><span class="p">(</span><span class="n">pduText</span><span class="p">)</span>
+            <span class="n">userDataLength</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">encodedText</span><span class="p">)</span> <span class="c1"># Payload size in septets/characters</span>
+            <span class="k">if</span> <span class="n">udhLen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">shift</span> <span class="o">=</span> <span class="p">((</span><span class="n">udhLen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span> <span class="c1"># &quot;fill bits&quot; needed to make the UDH end on a septet boundary</span>
+                <span class="n">userData</span> <span class="o">=</span> <span class="n">packSeptets</span><span class="p">(</span><span class="n">encodedText</span><span class="p">,</span> <span class="n">padBits</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">shift</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">userDataLength</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># take padding bits into account</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">userData</span> <span class="o">=</span> <span class="n">packSeptets</span><span class="p">(</span><span class="n">encodedText</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">alphabet</span> <span class="o">==</span> <span class="mh">0x08</span><span class="p">:</span> <span class="c1"># UCS2</span>
+            <span class="n">userData</span> <span class="o">=</span> <span class="n">encodeUcs2</span><span class="p">(</span><span class="n">pduText</span><span class="p">)</span>
+            <span class="n">userDataLength</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">userData</span><span class="p">)</span>
+          
+        <span class="k">if</span> <span class="n">udhLen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>            
+            <span class="n">userDataLength</span> <span class="o">+=</span> <span class="n">udhLen</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># +1 for the UDH length indicator byte</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">userDataLength</span><span class="p">)</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">udhLen</span><span class="p">)</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">udh</span><span class="p">)</span> <span class="c1"># UDH</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pdu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">userDataLength</span><span class="p">)</span>
+        <span class="n">pdu</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">userData</span><span class="p">)</span> <span class="c1"># User Data (message payload)</span>
+        <span class="n">tpdu_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdu</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">pdus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Pdu</span><span class="p">(</span><span class="n">pdu</span><span class="p">,</span> <span class="n">tpdu_length</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pdus</span></div>
+
+<div class="viewcode-block" id="decodeSmsPdu"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.decodeSmsPdu">[docs]</a><span class="k">def</span> <span class="nf">decodeSmsPdu</span><span class="p">(</span><span class="n">pdu</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decodes SMS pdu data and returns a tuple in format (number, text)</span>
+<span class="sd">    </span>
+<span class="sd">    :param pdu: PDU data as a hex string, or a bytearray containing PDU octects</span>
+<span class="sd">    :type pdu: str or bytearray</span>
+<span class="sd">    </span>
+<span class="sd">    :raise EncodingError: If the specified PDU data cannot be decoded</span>
+<span class="sd">    </span>
+<span class="sd">    :return: The decoded SMS data as a dictionary</span>
+<span class="sd">    :rtype: dict    </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pdu</span> <span class="o">=</span> <span class="n">toByteArray</span><span class="p">(</span><span class="n">pdu</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Python 2 raises TypeError, Python 3 raises binascii.Error</span>
+        <span class="k">raise</span> <span class="n">EncodingError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">pduIter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">pdu</span><span class="p">)</span>
+ 
+    <span class="n">smscNumber</span><span class="p">,</span> <span class="n">smscBytesRead</span> <span class="o">=</span> <span class="n">_decodeAddressField</span><span class="p">(</span><span class="n">pduIter</span><span class="p">,</span> <span class="n">smscField</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;smsc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">smscNumber</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;tpdu_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pdu</span><span class="p">)</span> <span class="o">-</span> <span class="n">smscBytesRead</span>
+    
+    <span class="n">tpduFirstOctet</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span> 
+    
+    <span class="n">pduType</span> <span class="o">=</span> <span class="n">tpduFirstOctet</span> <span class="o">&amp;</span> <span class="mh">0x03</span> <span class="c1"># bits 1-0</span>
+    <span class="k">if</span> <span class="n">pduType</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span> <span class="c1"># SMS-DELIVER or SMS-DELIVER REPORT</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SMS-DELIVER&#39;</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeAddressField</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;protocol_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">dataCoding</span> <span class="o">=</span> <span class="n">_decodeDataCoding</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">))</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeTimestamp</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">userDataLen</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">udhPresent</span> <span class="o">=</span> <span class="p">(</span><span class="n">tpduFirstOctet</span> <span class="o">&amp;</span> <span class="mh">0x40</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="n">ud</span> <span class="o">=</span> <span class="n">_decodeUserData</span><span class="p">(</span><span class="n">pduIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">,</span> <span class="n">dataCoding</span><span class="p">,</span> <span class="n">udhPresent</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ud</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pduType</span> <span class="o">==</span> <span class="mh">0x01</span><span class="p">:</span> <span class="c1"># SMS-SUBMIT or SMS-SUBMIT-REPORT</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SMS-SUBMIT&#39;</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span> <span class="c1"># message reference - we don&#39;t really use this</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeAddressField</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;protocol_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">dataCoding</span> <span class="o">=</span> <span class="n">_decodeDataCoding</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">))</span>
+        <span class="n">validityPeriodFormat</span> <span class="o">=</span> <span class="p">(</span><span class="n">tpduFirstOctet</span> <span class="o">&amp;</span> <span class="mh">0x18</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span> <span class="c1"># bits 4,3</span>
+        <span class="k">if</span> <span class="n">validityPeriodFormat</span> <span class="o">==</span> <span class="mh">0x02</span><span class="p">:</span> <span class="c1"># TP-VP field present and integer represented (relative)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;validity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeRelativeValidityPeriod</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">validityPeriodFormat</span> <span class="o">==</span> <span class="mh">0x03</span><span class="p">:</span> <span class="c1"># TP-VP field present and semi-octet represented (absolute)            </span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;validity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeTimestamp</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">userDataLen</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">udhPresent</span> <span class="o">=</span> <span class="p">(</span><span class="n">tpduFirstOctet</span> <span class="o">&amp;</span> <span class="mh">0x40</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>
+        <span class="n">ud</span> <span class="o">=</span> <span class="n">_decodeUserData</span><span class="p">(</span><span class="n">pduIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">,</span> <span class="n">dataCoding</span><span class="p">,</span> <span class="n">udhPresent</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ud</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">pduType</span> <span class="o">==</span> <span class="mh">0x02</span><span class="p">:</span> <span class="c1"># SMS-STATUS-REPORT or SMS-COMMAND</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SMS-STATUS-REPORT&#39;</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;reference&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeAddressField</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeTimestamp</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;discharge&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_decodeTimestamp</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">pduIter</span><span class="p">)</span>        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">EncodingError</span><span class="p">(</span><span class="s1">&#39;Unknown SMS message type: </span><span class="si">{0}</span><span class="s1">. First TPDU octet was: </span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pduType</span><span class="p">,</span> <span class="n">tpduFirstOctet</span><span class="p">))</span>
+    
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<span class="k">def</span> <span class="nf">_decodeUserData</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">,</span> <span class="n">dataCoding</span><span class="p">,</span> <span class="n">udhPresent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decodes PDU user data (UDHI (if present) and message text) &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">udhPresent</span><span class="p">:</span>
+        <span class="c1"># User Data Header is present</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;udh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">udhLen</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+        <span class="n">ieLenRead</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Parse and store UDH fields</span>
+        <span class="k">while</span> <span class="n">ieLenRead</span> <span class="o">&lt;</span> <span class="n">udhLen</span><span class="p">:</span>
+            <span class="n">ie</span> <span class="o">=</span> <span class="n">InformationElement</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+            <span class="n">ieLenRead</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ie</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;udh&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ie</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">ieLenRead</span>
+        <span class="k">if</span> <span class="n">dataCoding</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span> <span class="c1"># GSM-7</span>
+            <span class="c1"># Since we are using 7-bit data, &quot;fill bits&quot; may have been added to make the UDH end on a septet boundary</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="p">((</span><span class="n">udhLen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span> <span class="c1"># &quot;fill bits&quot; needed to make the UDH end on a septet boundary</span>
+            <span class="c1"># Simulate another &quot;shift&quot; in the unpackSeptets algorithm in order to ignore the fill bits</span>
+            <span class="n">prevOctet</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+            <span class="n">shift</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">dataCoding</span> <span class="o">==</span> <span class="mh">0x00</span><span class="p">:</span> <span class="c1"># GSM-7</span>
+        <span class="k">if</span> <span class="n">udhPresent</span><span class="p">:</span>
+            <span class="n">userDataSeptets</span> <span class="o">=</span> <span class="n">unpackSeptets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">,</span> <span class="n">prevOctet</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">userDataSeptets</span> <span class="o">=</span> <span class="n">unpackSeptets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decodeGsm7</span><span class="p">(</span><span class="n">userDataSeptets</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dataCoding</span> <span class="o">==</span> <span class="mh">0x02</span><span class="p">:</span> <span class="c1"># UCS2</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decodeUcs2</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">userDataLen</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># 8-bit (data)</span>
+        <span class="n">userData</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">byteIter</span><span class="p">:</span>
+            <span class="n">userData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unichr</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">userData</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<span class="k">def</span> <span class="nf">_decodeRelativeValidityPeriod</span><span class="p">(</span><span class="n">tpVp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Calculates the relative SMS validity period (based on the table in section 9.2.3.12 of GSM 03.40)</span>
+<span class="sd">    :rtype: datetime.timedelta</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">tpVp</span> <span class="o">&lt;=</span> <span class="mi">143</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="p">((</span><span class="n">tpVp</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="mi">144</span> <span class="o">&lt;=</span> <span class="n">tpVp</span> <span class="o">&lt;=</span> <span class="mi">167</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">minutes</span><span class="o">=</span><span class="p">((</span><span class="n">tpVp</span> <span class="o">-</span> <span class="mi">143</span><span class="p">)</span> <span class="o">*</span> <span class="mi">30</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="mi">168</span> <span class="o">&lt;=</span> <span class="n">tpVp</span> <span class="o">&lt;=</span> <span class="mi">196</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="p">(</span><span class="n">tpVp</span> <span class="o">-</span> <span class="mi">166</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="mi">197</span> <span class="o">&lt;=</span> <span class="n">tpVp</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">weeks</span><span class="o">=</span><span class="p">(</span><span class="n">tpVp</span> <span class="o">-</span> <span class="mi">192</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;tpVp must be in range [0, 255]&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_encodeRelativeValidityPeriod</span><span class="p">(</span><span class="n">validityPeriod</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Encodes the specified relative validity period timedelta into an integer for use in an SMS PDU</span>
+<span class="sd">    (based on the table in section 9.2.3.12 of GSM 03.40)</span>
+<span class="sd">    </span>
+<span class="sd">    :param validityPeriod: The validity period to encode</span>
+<span class="sd">    :type validityPeriod: datetime.timedelta</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Python 2.6 does not have timedelta.total_seconds(), so compute it manually</span>
+    <span class="c1">#seconds = validityPeriod.total_seconds()</span>
+    <span class="n">seconds</span> <span class="o">=</span> <span class="n">validityPeriod</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">validityPeriod</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">seconds</span> <span class="o">&lt;=</span> <span class="mi">43200</span><span class="p">:</span> <span class="c1"># 12 hours</span>
+        <span class="n">tpVp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="mi">300</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># divide by 5 minutes, subtract 1</span>
+    <span class="k">elif</span> <span class="n">seconds</span> <span class="o">&lt;=</span> <span class="mi">86400</span><span class="p">:</span> <span class="c1"># 24 hours</span>
+        <span class="n">tpVp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">seconds</span> <span class="o">-</span> <span class="mi">43200</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1800</span><span class="p">)</span> <span class="o">+</span> <span class="mi">143</span> <span class="c1"># subtract 12 hours, divide by 30 minutes. add 143</span>
+    <span class="k">elif</span> <span class="n">validityPeriod</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">:</span> <span class="c1"># 30 days</span>
+        <span class="n">tpVp</span> <span class="o">=</span> <span class="n">validityPeriod</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">166</span> <span class="c1"># amount of days + 166</span>
+    <span class="k">elif</span> <span class="n">validityPeriod</span><span class="o">.</span><span class="n">days</span> <span class="o">&lt;=</span> <span class="mi">441</span><span class="p">:</span> <span class="c1"># max value of tpVp is 255</span>
+        <span class="n">tpVp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">validityPeriod</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span> <span class="o">+</span> <span class="mi">192</span> <span class="c1"># amount of weeks + 192</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Validity period too long; tpVp limited to 1 octet (max value: 255)&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tpVp</span>
+        
+<span class="k">def</span> <span class="nf">_decodeTimestamp</span><span class="p">(</span><span class="n">byteIter</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decodes a 7-octet timestamp &quot;&quot;&quot;</span>
+    <span class="n">dateStr</span> <span class="o">=</span> <span class="n">decodeSemiOctets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+    <span class="n">timeZoneStr</span> <span class="o">=</span> <span class="n">dateStr</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>        
+    <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">dateStr</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;%y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">SmsPduTzInfo</span><span class="p">(</span><span class="n">timeZoneStr</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">_encodeTimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Encodes a 7-octet timestamp from the specified date</span>
+<span class="sd">    </span>
+<span class="sd">    Note: the specified timestamp must have a UTC offset set; you can use gsmmodem.util.SimpleOffsetTzInfo for simple cases</span>
+<span class="sd">    </span>
+<span class="sd">    :param timestamp: The timestamp to encode</span>
+<span class="sd">    :type timestamp: datetime.datetime</span>
+<span class="sd">    </span>
+<span class="sd">    :return: The encoded timestamp</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">tzinfo</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Please specify time zone information for the timestamp (e.g. by using gsmmodem.util.SimpleOffsetTzInfo)&#39;</span><span class="p">)</span>
+
+    <span class="c1"># See if the timezone difference is positive/negative</span>
+    <span class="n">tzDelta</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">utcoffset</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">tzDelta</span><span class="o">.</span><span class="n">days</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">tzValStr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:0&gt;2}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">tzDelta</span><span class="o">.</span><span class="n">seconds</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">15</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># negative</span>
+        <span class="n">tzVal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tzDelta</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="o">-</span><span class="mi">3600</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">-</span> <span class="n">tzDelta</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">15</span><span class="p">)</span> <span class="c1"># calculate offset in 0.25 hours</span>
+        <span class="c1"># Cast as literal hex value and set MSB of first semi-octet of timezone to 1 to indicate negative value</span>
+        <span class="n">tzVal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0:0&gt;2}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tzVal</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">|</span> <span class="mh">0x80</span>
+        <span class="n">tzValStr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{0:0&gt;2X}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tzVal</span><span class="p">)</span>
+
+    <span class="n">dateStr</span> <span class="o">=</span> <span class="n">timestamp</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%y%m</span><span class="si">%d</span><span class="s1">%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">tzValStr</span>
+
+    <span class="k">return</span> <span class="n">encodeSemiOctets</span><span class="p">(</span><span class="n">dateStr</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_decodeDataCoding</span><span class="p">(</span><span class="n">octet</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">octet</span> <span class="o">&amp;</span> <span class="mh">0xC0</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1">#compressed = octect &amp; 0x20</span>
+        <span class="n">alphabet</span> <span class="o">=</span> <span class="p">(</span><span class="n">octet</span> <span class="o">&amp;</span> <span class="mh">0x0C</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">alphabet</span> <span class="c1"># 0x00 == GSM-7, 0x01 == 8-bit data, 0x02 == UCS2</span>
+    <span class="c1"># We ignore other coding groups</span>
+    <span class="k">return</span> <span class="mi">0</span>    
+
+<span class="k">def</span> <span class="nf">_decodeAddressField</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">smscField</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decodes the address field at the current position of the bytearray iterator</span>
+<span class="sd">    </span>
+<span class="sd">    :param byteIter: Iterator over bytearray</span>
+<span class="sd">    :type byteIter: iter(bytearray) </span>
+<span class="sd">    </span>
+<span class="sd">    :return: Tuple containing the address value and amount of bytes read (value is or None if it is empty (zero-length))</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">addressLen</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">toa</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span>
+        <span class="n">ton</span> <span class="o">=</span> <span class="p">(</span><span class="n">toa</span> <span class="o">&amp;</span> <span class="mh">0x70</span><span class="p">)</span> <span class="c1"># bits 6,5,4 of type-of-address == type-of-number</span>
+        <span class="k">if</span> <span class="n">ton</span> <span class="o">==</span> <span class="mh">0x50</span><span class="p">:</span> 
+            <span class="c1"># Alphanumberic number            </span>
+            <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">addressLen</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+            <span class="n">septets</span> <span class="o">=</span> <span class="n">unpackSeptets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">addressLen</span><span class="p">)</span>
+            <span class="n">addressValue</span> <span class="o">=</span> <span class="n">decodeGsm7</span><span class="p">(</span><span class="n">septets</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">addressValue</span><span class="p">,</span> <span class="p">(</span><span class="n">addressLen</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># ton == 0x00: Unknown (might be international, local, etc) - leave as is            </span>
+            <span class="c1"># ton == 0x20: National number</span>
+            <span class="k">if</span> <span class="n">smscField</span><span class="p">:</span>
+                <span class="n">addressValue</span> <span class="o">=</span> <span class="n">decodeSemiOctets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">addressLen</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">addressLen</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">addressLen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">addressLen</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>                
+                <span class="n">addressValue</span> <span class="o">=</span> <span class="n">decodeSemiOctets</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">addressLen</span><span class="p">)</span>
+                <span class="n">addressLen</span> <span class="o">+=</span> <span class="mi">1</span> <span class="c1"># for the return value, add the toa byte</span>
+            <span class="k">if</span> <span class="n">ton</span> <span class="o">==</span> <span class="mh">0x10</span><span class="p">:</span> <span class="c1"># International number</span>
+                <span class="n">addressValue</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span> <span class="o">+</span> <span class="n">addressValue</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">addressValue</span><span class="p">,</span> <span class="p">(</span><span class="n">addressLen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_encodeAddressField</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">smscField</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Encodes the address into an address field</span>
+<span class="sd">    </span>
+<span class="sd">    :param address: The address to encode (phone number or alphanumeric)</span>
+<span class="sd">    :type byteIter: str</span>
+<span class="sd">    </span>
+<span class="sd">    :return: Encoded SMS PDU address field</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, see if this is a number or an alphanumeric string</span>
+    <span class="n">toa</span> <span class="o">=</span> <span class="mh">0x80</span> <span class="o">|</span> <span class="mh">0x00</span> <span class="o">|</span> <span class="mh">0x01</span> <span class="c1"># Type-of-address start | Unknown type-of-number | ISDN/tel numbering plan</span>
+    <span class="n">alphaNumeric</span> <span class="o">=</span> <span class="kc">False</span>    
+    <span class="k">if</span> <span class="n">address</span><span class="o">.</span><span class="n">isalnum</span><span class="p">():</span>
+        <span class="c1"># Might just be a local number</span>
+        <span class="k">if</span> <span class="n">address</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="c1"># Local number</span>
+            <span class="n">toa</span> <span class="o">|=</span> <span class="mh">0x20</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Alphanumeric address</span>
+            <span class="n">toa</span> <span class="o">|=</span> <span class="mh">0x50</span>
+            <span class="n">toa</span> <span class="o">&amp;=</span> <span class="mh">0xFE</span> <span class="c1"># switch to &quot;unknown&quot; numbering plan</span>
+            <span class="n">alphaNumeric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">address</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;+&#39;</span> <span class="ow">and</span> <span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+            <span class="c1"># International number</span>
+            <span class="n">toa</span> <span class="o">|=</span> <span class="mh">0x10</span>
+            <span class="c1"># Remove the &#39;+&#39; prefix</span>
+            <span class="n">address</span> <span class="o">=</span> <span class="n">address</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Alphanumeric address</span>
+            <span class="n">toa</span> <span class="o">|=</span> <span class="mh">0x50</span>
+            <span class="n">toa</span> <span class="o">&amp;=</span> <span class="mh">0xFE</span> <span class="c1"># switch to &quot;unknown&quot; numbering plan</span>
+            <span class="n">alphaNumeric</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span>  <span class="n">alphaNumeric</span><span class="p">:</span>
+        <span class="n">addressValue</span> <span class="o">=</span> <span class="n">packSeptets</span><span class="p">(</span><span class="n">encodeGsm7</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">addressValue</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">addressValue</span> <span class="o">=</span> <span class="n">encodeSemiOctets</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">smscField</span><span class="p">:</span>            
+            <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">addressValue</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">addressLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">addressLen</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">toa</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">addressValue</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="encodeSemiOctets"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.encodeSemiOctets">[docs]</a><span class="k">def</span> <span class="nf">encodeSemiOctets</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Semi-octet encoding algorithm (e.g. for phone numbers)</span>
+<span class="sd">        </span>
+<span class="sd">    :return: bytearray containing the encoded octets</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">number</span> <span class="o">=</span> <span class="n">number</span> <span class="o">+</span> <span class="s1">&#39;F&#39;</span> <span class="c1"># append the &quot;end&quot; indicator</span>
+    <span class="n">octets</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">number</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">number</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">number</span><span class="p">),</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="decodeSemiOctets"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.decodeSemiOctets">[docs]</a><span class="k">def</span> <span class="nf">decodeSemiOctets</span><span class="p">(</span><span class="n">encodedNumber</span><span class="p">,</span> <span class="n">numberOfOctets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Semi-octet decoding algorithm(e.g. for phone numbers)</span>
+<span class="sd">    </span>
+<span class="sd">    :param encodedNumber: The semi-octet-encoded telephone number (in bytearray format or hex string)</span>
+<span class="sd">    :type encodedNumber: bytearray, str or iter(bytearray)</span>
+<span class="sd">    :param numberOfOctets: The expected amount of octets after decoding (i.e. when to stop)</span>
+<span class="sd">    :type numberOfOctets: int</span>
+<span class="sd">    </span>
+<span class="sd">    :return: decoded telephone number</span>
+<span class="sd">    :rtype: string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">encodedNumber</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">encodedNumber</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encodedNumber</span><span class="p">,</span> <span class="s1">&#39;hex_codec&#39;</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">octet</span> <span class="ow">in</span> <span class="n">encodedNumber</span><span class="p">:</span>        
+        <span class="n">hexVal</span> <span class="o">=</span> <span class="nb">hex</span><span class="p">(</span><span class="n">octet</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   
+        <span class="n">number</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hexVal</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">hexVal</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span>
+            <span class="n">number</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hexVal</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">numberOfOctets</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">numberOfOctets</span><span class="p">:</span>
+                <span class="k">break</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">number</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="encodeGsm7"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.encodeGsm7">[docs]</a><span class="k">def</span> <span class="nf">encodeGsm7</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">discardInvalid</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; GSM-7 text encoding algorithm</span>
+<span class="sd">    </span>
+<span class="sd">    Encodes the specified text string into GSM-7 octets (characters). This method does not pack</span>
+<span class="sd">    the characters into septets.</span>
+<span class="sd">    </span>
+<span class="sd">    :param text: the text string to encode</span>
+<span class="sd">    :param discardInvalid: if True, characters that cannot be encoded will be silently discarded </span>
+<span class="sd">    </span>
+<span class="sd">    :raise ValueError: if the text string cannot be encoded using GSM-7 encoding (unless discardInvalid == True)</span>
+<span class="sd">    </span>
+<span class="sd">    :return: A bytearray containing the string encoded in GSM-7 encoding</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">PYTHON_VERSION</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span> 
+        <span class="n">plaintext</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">plaintext</span><span class="p">:</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">GSM7_BASIC</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">GSM7_EXTENDED</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mh">0x1B</span><span class="p">)</span> <span class="c1"># ESC - switch to extended table</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">GSM7_EXTENDED</span><span class="p">[</span><span class="n">char</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">discardInvalid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Cannot encode char &quot;</span><span class="si">{0}</span><span class="s1">&quot; using GSM-7 encoding&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">char</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="decodeGsm7"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.decodeGsm7">[docs]</a><span class="k">def</span> <span class="nf">decodeGsm7</span><span class="p">(</span><span class="n">encodedText</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; GSM-7 text decoding algorithm</span>
+<span class="sd">    </span>
+<span class="sd">    Decodes the specified GSM-7-encoded string into a plaintext string.</span>
+<span class="sd">    </span>
+<span class="sd">    :param encodedText: the text string to encode</span>
+<span class="sd">    :type encodedText: bytearray or str</span>
+<span class="sd">    </span>
+<span class="sd">    :return: A string containing the decoded text</span>
+<span class="sd">    :rtype: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">encodedText</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">encodedText</span> <span class="o">=</span> <span class="n">rawStrToByteArray</span><span class="p">(</span><span class="n">encodedText</span><span class="p">)</span> <span class="c1">#bytearray(encodedText)</span>
+    <span class="n">iterEncoded</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">encodedText</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">iterEncoded</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mh">0x1B</span><span class="p">:</span> <span class="c1"># ESC - switch to extended table</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">iterEncoded</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">char</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dictItemsIter</span><span class="p">(</span><span class="n">GSM7_EXTENDED</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">GSM7_BASIC</span><span class="p">[</span><span class="n">b</span><span class="p">])</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="packSeptets"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.packSeptets">[docs]</a><span class="k">def</span> <span class="nf">packSeptets</span><span class="p">(</span><span class="n">octets</span><span class="p">,</span> <span class="n">padBits</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Packs the specified octets into septets</span>
+<span class="sd">    </span>
+<span class="sd">    Typically the output of encodeGsm7 would be used as input to this function. The resulting</span>
+<span class="sd">    bytearray contains the original GSM-7 characters packed into septets ready for transmission.</span>
+<span class="sd">    </span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">octets</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">rawStrToByteArray</span><span class="p">(</span><span class="n">octets</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">octets</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">padBits</span>
+    <span class="k">if</span> <span class="n">padBits</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">prevSeptet</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">prevSeptet</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="k">for</span> <span class="n">octet</span> <span class="ow">in</span> <span class="n">octets</span><span class="p">:</span>
+        <span class="n">septet</span> <span class="o">=</span> <span class="n">octet</span> <span class="o">&amp;</span> <span class="mh">0x7f</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">shift</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="c1"># prevSeptet has already been fully added to result</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="mi">0</span>        
+            <span class="n">prevSeptet</span> <span class="o">=</span> <span class="n">septet</span>
+            <span class="k">continue</span>            
+        <span class="n">b</span> <span class="o">=</span> <span class="p">((</span><span class="n">septet</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="mi">7</span> <span class="o">-</span> <span class="n">shift</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">prevSeptet</span> <span class="o">&gt;&gt;</span> <span class="n">shift</span><span class="p">)</span>
+        <span class="n">prevSeptet</span> <span class="o">=</span> <span class="n">septet</span>
+        <span class="n">shift</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>    
+    <span class="k">if</span> <span class="n">shift</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="c1"># There is a bit &quot;left over&quot; from prevSeptet</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prevSeptet</span> <span class="o">&gt;&gt;</span> <span class="n">shift</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="unpackSeptets"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.unpackSeptets">[docs]</a><span class="k">def</span> <span class="nf">unpackSeptets</span><span class="p">(</span><span class="n">septets</span><span class="p">,</span> <span class="n">numberOfSeptets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prevOctet</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Unpacks the specified septets into octets </span>
+<span class="sd">    </span>
+<span class="sd">    :param septets: Iterator or iterable containing the septets packed into octets</span>
+<span class="sd">    :type septets: iter(bytearray), bytearray or str</span>
+<span class="sd">    :param numberOfSeptets: The amount of septets to unpack (or None for all remaining in &quot;septets&quot;)</span>
+<span class="sd">    :type numberOfSeptets: int or None</span>
+<span class="sd">    </span>
+<span class="sd">    :return: The septets unpacked into octets</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>    
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">septets</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">septets</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">rawStrToByteArray</span><span class="p">(</span><span class="n">septets</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">septets</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bytearray</span><span class="p">:</span>
+        <span class="n">septets</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">septets</span><span class="p">)</span>    
+    <span class="k">if</span> <span class="n">numberOfSeptets</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>        
+        <span class="n">numberOfSeptets</span> <span class="o">=</span> <span class="n">MAX_INT</span> <span class="c1"># Loop until StopIteration</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">octet</span> <span class="ow">in</span> <span class="n">septets</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">shift</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">prevOctet</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>                
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prevOctet</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>            
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">numberOfSeptets</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">octet</span> <span class="o">&amp;</span> <span class="mh">0x7F</span><span class="p">)</span>
+                <span class="n">prevOctet</span> <span class="o">=</span> <span class="n">octet</span>                
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">numberOfSeptets</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">((</span><span class="n">octet</span> <span class="o">&lt;&lt;</span> <span class="n">shift</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0x7F</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">prevOctet</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="n">shift</span><span class="p">))</span>
+        
+        <span class="n">prevOctet</span> <span class="o">=</span> <span class="n">octet</span>        
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">shift</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">numberOfSeptets</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">shift</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">prevOctet</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="n">shift</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b</span><span class="p">:</span>
+            <span class="c1"># The final septet value still needs to be unpacked</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>        
+    <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="decodeUcs2"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.decodeUcs2">[docs]</a><span class="k">def</span> <span class="nf">decodeUcs2</span><span class="p">(</span><span class="n">byteIter</span><span class="p">,</span> <span class="n">numBytes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Decodes UCS2-encoded text from the specified byte iterator, up to a maximum of numBytes &quot;&quot;&quot;</span>
+    <span class="n">userData</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numBytes</span><span class="p">:</span>
+            <span class="n">userData</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unichr</span><span class="p">((</span><span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">)</span> <span class="o">|</span> <span class="nb">next</span><span class="p">(</span><span class="n">byteIter</span><span class="p">)))</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="c1"># Not enough bytes in iterator to reach numBytes; return what we have</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">userData</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="encodeUcs2"><a class="viewcode-back" href="../../api.html#gsmmodem.pdu.encodeUcs2">[docs]</a><span class="k">def</span> <span class="nf">encodeUcs2</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; UCS2 text encoding algorithm</span>
+<span class="sd">    </span>
+<span class="sd">    Encodes the specified text string into UCS2-encoded bytes.</span>
+<span class="sd">    </span>
+<span class="sd">    :param text: the text string to encode</span>
+<span class="sd">    </span>
+<span class="sd">    :return: A bytearray containing the string encoded in UCS2 encoding</span>
+<span class="sd">    :rtype: bytearray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">map</span><span class="p">(</span><span class="nb">ord</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">python-gsmmodem 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>

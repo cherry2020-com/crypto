@@ -1,0 +1,433 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Examples &#8212; python-gsmmodem 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Welcome to python-gsmmodem’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to python-gsmmodem’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="dial-callback">
+<h2>Dial Callback<a class="headerlink" href="#dial-callback" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">Demo: dial a number (using callbacks to track call status)</span>
+
+<span class="sd">Simple demo app that makes a voice call and plays sone DTMF tones (if supported by modem)</span>
+<span class="sd">when the call is answered, and hangs up the call.</span>
+<span class="sd">It uses the dial() methods callback mechanism to be informed when the call is answered and ended.</span>
+
+<span class="sd">Note: you need to modify the NUMBER variable for this to work</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">logging</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyUSB2&#39;</span>
+<span class="n">BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
+<span class="n">NUMBER</span> <span class="o">=</span> <span class="s1">&#39;00000&#39;</span> <span class="c1"># Number to dial - CHANGE THIS TO A REAL NUMBER</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># SIM card PIN (if any)</span>
+
+<span class="kn">from</span> <span class="nn">gsmmodem.modem</span> <span class="kn">import</span> <span class="n">GsmModem</span>
+<span class="kn">from</span> <span class="nn">gsmmodem.exceptions</span> <span class="kn">import</span> <span class="n">InterruptedException</span><span class="p">,</span> <span class="n">CommandError</span>
+
+<span class="n">waitForCallback</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="k">def</span> <span class="nf">callStatusCallback</span><span class="p">(</span><span class="n">call</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">waitForCallback</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call status update callback function called&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">answered</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call has been answered; waiting a while...&#39;</span><span class="p">)</span>
+        <span class="c1"># Wait for a bit - some older modems struggle to send DTMF tone immediately after answering a call</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Playing DTMF tones...&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="c1"># Call could have been ended by remote party while we waited in the time.sleep() call</span>
+                <span class="n">call</span><span class="o">.</span><span class="n">sendDtmfTone</span><span class="p">(</span><span class="s1">&#39;9515999955951&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InterruptedException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Call was ended during playback</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DTMF playback interrupted: {0} ({1} Error {2})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">code</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">CommandError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DTMF playback failed: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="c1"># Call is still active</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hanging up call...&#39;</span><span class="p">)</span>
+                <span class="n">call</span><span class="o">.</span><span class="n">hangup</span><span class="p">()</span>
+            <span class="n">waitForCallback</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Call is no longer active (remote party ended it)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call has been ended by remote party&#39;</span><span class="p">)</span>
+        <span class="n">waitForCallback</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">NUMBER</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">NUMBER</span> <span class="o">==</span> <span class="s1">&#39;00000&#39;</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error: Please change the NUMBER variable</span><span class="se">\&#39;</span><span class="s1">s value before running this example.&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing modem...&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1">: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">modem</span> <span class="o">=</span> <span class="n">GsmModem</span><span class="p">(</span><span class="n">PORT</span><span class="p">,</span> <span class="n">BAUDRATE</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Waiting for network coverage...&#39;</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">waitForNetworkCoverage</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Dialing number: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NUMBER</span><span class="p">))</span>
+    <span class="n">call</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">dial</span><span class="p">(</span><span class="n">NUMBER</span><span class="p">,</span> <span class="n">callStatusUpdateCallbackFunc</span><span class="o">=</span><span class="n">callStatusCallback</span><span class="p">)</span>
+    <span class="k">global</span> <span class="n">waitForCallback</span>
+    <span class="k">while</span> <span class="n">waitForCallback</span><span class="p">:</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Done&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dial-polling">
+<h2>Dial Polling<a class="headerlink" href="#dial-polling" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">Demo: dial a number (simple example using polling to check call status)</span>
+
+<span class="sd">Simple demo app that makes a voice call and plays sone DTMF tones (if supported by modem)</span>
+<span class="sd">when the call is answered, and hangs up the call.</span>
+<span class="sd">It polls the call status to see if the call has been answered</span>
+
+<span class="sd">Note: you need to modify the NUMBER variable for this to work</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">logging</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyUSB2&#39;</span>
+<span class="n">BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
+<span class="n">NUMBER</span> <span class="o">=</span> <span class="s1">&#39;00000&#39;</span> <span class="c1"># Number to dial - CHANGE THIS TO A REAL NUMBER</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># SIM card PIN (if any)</span>
+
+<span class="kn">from</span> <span class="nn">gsmmodem.modem</span> <span class="kn">import</span> <span class="n">GsmModem</span>
+<span class="kn">from</span> <span class="nn">gsmmodem.exceptions</span> <span class="kn">import</span> <span class="n">InterruptedException</span><span class="p">,</span> <span class="n">CommandError</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">NUMBER</span> <span class="o">==</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">NUMBER</span> <span class="o">==</span> <span class="s1">&#39;00000&#39;</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error: Please change the NUMBER variable</span><span class="se">\&#39;</span><span class="s1">s value before running this example.&#39;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing modem...&#39;</span><span class="p">)</span>
+    <span class="c1">#logging.basicConfig(format=&#39;%(levelname)s: %(message)s&#39;, level=logging.DEBUG)</span>
+    <span class="n">modem</span> <span class="o">=</span> <span class="n">GsmModem</span><span class="p">(</span><span class="n">PORT</span><span class="p">,</span> <span class="n">BAUDRATE</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Waiting for network coverage...&#39;</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">waitForNetworkCoverage</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Dialing number: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">NUMBER</span><span class="p">))</span>
+    <span class="n">call</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">dial</span><span class="p">(</span><span class="n">NUMBER</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Waiting for call to be answered/rejected&#39;</span><span class="p">)</span>
+    <span class="n">wasAnswered</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">while</span> <span class="n">call</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">answered</span><span class="p">:</span>
+            <span class="n">wasAnswered</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call has been answered; waiting a while...&#39;</span><span class="p">)</span>
+            <span class="c1"># Wait for a bit - some older modems struggle to send DTMF tone immediately after answering a call</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Playing DTMF tones...&#39;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="c1"># Call could have been ended by remote party while we waited in the time.sleep() call</span>
+                    <span class="n">call</span><span class="o">.</span><span class="n">sendDtmfTone</span><span class="p">(</span><span class="s1">&#39;9515999955951&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">InterruptedException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Call was ended during playback</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DTMF playback interrupted: {0} ({1} Error {2})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">code</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">CommandError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DTMF playback failed: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">active</span><span class="p">:</span> <span class="c1"># Call is still active</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hanging up call...&#39;</span><span class="p">)</span>
+                    <span class="n">call</span><span class="o">.</span><span class="n">hangup</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># Call is no longer active (remote party ended it)</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call has been ended by remote party&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Wait a bit and check again</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">wasAnswered</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Call was not answered by remote party&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="incoming-call-handling">
+<h2>Incoming Call Handling<a class="headerlink" href="#incoming-call-handling" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">Demo: handle incoming calls</span>
+
+<span class="sd">Simple demo app that listens for incoming calls, displays the caller ID,</span>
+<span class="sd">optionally answers the call and plays sone DTMF tones (if supported by modem), </span>
+<span class="sd">and hangs up the call.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">logging</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyUSB2&#39;</span>
+<span class="n">BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># SIM card PIN (if any)</span>
+
+<span class="kn">from</span> <span class="nn">gsmmodem.modem</span> <span class="kn">import</span> <span class="n">GsmModem</span>
+<span class="kn">from</span> <span class="nn">gsmmodem.exceptions</span> <span class="kn">import</span> <span class="n">InterruptedException</span>
+
+<span class="k">def</span> <span class="nf">handleIncomingCall</span><span class="p">(</span><span class="n">call</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">ringCount</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Incoming call from:&#39;</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">call</span><span class="o">.</span><span class="n">ringCount</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">dtmfSupport</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Answering call and playing some DTMF tones...&#39;</span><span class="p">)</span>
+            <span class="n">call</span><span class="o">.</span><span class="n">answer</span><span class="p">()</span>
+            <span class="c1"># Wait for a bit - some older modems struggle to send DTMF tone immediately after answering a call</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> 
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">call</span><span class="o">.</span><span class="n">sendDtmfTone</span><span class="p">(</span><span class="s1">&#39;9515999955951&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">InterruptedException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Call was ended during playback</span>
+                <span class="k">print</span><span class="p">(</span><span class="s1">&#39;DTMF playback interrupted: {0} ({1} Error {2})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">cause</span><span class="o">.</span><span class="n">code</span><span class="p">))</span>                
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">call</span><span class="o">.</span><span class="n">answered</span><span class="p">:</span>
+                    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Hanging up call.&#39;</span><span class="p">)</span>
+                    <span class="n">call</span><span class="o">.</span><span class="n">hangup</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>            
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Modem has no DTMF support - hanging up call.&#39;</span><span class="p">)</span>
+            <span class="n">call</span><span class="o">.</span><span class="n">hangup</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39; Call from {0} is still ringing...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">call</span><span class="o">.</span><span class="n">number</span><span class="p">))</span>
+    
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing modem...&#39;</span><span class="p">)</span>
+    <span class="c1">#logging.basicConfig(format=&#39;%(levelname)s: %(message)s&#39;, level=logging.DEBUG)</span>
+    <span class="n">modem</span> <span class="o">=</span> <span class="n">GsmModem</span><span class="p">(</span><span class="n">PORT</span><span class="p">,</span> <span class="n">BAUDRATE</span><span class="p">,</span> <span class="n">incomingCallCallbackFunc</span><span class="o">=</span><span class="n">handleIncomingCall</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Waiting for incoming calls...&#39;</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>    
+        <span class="n">modem</span><span class="o">.</span><span class="n">rxThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">)</span> <span class="c1"># Specify a (huge) timeout so that it essentially blocks indefinitely, but still receives CTRL+C interrupt signal</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">modem</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sms-handling">
+<h2>SMS Handling<a class="headerlink" href="#sms-handling" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">Demo: handle incoming SMS messages by replying to them</span>
+
+<span class="sd">Simple demo app that listens for incoming SMS messages, displays the sender&#39;s number</span>
+<span class="sd">and the messages, then replies to the SMS by saying &quot;thank you&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyUSB2&#39;</span>
+<span class="n">BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># SIM card PIN (if any)</span>
+
+<span class="kn">from</span> <span class="nn">gsmmodem.modem</span> <span class="kn">import</span> <span class="n">GsmModem</span>
+
+<span class="k">def</span> <span class="nf">handleSms</span><span class="p">(</span><span class="n">sms</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;== SMS message received ==</span><span class="se">\n</span><span class="s1">From: {0}</span><span class="se">\n</span><span class="s1">Time: {1}</span><span class="se">\n</span><span class="s1">Message:</span><span class="se">\n</span><span class="s1">{2}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sms</span><span class="o">.</span><span class="n">number</span><span class="p">,</span> <span class="n">sms</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">sms</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Replying to SMS...&#39;</span><span class="p">)</span>
+    <span class="n">sms</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;SMS received: &quot;{0}{1}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sms</span><span class="o">.</span><span class="n">text</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="s1">&#39;...&#39;</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sms</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;SMS sent.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing modem...&#39;</span><span class="p">)</span>
+    <span class="c1"># Uncomment the following line to see what the modem is doing:</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(levelname)s</span><span class="s1">: </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+    <span class="n">modem</span> <span class="o">=</span> <span class="n">GsmModem</span><span class="p">(</span><span class="n">PORT</span><span class="p">,</span> <span class="n">BAUDRATE</span><span class="p">,</span> <span class="n">smsReceivedCallbackFunc</span><span class="o">=</span><span class="n">handleSms</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">smsTextMode</span> <span class="o">=</span> <span class="bp">False</span> 
+    <span class="n">modem</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Waiting for SMS message...&#39;</span><span class="p">)</span>    
+    <span class="k">try</span><span class="p">:</span>    
+        <span class="n">modem</span><span class="o">.</span><span class="n">rxThread</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">31</span><span class="p">)</span> <span class="c1"># Specify a (huge) timeout so that it essentially blocks indefinitely, but still receives CTRL+C interrupt signal</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">modem</span><span class="o">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="ussd-sessions">
+<h2>USSD Sessions<a class="headerlink" href="#ussd-sessions" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;\</span>
+<span class="sd">Demo: Simple USSD example</span>
+
+<span class="sd">Simple demo app that initiates a USSD session, reads the string response and closes the session</span>
+<span class="sd">(if it wasn&#39;t closed by the network)</span>
+
+<span class="sd">Note: for this to work, a valid USSD string for your network must be used.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">PORT</span> <span class="o">=</span> <span class="s1">&#39;/dev/ttyUSB2&#39;</span>
+<span class="n">BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
+<span class="n">USSD_STRING</span> <span class="o">=</span> <span class="s1">&#39;*101#&#39;</span>
+<span class="n">PIN</span> <span class="o">=</span> <span class="bp">None</span> <span class="c1"># SIM card PIN (if any)</span>
+
+<span class="kn">from</span> <span class="nn">gsmmodem.modem</span> <span class="kn">import</span> <span class="n">GsmModem</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Initializing modem...&#39;</span><span class="p">)</span>
+    <span class="c1">#logging.basicConfig(format=&#39;%(levelname)s: %(message)s&#39;, level=logging.DEBUG)</span>
+    <span class="n">modem</span> <span class="o">=</span> <span class="n">GsmModem</span><span class="p">(</span><span class="n">PORT</span><span class="p">,</span> <span class="n">BAUDRATE</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">PIN</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">waitForNetworkCoverage</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Sending USSD string: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">USSD_STRING</span><span class="p">))</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">modem</span><span class="o">.</span><span class="n">sendUssd</span><span class="p">(</span><span class="n">USSD_STRING</span><span class="p">)</span> <span class="c1"># response type: gsmmodem.modem.Ussd</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;USSD reply received: {0}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">sessionActive</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Closing USSD session.&#39;</span><span class="p">)</span>
+        <span class="c1"># At this point, you could also reply to the USSD message by using response.reply()</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;USSD session was ended by network.&#39;</span><span class="p">)</span>
+    <span class="n">modem</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#dial-callback">Dial Callback</a></li>
+<li><a class="reference internal" href="#dial-polling">Dial Polling</a></li>
+<li><a class="reference internal" href="#incoming-call-handling">Incoming Call Handling</a></li>
+<li><a class="reference internal" href="#sms-handling">SMS Handling</a></li>
+<li><a class="reference internal" href="#ussd-sessions">USSD Sessions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to python-gsmmodem’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/examples.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="api.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to python-gsmmodem’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>

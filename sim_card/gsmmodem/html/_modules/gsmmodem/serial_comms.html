@@ -1,0 +1,231 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gsmmodem.serial_comms &#8212; python-gsmmodem 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">python-gsmmodem 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gsmmodem.serial_comms</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot; Low-level serial communications handling &quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">threading</span><span class="o">,</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">serial</span> <span class="c1"># pyserial: http://pyserial.sourceforge.net</span>
+
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">TimeoutException</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">compat</span> <span class="c1"># For Python 2.6 compatibility</span>
+
+<div class="viewcode-block" id="SerialComms"><a class="viewcode-back" href="../../api.html#gsmmodem.serial_comms.SerialComms">[docs]</a><span class="k">class</span> <span class="nc">SerialComms</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Wraps all low-level serial communications (actual read/write operations) &quot;&quot;&quot;</span>
+    
+    <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;gsmmodem.serial_comms.SerialComms&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># End-of-line read terminator</span>
+    <span class="n">RX_EOL_SEQ</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
+    <span class="c1"># End-of-response terminator</span>
+    <span class="n">RESPONSE_TERM</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^OK|ERROR|(\+CM[ES] ERROR: \d+)|(COMMAND NOT SUPPORT)$&#39;</span><span class="p">)</span>
+    <span class="c1"># Default timeout for serial port reads (in seconds)</span>
+    <span class="n">timeout</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="mi">115200</span><span class="p">,</span> <span class="n">notifyCallbackFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fatalErrorCallbackFunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Constructor</span>
+<span class="sd">         </span>
+<span class="sd">        :param fatalErrorCallbackFunc: function to call if a fatal error occurs in the serial device reading thread</span>
+<span class="sd">        :type fatalErrorCallbackFunc: func</span>
+<span class="sd">        &quot;&quot;&quot;</span>     
+        <span class="bp">self</span><span class="o">.</span><span class="n">alive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">baudrate</span> <span class="o">=</span> <span class="n">baudrate</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># threading.Event()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># expected response terminator sequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_response</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># Buffer containing response to a written command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_notification</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># Buffer containing lines from an unsolicited notification from the modem</span>
+        <span class="c1"># Reentrant lock for managing concurrent write access to the underlying serial port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_txLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">notifyCallback</span> <span class="o">=</span> <span class="n">notifyCallbackFunc</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_placeholderCallback</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">fatalErrorCallback</span> <span class="o">=</span> <span class="n">fatalErrorCallbackFunc</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_placeholderCallback</span>
+        
+<div class="viewcode-block" id="SerialComms.connect"><a class="viewcode-back" href="../../api.html#gsmmodem.serial_comms.SerialComms.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Connects to the device and starts the read thread &quot;&quot;&quot;</span>                
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">baudrate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">baudrate</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="c1"># Start read thread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alive</span> <span class="o">=</span> <span class="kc">True</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">rxThread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_readLoop</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rxThread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rxThread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SerialComms.close"><a class="viewcode-back" href="../../api.html#gsmmodem.serial_comms.SerialComms.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Stops the read thread, waits for it to exit cleanly, then closes the underlying serial port &quot;&quot;&quot;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">alive</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rxThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_handleLineRead</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">checkForResponseTerm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1">#print &#39;sc.hlineread:&#39;,line</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
+            <span class="c1"># A response event has been set up (another thread is waiting for this response)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_response</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">checkForResponseTerm</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESPONSE_TERM</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+                <span class="c1"># End of response reached; notify waiting thread</span>
+                <span class="c1">#print &#39;response:&#39;, self._response</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;response: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_response</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>            
+            <span class="c1"># Nothing was waiting for this - treat it as a notification</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_notification</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">inWaiting</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># No more chars on the way for this notification - notify higher-level callback</span>
+                <span class="c1">#print &#39;notification:&#39;, self._notification</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;notification: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_notification</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">notifyCallback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_notification</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_notification</span> <span class="o">=</span> <span class="p">[]</span>                
+
+    <span class="k">def</span> <span class="nf">_placeholderCallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Placeholder callback function (does nothing) &quot;&quot;&quot;</span>
+        
+    <span class="k">def</span> <span class="nf">_readLoop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read thread main loop</span>
+<span class="sd">        </span>
+<span class="sd">        Reads lines from the connected device</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">readTermSeq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RX_EOL_SEQ</span><span class="p">)</span>
+            <span class="n">readTermLen</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">readTermSeq</span><span class="p">)</span>
+            <span class="n">rxBuffer</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">alive</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">data</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="c1"># check for timeout</span>
+                    <span class="c1">#print &gt;&gt; sys.stderr, &#39; RX:&#39;, data,&#39;({0})&#39;.format(ord(data))</span>
+                    <span class="n">rxBuffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">rxBuffer</span><span class="p">[</span><span class="o">-</span><span class="n">readTermLen</span><span class="p">:]</span> <span class="o">==</span> <span class="n">readTermSeq</span><span class="p">:</span>                        
+                        <span class="c1"># A line (or other logical segment) has been read</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rxBuffer</span><span class="p">[:</span><span class="o">-</span><span class="n">readTermLen</span><span class="p">])</span>
+                        <span class="n">rxBuffer</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>                          
+                            <span class="c1">#print &#39;calling handler&#39;                      </span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_handleLineRead</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">rxBuffer</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span><span class="p">):]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span><span class="p">:</span>
+                            <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rxBuffer</span><span class="p">)</span> 
+                            <span class="n">rxBuffer</span> <span class="o">=</span> <span class="p">[]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_handleLineRead</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">checkForResponseTerm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>                                                
+            <span class="c1">#else:</span>
+                <span class="c1">#&#39; &lt;RX timeout&gt;&#39;</span>
+        <span class="k">except</span> <span class="n">serial</span><span class="o">.</span><span class="n">SerialException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alive</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span> <span class="c1">#pragma: no cover</span>
+                <span class="k">pass</span>
+            <span class="c1"># Notify the fatal error handler</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fatalErrorCallback</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">waitForResponse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">expectedResponseTermSeq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_txLock</span><span class="p">:</span>            
+            <span class="k">if</span> <span class="n">waitForResponse</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">expectedResponseTermSeq</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">expectedResponseTermSeq</span><span class="p">)</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">_response</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>                
+                <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_response</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># Response timed out</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_responseEvent</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_expectResponseTermSeq</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_response</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="c1"># Add the partial response to the timeout exception</span>
+                        <span class="k">raise</span> <span class="n">TimeoutException</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_response</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">TimeoutException</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>                
+                <span class="bp">self</span><span class="o">.</span><span class="n">serial</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">python-gsmmodem 0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>

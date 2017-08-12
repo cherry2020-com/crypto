@@ -1,0 +1,1064 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &#8212; python-gsmmodem 0.9 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-gsmmodem.modem">
+<span id="gsm-modem"></span><h2>GSM Modem<a class="headerlink" href="#module-gsmmodem.modem" title="Permalink to this headline">¶</a></h2>
+<p>High-level API classes for an attached GSM modem</p>
+<dl class="class">
+<dt id="gsmmodem.modem.Call">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">Call</code><span class="sig-paren">(</span><em>gsmModem</em>, <em>callId</em>, <em>callType</em>, <em>number</em>, <em>callStatusUpdateCallbackFunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Call" title="Permalink to this definition">¶</a></dt>
+<dd><p>A voice call</p>
+<dl class="method">
+<dt id="gsmmodem.modem.Call.hangup">
+<code class="descname">hangup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Call.hangup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Call.hangup" title="Permalink to this definition">¶</a></dt>
+<dd><p>End the phone call.</p>
+<p>Does nothing if the call is already inactive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.Call.sendDtmfTone">
+<code class="descname">sendDtmfTone</code><span class="sig-paren">(</span><em>tones</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Call.sendDtmfTone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Call.sendDtmfTone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send one or more DTMF tones to the remote party (only allowed for an answered call)</p>
+<p>Note: this is highly device-dependent, and might not work</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>digits</strong> – A str containining one or more DTMF tones to play, e.g. “3” or “*123#”</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>CommandError</strong> – if the command failed/is not supported</li>
+<li><strong>InvalidStateException</strong> – if the call has not been answered, or is ended while the command is still executing</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.GsmModem">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">GsmModem</code><span class="sig-paren">(</span><em>port</em>, <em>baudrate=115200</em>, <em>incomingCallCallbackFunc=None</em>, <em>smsReceivedCallbackFunc=None</em>, <em>smsStatusReportCallback=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main class for interacting with an attached GSM modem</p>
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>pin=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens the port and initializes the modem and SIM card</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pin</strong> (<em>str</em>) – The SIM card PIN code, if any</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>PinRequiredError</strong> – if the SIM card requires a PIN but none was provided</li>
+<li><strong>IncorrectPinError</strong> – if the specified PIN is incorrect</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.deleteMultipleStoredSms">
+<code class="descname">deleteMultipleStoredSms</code><span class="sig-paren">(</span><em>delFlag=4</em>, <em>memory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.deleteMultipleStoredSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.deleteMultipleStoredSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes all SMS messages that have the specified read status.</p>
+<p>The messages are read from the memory set by the “memory” parameter.
+The value of the “delFlag” paramater is the same as the “DelFlag” parameter of the +CMGD command:
+1: Delete All READ messages
+2: Delete All READ and SENT messages
+3: Delete All READ, SENT and UNSENT messages
+4: Delete All messages (this is the default)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>delFlag</strong> (<em>int</em>) – Controls what type of messages to delete; see description above.</li>
+<li><strong>memory</strong> (<em>str</em><em> or </em><em>None</em>) – The memory type to delete from. If None, use the current default SMS read/delete memory</li>
+<li><strong>delete</strong> (<em>bool</em>) – If True, delete returned messages from the device/SIM card</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueErrror</strong> – if “delFlag” is not in range [1,4]</li>
+<li><strong>CommandError</strong> – if unable to delete the stored messages</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.deleteStoredSms">
+<code class="descname">deleteStoredSms</code><span class="sig-paren">(</span><em>index</em>, <em>memory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.deleteStoredSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.deleteStoredSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the SMS message stored at the specified index in modem/SIM card memory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>int</em>) – The index of the SMS message in the specified memory</li>
+<li><strong>memory</strong> (<em>str</em><em> or </em><em>None</em>) – The memory type to delete from. If None, use the current default SMS read/delete memory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>CommandError</strong> – if unable to delete the stored message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.dial">
+<code class="descname">dial</code><span class="sig-paren">(</span><em>number</em>, <em>timeout=5</em>, <em>callStatusUpdateCallbackFunc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.dial"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.dial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls the specified phone number using a voice phone call</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>number</strong> – The phone number to dial</li>
+<li><strong>timeout</strong> – Maximum time to wait for the call to be established</li>
+<li><strong>callStatusUpdateCallbackFunc</strong> – Callback function that is executed if the call’s status changes due to
+remote events (i.e. when it is answered, the call is ended by the remote party)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The outgoing call</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gsmmodem.modem.Call" title="gsmmodem.modem.Call">gsmmodem.modem.Call</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.imei">
+<code class="descname">imei</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.imei" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The modem’s serial number (IMEI number)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.imsi">
+<code class="descname">imsi</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.imsi" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The IMSI (International Mobile Subscriber Identity) of the SIM card. The PIN may need to be entered before reading the IMSI</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.listStoredSms">
+<code class="descname">listStoredSms</code><span class="sig-paren">(</span><em>status=4</em>, <em>memory=None</em>, <em>delete=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.listStoredSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.listStoredSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns SMS messages currently stored on the device/SIM card.</p>
+<p>The messages are read from the memory set by the “memory” parameter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>status</strong> (<em>int</em>) – Filter messages based on this read status; must be 0-4 (see Sms class)</li>
+<li><strong>memory</strong> (<em>str</em><em> or </em><em>None</em>) – The memory type to read from. If None, use the current default SMS read memory</li>
+<li><strong>delete</strong> (<em>bool</em>) – If True, delete returned messages from the device/SIM card</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of Sms objects containing the messages read</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.manufacturer">
+<code class="descname">manufacturer</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.manufacturer" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The modem’s manufacturer’s name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.model">
+<code class="descname">model</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.model" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The modem’s model name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.networkName">
+<code class="descname">networkName</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.networkName" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the name of the GSM Network Operator to which the modem is connected</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.processStoredSms">
+<code class="descname">processStoredSms</code><span class="sig-paren">(</span><em>unreadOnly=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.processStoredSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.processStoredSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process all SMS messages currently stored on the device/SIM card.</p>
+<p>Reads all (or just unread) received SMS messages currently stored on the 
+device/SIM card, initiates “SMS received” events for them, and removes 
+them from the SIM card.
+This is useful if SMS messages were received during a period that
+python-gsmmodem was not running but the modem was powered on.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unreadOnly</strong> (<em>boolean</em>) – If True, only process unread SMS messages</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.readStoredSms">
+<code class="descname">readStoredSms</code><span class="sig-paren">(</span><em>index</em>, <em>memory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.readStoredSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.readStoredSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads and returns the SMS message at the specified index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> (<em>int</em>) – The index of the SMS message in the specified memory</li>
+<li><strong>memory</strong> (<em>str</em><em> or </em><em>None</em>) – The memory type to read from. If None, use the current default SMS read memory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>CommandError</strong> – if unable to read the stored message</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The SMS message</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">subclass of gsmmodem.modem.Sms (either ReceivedSms or <a class="reference internal" href="#gsmmodem.modem.StatusReport" title="gsmmodem.modem.StatusReport">StatusReport</a>)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.revision">
+<code class="descname">revision</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.revision" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The modem’s software revision, or None if not known/supported</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.sendSms">
+<code class="descname">sendSms</code><span class="sig-paren">(</span><em>destination</em>, <em>text</em>, <em>waitForDeliveryReport=False</em>, <em>deliveryTimeout=15</em>, <em>sendFlash=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.sendSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.sendSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send an SMS text message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>destination</strong> (<em>str</em>) – the recipient’s phone number</li>
+<li><strong>text</strong> (<em>str</em>) – the message text</li>
+<li><strong>waitForDeliveryReport</strong> (<em>boolean</em>) – if True, this method blocks until a delivery report is received for the sent message</li>
+<li><strong>deliveryReport</strong> – the maximum time in seconds to wait for a delivery report (if “waitForDeliveryReport” is True)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>CommandError</strong> – if an error occurs while attempting to send the message</li>
+<li><strong>TimeoutException</strong> – if the operation times out</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.sendUssd">
+<code class="descname">sendUssd</code><span class="sig-paren">(</span><em>ussdString</em>, <em>responseTimeout=15</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.sendUssd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.sendUssd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts a USSD session by dialing the the specified USSD string, or         sends the specified string in the existing USSD session (if any)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ussdString</strong> – The USSD access number to dial</li>
+<li><strong>responseTimeout</strong> – Maximum time to wait a response, in seconds</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>TimeoutException</strong> – if no response is received in time</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The USSD response message/session (as a Ussd object)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gsmmodem.modem.Ussd" title="gsmmodem.modem.Ussd">gsmmodem.modem.Ussd</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.signalStrength">
+<code class="descname">signalStrength</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.signalStrength" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the modem’s cellular network signal strength</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>CommandError</strong> – if an error occurs</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The network signal strength as an integer between 0 and 99, or -1 if it is unknown</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.smsTextMode">
+<code class="descname">smsTextMode</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.smsTextMode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the modem is set to use text mode for SMS, False if it is set to use PDU mode</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.smsc">
+<code class="descname">smsc</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.smsc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The default SMSC number stored on the SIM card</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gsmmodem.modem.GsmModem.supportedCommands">
+<code class="descname">supportedCommands</code><a class="headerlink" href="#gsmmodem.modem.GsmModem.supportedCommands" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of AT commands supported by this modem (without the AT prefix). Returns None if not known</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.waitForNetworkCoverage">
+<code class="descname">waitForNetworkCoverage</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.waitForNetworkCoverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.waitForNetworkCoverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Block until the modem has GSM network coverage.</p>
+<p>This method blocks until the modem is registered with the network 
+and the signal strength is greater than 0, optionally timing out
+if a timeout was specified</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>timeout</strong> (<em>int</em><em> or </em><em>float</em>) – Maximum time to wait for network coverage, in seconds</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>TimeoutException</strong> – if a timeout was specified and reached</li>
+<li><strong>InvalidStateException</strong> – if the modem is not going to receive network coverage (SIM blocked, etc)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the current signal strength</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.GsmModem.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>data</em>, <em>waitForResponse=True</em>, <em>timeout=5</em>, <em>parseError=True</em>, <em>writeTerm=’\r’</em>, <em>expectedResponseTermSeq=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#GsmModem.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.GsmModem.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write data to the modem.</p>
+<p>This method adds the <code class="docutils literal"><span class="pre">\r\n</span></code> end-of-line sequence to the data parameter, and
+writes it to the modem.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>str</em>) – Command/data to be written to the modem</li>
+<li><strong>waitForResponse</strong> (<em>bool</em>) – Whether this method should block and return the response from the modem or not</li>
+<li><strong>timeout</strong> (<em>int</em>) – Maximum amount of time in seconds to wait for a response from the modem</li>
+<li><strong>parseError</strong> (<em>bool</em>) – If True, a CommandError is raised if the modem responds with an error (otherwise the response is returned as-is)</li>
+<li><strong>writeTerm</strong> (<em>str</em>) – The terminating sequence to append to the written data</li>
+<li><strong>expectedResponseTermSeq</strong> (<em>str</em>) – The expected terminating sequence that marks the end of the modem’s response (defaults to <code class="docutils literal"><span class="pre">\r\n</span></code>)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first simple">
+<li><strong>CommandError</strong> – if the command returns an error (only if parseError parameter is True)</li>
+<li><strong>TimeoutException</strong> – if no response to the command was received from the modem</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list containing the response lines from the modem, or None if waitForResponse is False</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.ReceivedSms">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">ReceivedSms</code><span class="sig-paren">(</span><em>gsmModem</em>, <em>status</em>, <em>number</em>, <em>time</em>, <em>text</em>, <em>smsc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#ReceivedSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.ReceivedSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>An SMS message that has been received (MT)</p>
+<dl class="method">
+<dt id="gsmmodem.modem.ReceivedSms.reply">
+<code class="descname">reply</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#ReceivedSms.reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.ReceivedSms.reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method that sends a reply SMS to the sender of this message</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.SentSms">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">SentSms</code><span class="sig-paren">(</span><em>number</em>, <em>text</em>, <em>reference</em>, <em>smsc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#SentSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.SentSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>An SMS message that has been sent (MO)</p>
+<dl class="attribute">
+<dt id="gsmmodem.modem.SentSms.status">
+<code class="descname">status</code><a class="headerlink" href="#gsmmodem.modem.SentSms.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Status of this SMS. Can be ENROUTE, DELIVERED or FAILED</p>
+<p>The actual status report object may be accessed via the ‘report’ attribute
+if status is ‘DELIVERED’ or ‘FAILED’</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.Sms">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">Sms</code><span class="sig-paren">(</span><em>number</em>, <em>text</em>, <em>smsc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Sms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Sms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract SMS message base class</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.StatusReport">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">StatusReport</code><span class="sig-paren">(</span><em>gsmModem</em>, <em>status</em>, <em>reference</em>, <em>number</em>, <em>timeSent</em>, <em>timeFinalized</em>, <em>deliveryStatus</em>, <em>smsc=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#StatusReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.StatusReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>An SMS status/delivery report</p>
+<p>Note: the ‘status’ attribute of this class refers to this status report SM’s status (whether
+it has been read, etc). To find the status of the message that caused this status report,
+use the ‘deliveryStatus’ attribute.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.modem.Ussd">
+<em class="property">class </em><code class="descclassname">gsmmodem.modem.</code><code class="descname">Ussd</code><span class="sig-paren">(</span><em>gsmModem</em>, <em>sessionActive</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Ussd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Ussd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unstructured Supplementary Service Data (USSD) message.</p>
+<p>This class contains convenient methods for replying to a USSD prompt
+and to cancel the USSD session</p>
+<dl class="method">
+<dt id="gsmmodem.modem.Ussd.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Ussd.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Ussd.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminates/cancels the USSD session (without sending a reply)</p>
+<p>Does nothing if the USSD session is inactive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.modem.Ussd.reply">
+<code class="descname">reply</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/modem.html#Ussd.reply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.modem.Ussd.reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a reply to this USSD message in the same USSD session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>InvalidStateException</strong> – if the USSD session is not active (i.e. it has ended)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The USSD response message/session (as a Ussd object)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gsmmodem.serial_comms">
+<span id="serial-communications"></span><h2>Serial Communications<a class="headerlink" href="#module-gsmmodem.serial_comms" title="Permalink to this headline">¶</a></h2>
+<p>Low-level serial communications handling</p>
+<dl class="class">
+<dt id="gsmmodem.serial_comms.SerialComms">
+<em class="property">class </em><code class="descclassname">gsmmodem.serial_comms.</code><code class="descname">SerialComms</code><span class="sig-paren">(</span><em>port</em>, <em>baudrate=115200</em>, <em>notifyCallbackFunc=None</em>, <em>fatalErrorCallbackFunc=None</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/serial_comms.html#SerialComms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.serial_comms.SerialComms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps all low-level serial communications (actual read/write operations)</p>
+<dl class="method">
+<dt id="gsmmodem.serial_comms.SerialComms.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/serial_comms.html#SerialComms.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.serial_comms.SerialComms.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the read thread, waits for it to exit cleanly, then closes the underlying serial port</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.serial_comms.SerialComms.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/serial_comms.html#SerialComms.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.serial_comms.SerialComms.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects to the device and starts the read thread</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gsmmodem.pdu">
+<span id="pdu"></span><h2>PDU<a class="headerlink" href="#module-gsmmodem.pdu" title="Permalink to this headline">¶</a></h2>
+<p>SMS PDU encoding methods</p>
+<dl class="class">
+<dt id="gsmmodem.pdu.Concatenation">
+<em class="property">class </em><code class="descclassname">gsmmodem.pdu.</code><code class="descname">Concatenation</code><span class="sig-paren">(</span><em>iei=0</em>, <em>ieLen=0</em>, <em>ieData=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#Concatenation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.Concatenation" title="Permalink to this definition">¶</a></dt>
+<dd><p>IE that indicates SMS concatenation.</p>
+<p>This implementation handles both 8-bit and 16-bit concatenation
+indication, and exposes the specific useful details of this
+IE as instance variables.</p>
+<p>Exposes:</p>
+<dl class="docutils">
+<dt>reference</dt>
+<dd>CSMS reference number, must be same for all the SMS parts in the CSMS</dd>
+<dt>parts</dt>
+<dd>total number of parts. The value shall remain constant for every short
+message which makes up the concatenated short message. If the value is zero then
+the receiving entity shall ignore the whole information element</dd>
+<dt>number</dt>
+<dd>this part’s number in the sequence. The value shall start at 1 and
+increment for every short message which makes up the concatenated short message</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.pdu.InformationElement">
+<em class="property">class </em><code class="descclassname">gsmmodem.pdu.</code><code class="descname">InformationElement</code><span class="sig-paren">(</span><em>iei</em>, <em>ieLen=0</em>, <em>ieData=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#InformationElement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.InformationElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>User Data Header (UDH) Information Element (IE) implementation</p>
+<p>This represents a single field (“information element”) in the PDU’s
+User Data Header. The UDH itself contains one or more of these
+information elements.</p>
+<p>If the IEI (IE identifier) is recognized, the class will automatically
+specialize into one of the subclasses of InformationElement, 
+e.g. Concatenation or PortAddress, allowing the user to easily
+access the specific (and useful) attributes of these special cases.</p>
+<dl class="classmethod">
+<dt id="gsmmodem.pdu.InformationElement.decode">
+<em class="property">classmethod </em><code class="descname">decode</code><span class="sig-paren">(</span><em>byteIter</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#InformationElement.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.InformationElement.decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes a single IE at the current position in the specified
+byte iterator</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An InformationElement (or subclass) instance for the decoded IE</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#gsmmodem.pdu.InformationElement" title="gsmmodem.pdu.InformationElement">InformationElement</a>, or subclass thereof</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gsmmodem.pdu.InformationElement.encode">
+<code class="descname">encode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#InformationElement.encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.InformationElement.encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes this IE and returns the resulting bytes</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.pdu.Pdu">
+<em class="property">class </em><code class="descclassname">gsmmodem.pdu.</code><code class="descname">Pdu</code><span class="sig-paren">(</span><em>data</em>, <em>tpduLength</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#Pdu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.Pdu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encoded SMS PDU. Contains raw PDU data and related meta-information</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.pdu.PortAddress">
+<em class="property">class </em><code class="descclassname">gsmmodem.pdu.</code><code class="descname">PortAddress</code><span class="sig-paren">(</span><em>iei=4</em>, <em>ieLen=0</em>, <em>ieData=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#PortAddress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.PortAddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>IE that indicates an Application Port Addressing Scheme.</p>
+<p>This implementation handles both 8-bit and 16-bit concatenation
+indication, and exposes the specific useful details of this
+IE as instance variables.</p>
+<p>Exposes:
+destination: The destination port number
+source: The source port number</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="gsmmodem.pdu.SmsPduTzInfo">
+<em class="property">class </em><code class="descclassname">gsmmodem.pdu.</code><code class="descname">SmsPduTzInfo</code><span class="sig-paren">(</span><em>pduOffsetStr=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#SmsPduTzInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.SmsPduTzInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple implementation of datetime.tzinfo for handling timestamp GMT offsets specified in SMS PDUs</p>
+<dl class="method">
+<dt id="gsmmodem.pdu.SmsPduTzInfo.dst">
+<code class="descname">dst</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#SmsPduTzInfo.dst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.SmsPduTzInfo.dst" title="Permalink to this definition">¶</a></dt>
+<dd><p>We do not have enough info in the SMS PDU to implement daylight savings time</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.decodeGsm7">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">decodeGsm7</code><span class="sig-paren">(</span><em>encodedText</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#decodeGsm7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.decodeGsm7" title="Permalink to this definition">¶</a></dt>
+<dd><p>GSM-7 text decoding algorithm</p>
+<p>Decodes the specified GSM-7-encoded string into a plaintext string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>encodedText</strong> (<em>bytearray</em><em> or </em><em>str</em>) – the text string to encode</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A string containing the decoded text</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.decodeSemiOctets">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">decodeSemiOctets</code><span class="sig-paren">(</span><em>encodedNumber</em>, <em>numberOfOctets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#decodeSemiOctets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.decodeSemiOctets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semi-octet decoding algorithm(e.g. for phone numbers)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>encodedNumber</strong> (<em>bytearray</em><em>, </em><em>str</em><em> or </em><em>iter</em><em>(</em><em>bytearray</em><em>)</em>) – The semi-octet-encoded telephone number (in bytearray format or hex string)</li>
+<li><strong>numberOfOctets</strong> (<em>int</em>) – The expected amount of octets after decoding (i.e. when to stop)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">decoded telephone number</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.decodeSmsPdu">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">decodeSmsPdu</code><span class="sig-paren">(</span><em>pdu</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#decodeSmsPdu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.decodeSmsPdu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes SMS pdu data and returns a tuple in format (number, text)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pdu</strong> (<em>str</em><em> or </em><em>bytearray</em>) – PDU data as a hex string, or a bytearray containing PDU octects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>EncodingError</strong> – If the specified PDU data cannot be decoded</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The decoded SMS data as a dictionary</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.decodeUcs2">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">decodeUcs2</code><span class="sig-paren">(</span><em>byteIter</em>, <em>numBytes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#decodeUcs2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.decodeUcs2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes UCS2-encoded text from the specified byte iterator, up to a maximum of numBytes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.encodeGsm7">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">encodeGsm7</code><span class="sig-paren">(</span><em>plaintext</em>, <em>discardInvalid=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#encodeGsm7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.encodeGsm7" title="Permalink to this definition">¶</a></dt>
+<dd><p>GSM-7 text encoding algorithm</p>
+<p>Encodes the specified text string into GSM-7 octets (characters). This method does not pack
+the characters into septets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> – the text string to encode</li>
+<li><strong>discardInvalid</strong> – if True, characters that cannot be encoded will be silently discarded</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>ValueError</strong> – if the text string cannot be encoded using GSM-7 encoding (unless discardInvalid == True)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A bytearray containing the string encoded in GSM-7 encoding</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bytearray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.encodeSemiOctets">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">encodeSemiOctets</code><span class="sig-paren">(</span><em>number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#encodeSemiOctets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.encodeSemiOctets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Semi-octet encoding algorithm (e.g. for phone numbers)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">bytearray containing the encoded octets</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bytearray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.encodeSmsSubmitPdu">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">encodeSmsSubmitPdu</code><span class="sig-paren">(</span><em>number</em>, <em>text</em>, <em>reference=0</em>, <em>validity=None</em>, <em>smsc=None</em>, <em>requestStatusReport=True</em>, <em>rejectDuplicates=False</em>, <em>sendFlash=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#encodeSmsSubmitPdu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.encodeSmsSubmitPdu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an SMS-SUBMIT PDU for sending a message with the specified text to the specified number</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>number</strong> (<em>str</em>) – the destination mobile number</li>
+<li><strong>text</strong> (<em>str</em>) – the message text</li>
+<li><strong>reference</strong> (<em>int</em>) – message reference number (see also: rejectDuplicates parameter)</li>
+<li><strong>validity</strong> (<em>datetime.timedelta</em><em> (</em><em>relative</em><em>) or </em><em>datetime.datetime</em><em> (</em><em>absolute</em><em>)</em>) – message validity period (absolute or relative)</li>
+<li><strong>smsc</strong> (<em>str</em>) – SMSC number to use (leave None to use default)</li>
+<li><strong>rejectDuplicates</strong> (<em>bool</em>) – Flag that controls the TP-RD parameter (messages with same destination and reference may be rejected if True)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of one or more tuples containing the SMS PDU (as a bytearray, and the length of the TPDU part</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list of tuples</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.encodeUcs2">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">encodeUcs2</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#encodeUcs2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.encodeUcs2" title="Permalink to this definition">¶</a></dt>
+<dd><p>UCS2 text encoding algorithm</p>
+<p>Encodes the specified text string into UCS2-encoded bytes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text</strong> – the text string to encode</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A bytearray containing the string encoded in UCS2 encoding</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bytearray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.packSeptets">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">packSeptets</code><span class="sig-paren">(</span><em>octets</em>, <em>padBits=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#packSeptets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.packSeptets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Packs the specified octets into septets</p>
+<p>Typically the output of encodeGsm7 would be used as input to this function. The resulting
+bytearray contains the original GSM-7 characters packed into septets ready for transmission.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bytearray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.pdu.unpackSeptets">
+<code class="descclassname">gsmmodem.pdu.</code><code class="descname">unpackSeptets</code><span class="sig-paren">(</span><em>septets</em>, <em>numberOfSeptets=None</em>, <em>prevOctet=None</em>, <em>shift=7</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/pdu.html#unpackSeptets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.pdu.unpackSeptets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpacks the specified septets into octets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>septets</strong> (<em>iter</em><em>(</em><em>bytearray</em><em>)</em><em>, </em><em>bytearray</em><em> or </em><em>str</em>) – Iterator or iterable containing the septets packed into octets</li>
+<li><strong>numberOfSeptets</strong> (<em>int</em><em> or </em><em>None</em>) – The amount of septets to unpack (or None for all remaining in “septets”)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The septets unpacked into octets</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">bytearray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gsmmodem.util">
+<span id="utilities"></span><h2>Utilities<a class="headerlink" href="#module-gsmmodem.util" title="Permalink to this headline">¶</a></h2>
+<p>Some common utility classes used by tests</p>
+<dl class="class">
+<dt id="gsmmodem.util.SimpleOffsetTzInfo">
+<em class="property">class </em><code class="descclassname">gsmmodem.util.</code><code class="descname">SimpleOffsetTzInfo</code><span class="sig-paren">(</span><em>offsetInHours=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#SimpleOffsetTzInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.SimpleOffsetTzInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Very simple implementation of datetime.tzinfo offering set timezone offset for datetime instances</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.util.allLinesMatchingPattern">
+<code class="descclassname">gsmmodem.util.</code><code class="descname">allLinesMatchingPattern</code><span class="sig-paren">(</span><em>pattern</em>, <em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#allLinesMatchingPattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.allLinesMatchingPattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like lineMatchingPattern, but returns all lines that match the specified pattern</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of re.Match objects for each line matched, or an empty list if none matched</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.util.lineMatching">
+<code class="descclassname">gsmmodem.util.</code><code class="descname">lineMatching</code><span class="sig-paren">(</span><em>regexStr</em>, <em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#lineMatching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.lineMatching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches through the specified list of strings and returns the regular expression 
+match for the first line that matches the specified regex string, or None if no match was found</p>
+<p>Note: if you have a pre-compiled regex pattern, use lineMatchingPattern() instead</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the regular expression match for the first line that matches the specified regex, or None if no match was found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">re.Match</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.util.lineMatchingPattern">
+<code class="descclassname">gsmmodem.util.</code><code class="descname">lineMatchingPattern</code><span class="sig-paren">(</span><em>pattern</em>, <em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#lineMatchingPattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.lineMatchingPattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches through the specified list of strings and returns the regular expression 
+match for the first line that matches the specified pre-compiled regex pattern, or None if no match was found</p>
+<p>Note: if you are using a regex pattern string (i.e. not already compiled), use lineMatching() instead</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the regular expression match for the first line that matches the specified regex, or None if no match was found</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">re.Match</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.util.lineStartingWith">
+<code class="descclassname">gsmmodem.util.</code><code class="descname">lineStartingWith</code><span class="sig-paren">(</span><em>string</em>, <em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#lineStartingWith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.lineStartingWith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Searches through the specified list of strings and returns the 
+first line starting with the specified search string, or None if not found</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gsmmodem.util.parseTextModeTimeStr">
+<code class="descclassname">gsmmodem.util.</code><code class="descname">parseTextModeTimeStr</code><span class="sig-paren">(</span><em>timeStr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsmmodem/util.html#parseTextModeTimeStr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gsmmodem.util.parseTextModeTimeStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the specified SMS text mode time string</p>
+<p>The time stamp format is “yy/MM/dd,hh:mm:ss±zz”
+(yy = year, MM = month, dd = day, hh = hour, mm = minute, ss = second, zz = time zone
+[Note: the unit of time zone is a quarter of an hour])</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>timeStr</strong> (<em>str</em>) – The time string to parse</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">datetime object representing the specified time string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">datetime.datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#module-gsmmodem.modem">GSM Modem</a></li>
+<li><a class="reference internal" href="#module-gsmmodem.serial_comms">Serial Communications</a></li>
+<li><a class="reference internal" href="#module-gsmmodem.pdu">PDU</a></li>
+<li><a class="reference internal" href="#module-gsmmodem.util">Utilities</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Examples</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">python-gsmmodem 0.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2013, Developers.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>
