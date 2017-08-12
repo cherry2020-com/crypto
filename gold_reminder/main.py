@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
+import sys
+sys.path.extend(['.', '..'])
 import random
 import re
-
 import itchat
 import json
-
 import os
-
 import time
+import urllib3
 
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 
-import urllib3
 urllib3.disable_warnings()
 
 
@@ -22,13 +21,14 @@ urllib3.disable_warnings()
 def text_reply(msg):
     if msg.get('User') and msg.get('User').get('NickName').startswith(u'黄金'):
         return WechatSet(msg).analysis_cmd()
-    return u'本服务不支持您，欢迎联系管理员 ~'
+    # return u'本服务不支持您，欢迎联系管理员 ~'
 
 
 class WechatSet(object):
     CMD_MAP = {
         u'上限': 'set_upper_func',
-        u'下限': 'set_down_func'
+        u'下限': 'set_down_func',
+        u'配置': 'get_setting_func'
     }
     FILE_PATH = os.path.join(GOLD_DIR, 'json.txt')
 
@@ -81,6 +81,15 @@ class WechatSet(object):
         return u'设置成功：提醒 {}：{}'.format(self.cmds[0], self.cmds[1])
 
     set_down_func = set_upper_func
+
+    def get_setting_func(self):
+        reverse_cmd = {}
+        for cmd, cmd_fuc in self.CMD_MAP.items():
+            reverse_cmd[cmd_fuc] = cmd
+        msg = u'获取配置：\n'
+        for cmd_func, set_value in self.get_json().items():
+            msg += u'{}：{}\n'.format(reverse_cmd[cmd_func], set_value)
+        return msg
 
 
 class WechatObject(object):

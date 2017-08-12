@@ -3,8 +3,6 @@
 import logging
 import os
 
-import sys
-
 GOLD_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Log
