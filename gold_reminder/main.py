@@ -19,8 +19,11 @@ urllib3.disable_warnings()
 @itchat.msg_register(itchat.content.TEXT, isFriendChat=True,
                      isGroupChat=True, isMpChat=True)
 def text_reply(msg):
-    if msg.get('User') and msg.get('User').get('NickName').startswith(u'黄金'):
-        return WechatSet(msg).analysis_cmd()
+    try:
+        if msg['User']['NickName'].startswith(u'黄金'):
+            return WechatSet(msg).analysis_cmd()
+    except:
+        pass
     # return u'本服务不支持您，欢迎联系管理员 ~'
 
 
@@ -28,7 +31,8 @@ class WechatSet(object):
     CMD_MAP = {
         u'上限': 'set_upper_func',
         u'下限': 'set_down_func',
-        u'配置': 'get_setting_func'
+        u'配置': 'get_setting_func',
+        u'帮助': 'get_help_func',
     }
     FILE_PATH = os.path.join(GOLD_DIR, 'json.txt')
 
@@ -91,6 +95,12 @@ class WechatSet(object):
             msg += u'{}：{}\n'.format(reverse_cmd[cmd_func], set_value)
         return msg
 
+    def get_help_func(self):
+        return u"帮助：\n" \
+               u"#：实时获取当前价格；\n" \
+               u"#上限#（数字）：设置上限提醒；\n" \
+               u"#下限#（数字）：设置下限提醒；\n" \
+               u"#配置：获取当前的配置"
 
 class WechatObject(object):
 
@@ -105,8 +115,7 @@ class WechatObject(object):
     def send_msg(self, msg):
         for gold_room in self.gold_rooms:
             gold_room_name = gold_room['UserName']
-            msg += GOLD_LINK
-            itchat.send(msg, toUserName=gold_room_name)
+            itchat.send(msg + GOLD_LINK, toUserName=gold_room_name)
 
     def run(self, block_thread=False):
         itchat.run(blockThread=block_thread)
@@ -155,7 +164,7 @@ GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
 
 
 if __name__ == '__main__':
-    itchat_obj = WechatObject(2)
+    itchat_obj = WechatObject()
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
