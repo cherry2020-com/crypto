@@ -35,6 +35,14 @@ class WechatSet(object):
         u'下限': 'set_down_func',
         u'配置': 'get_setting_func',
         u'帮助': 'get_help_func',
+        u'浮动': 'set_float_func',
+    }
+    ENGLISH_CMD_MAP = {
+        u'upper': 'set_upper_func',
+        u'down': 'set_down_func',
+        u'setting': 'get_setting_func',
+        u'help': 'get_help_func',
+        u'float': 'set_float_func',
     }
     FILE_PATH = os.path.join(GOLD_DIR, 'json.txt')
 
@@ -64,7 +72,8 @@ class WechatSet(object):
             return CUR_MONEY_TEMP.format(GoldMake().cur_money) + GOLD_LINK
         self.cmds = msg_text.strip('#').split('#')
         self.cmds = [x.strip() for x in self.cmds]
-        func_name = self.CMD_MAP.get(self.cmds[0])
+        func_name = (self.CMD_MAP.get(self.cmds[0]) or
+                     self.ENGLISH_CMD_MAP.get(self.cmds[0]))
         if func_name:
             try:
                 return getattr(self, func_name)()
@@ -87,6 +96,7 @@ class WechatSet(object):
         return u'设置成功：提醒 {}：{}'.format(self.cmds[0], self.cmds[1])
 
     set_down_func = set_upper_func
+    set_float_func = set_upper_func
 
     def get_setting_func(self):
         reverse_cmd = {}
@@ -98,11 +108,13 @@ class WechatSet(object):
         return msg
 
     def get_help_func(self):
-        return u"帮助：\n" \
-               u"#：实时获取当前价格；\n" \
-               u"#上限#（数字）：设置上限提醒；\n" \
-               u"#下限#（数字）：设置下限提醒；\n" \
-               u"#配置：获取当前的配置"
+        return u"帮助: \n" \
+               u"#: 实时获取当前价格;\n" \
+               u"#上限#(数字): 上限提醒;\n" \
+               u"#下限#(数字): 下限提醒;\n" \
+               u"#浮动#(数字): 浮动提醒;\n" \
+               u"#配置: 获取当前的配置."
+
 
 class WechatObject(object):
 
@@ -146,30 +158,27 @@ class GoldMake(object):
 
     def lte__cur_money(self, value):
         if value:
-            return
-        value = float(value)
-        if self.cur_money <= value and self.lte__cur_money_tmp != value:
-            self.lte__cur_money_tmp = value
-            return self.LTE__CUR_MONEY_TEMP.format(value, self.cur_money)
+            value = float(value)
+            if self.cur_money <= value and self.lte__cur_money_tmp != value:
+                self.lte__cur_money_tmp = value
+                return self.LTE__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
     def gte__cur_money(self, value):
         if value:
-            return
-        value = float(value)
-        if self.cur_money >= value and self.gte__cur_money_tmp != value:
-            self.gte__cur_money_tmp = value
-            return self.GTE__CUR_MONEY_TEMP.format(value, self.cur_money)
+            value = float(value)
+            if self.cur_money >= value and self.gte__cur_money_tmp != value:
+                self.gte__cur_money_tmp = value
+                return self.GTE__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
     def sep__cur_money(self, value):
         if value and self.start_money:
-            return
-        value = float(value)
-        sep_money = abs(self.start_money - self.cur_money) - value
-        if sep_money >= 0:
-            self.start_money = self.cur_money
-            return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
+            value = float(value)
+            sep_money = abs(self.start_money - self.cur_money) - value
+            if sep_money >= 0:
+                self.start_money = self.cur_money
+                return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
     def clear(self):
@@ -199,6 +208,7 @@ if __name__ == '__main__':
             make_obj.refresh_cur_money()
             msg = make_obj.lte__cur_money(json_data.get('set_down_func'))
             msg += make_obj.gte__cur_money(json_data.get('set_upper_func'))
+            msg += make_obj.sep__cur_money(json_data.get('set_float_func'))
             if msg:
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(10, 20)
