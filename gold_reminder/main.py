@@ -94,7 +94,7 @@ class WechatSet(object):
 
 class WechatObject(object):
 
-    def __init__(self, enable_cmd_qr=2):
+    def __init__(self, enable_cmd_qr=False):
         itchat.auto_login(enableCmdQR=enable_cmd_qr, hotReload=True)
         itchat.send('Hello, I am start !', toUserName='filehelper')
         self.gold_rooms = itchat.search_chatrooms(name=u'黄金')
@@ -155,7 +155,7 @@ GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
 
 
 if __name__ == '__main__':
-    itchat_obj = WechatObject()
+    itchat_obj = WechatObject(2)
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
