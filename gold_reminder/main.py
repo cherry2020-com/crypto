@@ -16,8 +16,10 @@ from utils.fiddler import RawToPython
 urllib3.disable_warnings()
 
 
-@itchat.msg_register(itchat.content.TEXT, isFriendChat=True,
-                     isGroupChat=True, isMpChat=True)
+# isFriendChat=True
+# isGroupChat=True
+# isMpChat=True
+@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
 def text_reply(msg):
     try:
         if msg['User']['NickName'].startswith(u'黄金'):
