@@ -127,12 +127,14 @@ class GoldMake(object):
     FD_FILE_PATH = os.path.join(GOLD_DIR, 'header.txt')
     LTE__CUR_MONEY_TEMP = u'低于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
     GTE__CUR_MONEY_TEMP = u'高于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
+    SEP__CUR_MONEY_TEMP = u'涨跌浮动超过：{:.2f} 元\n当前价格：{:.2f} 元\n'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
         self.cur_money = self.refresh_cur_money()
         self.lte__cur_money_tmp = 0
         self.gte__cur_money_tmp = 0
+        self.start_money = self.cur_money
 
     def refresh_cur_money(self):
         web_data = self.fd_obj.requests()
@@ -143,6 +145,8 @@ class GoldMake(object):
         return self.cur_money
 
     def lte__cur_money(self, value):
+        if value:
+            return
         value = float(value)
         if self.cur_money <= value and self.lte__cur_money_tmp != value:
             self.lte__cur_money_tmp = value
@@ -150,10 +154,22 @@ class GoldMake(object):
         return ''
 
     def gte__cur_money(self, value):
+        if value:
+            return
         value = float(value)
         if self.cur_money >= value and self.gte__cur_money_tmp != value:
             self.gte__cur_money_tmp = value
             return self.GTE__CUR_MONEY_TEMP.format(value, self.cur_money)
+        return ''
+
+    def sep__cur_money(self, value):
+        if value and self.start_money:
+            return
+        value = float(value)
+        sep_money = abs(self.start_money - self.cur_money) - value
+        if sep_money >= 0:
+            self.start_money = self.cur_money
+            return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
     def clear(self):
@@ -181,8 +197,8 @@ if __name__ == '__main__':
         if next_time < now_time:
             json_data = set_obj.get_json()
             make_obj.refresh_cur_money()
-            msg = make_obj.lte__cur_money(json_data['set_down_func'])
-            msg += make_obj.gte__cur_money(json_data['set_upper_func'])
+            msg = make_obj.lte__cur_money(json_data.get('set_down_func'))
+            msg += make_obj.gte__cur_money(json_data.get('set_upper_func'))
             if msg:
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(10, 20)
