@@ -192,16 +192,16 @@ class GoldMake(object):
     def lte__cur_money(self, value):
         if value and self.cur_money:
             value = float(value)
-            if self.cur_money <= value and self.lte__cur_money_tmp != value:
-                self.lte__cur_money_tmp = value
+            if self.cur_money <= value and self.lte__cur_money_tmp != self.cur_money:
+                self.lte__cur_money_tmp = self.cur_money
                 return self.LTE__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
     def gte__cur_money(self, value):
         if value and self.cur_money:
             value = float(value)
-            if self.cur_money >= value and self.gte__cur_money_tmp != value:
-                self.gte__cur_money_tmp = value
+            if self.cur_money >= value and self.gte__cur_money_tmp != self.cur_money:
+                self.gte__cur_money_tmp = self.cur_money
                 return self.GTE__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
