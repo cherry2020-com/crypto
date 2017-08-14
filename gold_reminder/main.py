@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
 import sys
+
+import logging
+
 sys.path.extend(['.', '..'])
 import random
 import re
@@ -19,11 +22,11 @@ urllib3.disable_warnings()
 # isFriendChat=True
 # isGroupChat=True
 # isMpChat=True
-@itchat.msg_register(itchat.content.TEXT, isGroupChat=True)
+@itchat.msg_register(itchat.content.TEXT, isFriendChat=True, isGroupChat=True)
 def text_reply(msg):
     try:
-        if msg['User']['NickName'].startswith(u'黄金'):
-            return WechatSet(msg).analysis_cmd()
+        # if msg['User']['NickName'].startswith(u'黄金'):
+        return WechatSet(msg).analysis_cmd()
     except:
         pass
     # return u'本服务不支持您，欢迎联系管理员 ~'
@@ -69,7 +72,7 @@ class WechatSet(object):
         if not msg_text.startswith('#'):
             return None
         if msg_text == '#':
-            return CUR_MONEY_TEMP.format(GoldMake().cur_money) + GOLD_LINK
+            return GoldMake().get_money_msg() + GOLD_LINK
         self.cmds = msg_text.strip('#').split('#')
         self.cmds = [x.strip() for x in self.cmds]
         func_name = (self.CMD_MAP.get(self.cmds[0]) or
@@ -140,10 +143,20 @@ class GoldMake(object):
     LTE__CUR_MONEY_TEMP = u'低于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
     GTE__CUR_MONEY_TEMP = u'高于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
     SEP__CUR_MONEY_TEMP = u'涨跌浮动超过：{:.2f} 元\n当前价格：{:.2f} 元\n'
+    NEW_HIGH_MONEY_TEMP = u'获得新【高】：{:.2f} 元\n'
+    NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元\n'
+    MONEY_TEMP = u'当前：{:.2f} 元\n' \
+                 u'最高：{:.2f} 元\n' \
+                 u'最低：{:.2f} 元'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
-        self.cur_money = self.refresh_cur_money()
+        self.cur_money = 0
+        self.high_money = 0
+        self.low_money = 0
+        self.refresh_cur_money()
+        self.tmp_high_money = self.high_money
+        self.tmp_low_money = self.low_money
         self.lte__cur_money_tmp = 0
         self.gte__cur_money_tmp = 0
         self.start_money = self.cur_money
@@ -152,15 +165,20 @@ class GoldMake(object):
         try:
             web_data = self.fd_obj.requests()
             # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
-            re_finds = re.findall(r'<dd><b>(.+?)</b><i class="up"></i>.*?</dd>',
+            re_finds = re.findall(r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>',
                                   web_data.text)
+            re_find_high = re.findall(r'<li>最高：(.*?)</li>'.decode('utf-8'), web_data.text)
+            re_find_low = re.findall(r'<li class="fall">最低：<span>(.*?)</span></li>'.decode('utf-8'),
+                                     web_data.text)
             self.cur_money = float(re_finds[0])
-        except:
-            pass
+            self.high_money = float(re_find_high[0])
+            self.low_money = float(re_find_low[0])
+        except Exception as e:
+            logging.error('GoldMake\n' + e)
         return self.cur_money
 
     def lte__cur_money(self, value):
-        if value:
+        if value and self.cur_money:
             value = float(value)
             if self.cur_money <= value and self.lte__cur_money_tmp != value:
                 self.lte__cur_money_tmp = value
@@ -168,7 +186,7 @@ class GoldMake(object):
         return ''
 
     def gte__cur_money(self, value):
-        if value:
+        if value and self.cur_money:
             value = float(value)
             if self.cur_money >= value and self.gte__cur_money_tmp != value:
                 self.gte__cur_money_tmp = value
@@ -176,7 +194,7 @@ class GoldMake(object):
         return ''
 
     def sep__cur_money(self, value):
-        if value and self.start_money:
+        if value and self.start_money and self.cur_money:
             value = float(value)
             sep_money = abs(self.start_money - self.cur_money) - value
             if sep_money >= 0:
@@ -184,9 +202,35 @@ class GoldMake(object):
                 return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
+    def new_high__cur_money(self):
+        if self.tmp_high_money and self.cur_money:
+            if self.tmp_high_money < self.cur_money:
+                self.tmp_high_money = self.high_money
+                return self.NEW_HIGH_MONEY_TEMP.format(self.cur_money)
+        return ''
+
+    def new_low__cur_money(self):
+        if self.tmp_low_money and self.cur_money:
+            if self.tmp_low_money > self.cur_money:
+                self.tmp_low_money = self.low_money
+                return self.NEW_LOW_MONEY_TEMP.format(self.cur_money)
+        return ''
+
+    def get_money_msg(self):
+        return self.MONEY_TEMP.format(self.cur_money, self.high_money, self.low_money)
+
     def clear(self):
         self.lte__cur_money_tmp = 0
         self.gte__cur_money_tmp = 0
+
+    def get_msg(self, high_value, low_value, sep_value):
+        msg = self.gte__cur_money(high_value)
+        msg += self.lte__cur_money(low_value)
+        msg += self.sep__cur_money(sep_value)
+        msg += self.new_high__cur_money()
+        msg += self.new_low__cur_money()
+        return msg
+
 
 CUR_MONEY_TEMP = u'当前价格：{:.2f} 元\n'
 
@@ -198,7 +242,7 @@ if __name__ == '__main__':
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
-    itchat_obj.send_msg(CUR_MONEY_TEMP.format(make_obj.cur_money))
+    # itchat_obj.send_msg(make_obj.get_money_msg())
     # print web_data.text
     next_time = 0
     clear_time = 0
@@ -209,12 +253,12 @@ if __name__ == '__main__':
         if next_time < now_time:
             json_data = set_obj.get_json()
             make_obj.refresh_cur_money()
-            msg = make_obj.lte__cur_money(json_data.get('set_down_func'))
-            msg += make_obj.gte__cur_money(json_data.get('set_upper_func'))
-            msg += make_obj.sep__cur_money(json_data.get('set_float_func'))
+            msg = make_obj.get_msg(json_data.get('set_upper_func'),
+                                   json_data.get('set_down_func'),
+                                   json_data.get('set_float_func'))
             if msg:
                 itchat_obj.send_msg(msg)
-            next_time = now_time + random.randint(10, 20)
+            next_time = now_time + random.randint(10, 30)
         if clear_time < now_time:
             clear_time = now_time + 600
             make_obj.clear()
