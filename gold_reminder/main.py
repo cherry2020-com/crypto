@@ -151,13 +151,15 @@ class GoldMake(object):
     NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元\n'
     MONEY_TEMP = u'当前：{:.2f} 元\n' \
                  u'最高：{:.2f} 元\n' \
-                 u'最低：{:.2f} 元\n'
+                 u'最低：{:.2f} 元\n' \
+                 u'涨跌：{:.2f} 元\n'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
         self.cur_money = 0
         self.high_money = 0
         self.low_money = 0
+        self.float_money = 0
         self.refresh_cur_money()
         self.tmp_high_money = self.high_money
         self.tmp_low_money = self.low_money
@@ -169,14 +171,20 @@ class GoldMake(object):
         try:
             web_data = self.fd_obj.requests()
             # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
-            re_finds = re.findall(r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>',
-                                  web_data.text)
-            re_find_high = re.findall(r'<li>最高：(.*?)</li>'.decode('utf-8'), web_data.text)
-            re_find_low = re.findall(r'<li class="fall">最低：<span>(.*?)</span></li>'.decode('utf-8'),
-                                     web_data.text)
+            re_finds = re.findall(
+                r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>', web_data.text) or [0]
+            re_find_high = re.findall(
+                r'<li>最高：(.*?)</li>'.decode('utf-8'), web_data.text) or [0]
+            re_find_low = re.findall(
+                r'<li class="fall">最低：<span>(.*?)</span></li>'.decode('utf-8'),
+                web_data.text) or [0]
+            re_find_float = re.findall(
+                r'<li class="fall">涨跌额：<span>(.*?)</span></li>'.decode('utf-8'),
+                web_data.text) or [0]
             self.cur_money = float(re_finds[0])
             self.high_money = float(re_find_high[0])
             self.low_money = float(re_find_low[0])
+            self.float_money = float(re_find_float[0])
         except Exception as e:
             logging.error('GoldMake\n' + e)
         return self.cur_money
@@ -221,7 +229,8 @@ class GoldMake(object):
         return ''
 
     def get_money_msg(self):
-        return self.MONEY_TEMP.format(self.cur_money, self.high_money, self.low_money)
+        return self.MONEY_TEMP.format(self.cur_money, self.high_money, self.low_money,
+                                      self.float_money)
 
     def clear(self):
         self.lte__cur_money_tmp = 0
