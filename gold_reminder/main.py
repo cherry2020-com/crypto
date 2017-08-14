@@ -149,11 +149,14 @@ class GoldMake(object):
         self.start_money = self.cur_money
 
     def refresh_cur_money(self):
-        web_data = self.fd_obj.requests()
-        # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
-        re_finds = re.findall(r'<dd><b>(.+?)</b><i class="up"></i>.*?</dd>',
-                              web_data.text)
-        self.cur_money = float(re_finds[0])
+        try:
+            web_data = self.fd_obj.requests()
+            # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
+            re_finds = re.findall(r'<dd><b>(.+?)</b><i class="up"></i>.*?</dd>',
+                                  web_data.text)
+            self.cur_money = float(re_finds[0])
+        except:
+            pass
         return self.cur_money
 
     def lte__cur_money(self, value):
