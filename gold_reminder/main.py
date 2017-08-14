@@ -39,6 +39,7 @@ class WechatSet(object):
         u'配置': 'get_setting_func',
         u'帮助': 'get_help_func',
         u'浮动': 'set_float_func',
+        # u'调试': 'set_debug_func',
     }
     ENGLISH_CMD_MAP = {
         u'upper': 'set_upper_func',
@@ -46,12 +47,16 @@ class WechatSet(object):
         u'setting': 'get_setting_func',
         u'help': 'get_help_func',
         u'float': 'set_float_func',
+        # u'debug': 'set_debug_func',
     }
     FILE_PATH = os.path.join(GOLD_DIR, 'json.txt')
 
     def __init__(self, msg=None):
         self.msg = msg
         self.cmds = None
+        self.reverse_cmd = {}
+        for cmd, cmd_fuc in self.CMD_MAP.items():
+            self.reverse_cmd[cmd_fuc] = cmd
 
     def get_json(self):
         json_data = {}
@@ -93,21 +98,20 @@ class WechatSet(object):
             json.dump(json_data, fp, encoding='utf-8')
 
     def set_upper_func(self):
-        value = float(self.cmds[1])
-        update_json = {self.CMD_MAP[self.cmds[0]]: value}
+        json_value = float(self.cmds[1])
+        json_key = (self.CMD_MAP.get(self.cmds[0]) or
+                    self.ENGLISH_CMD_MAP.get(self.cmds[0]))
+        update_json = {json_key: json_value}
         self.__save(update_json)
-        return u'设置成功：提醒 {}：{}'.format(self.cmds[0], self.cmds[1])
+        return u'设置成功：提醒 {}：{}'.format(self.reverse_cmd[json_key], self.cmds[1])
 
     set_down_func = set_upper_func
     set_float_func = set_upper_func
 
     def get_setting_func(self):
-        reverse_cmd = {}
-        for cmd, cmd_fuc in self.CMD_MAP.items():
-            reverse_cmd[cmd_fuc] = cmd
         msg = u'获取配置：\n'
         for cmd_func, set_value in self.get_json().items():
-            msg += u'{}：{}\n'.format(reverse_cmd[cmd_func], set_value)
+            msg += u'{}：{}\n'.format(self.reverse_cmd[cmd_func], set_value)
         return msg
 
     def get_help_func(self):
@@ -147,7 +151,7 @@ class GoldMake(object):
     NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元\n'
     MONEY_TEMP = u'当前：{:.2f} 元\n' \
                  u'最高：{:.2f} 元\n' \
-                 u'最低：{:.2f} 元'
+                 u'最低：{:.2f} 元\n'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
@@ -231,11 +235,7 @@ class GoldMake(object):
         msg += self.new_low__cur_money()
         return msg
 
-
-CUR_MONEY_TEMP = u'当前价格：{:.2f} 元\n'
-
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
-
 
 if __name__ == '__main__':
     itchat_obj = WechatObject()
