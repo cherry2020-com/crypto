@@ -172,21 +172,23 @@ class GoldMake(object):
             web_data = self.fd_obj.requests()
             # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
             re_finds = re.findall(
-                r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>', web_data.text) or [0]
+                r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>',
+                web_data.text) or [0]
             re_find_high = re.findall(
-                r'<li>最高：(.*?)</li>'.decode('utf-8'), web_data.text) or [0]
+                r'<li.*?>最高：<span>(.*?)</span></li>'.decode('utf-8'),
+                web_data.text) or [0]
             re_find_low = re.findall(
-                r'<li class="fall">最低：<span>(.*?)</span></li>'.decode('utf-8'),
+                r'<li.*?>最低：<span>(.*?)</span></li>'.decode('utf-8'),
                 web_data.text) or [0]
             re_find_float = re.findall(
-                r'<li class="fall">涨跌额：<span>(.*?)</span></li>'.decode('utf-8'),
+                r'<li.*?>涨跌额：<span>(.*?)</span></li>'.decode('utf-8'),
                 web_data.text) or [0]
             self.cur_money = float(re_finds[0])
             self.high_money = float(re_find_high[0])
             self.low_money = float(re_find_low[0])
             self.float_money = float(re_find_float[0])
         except Exception as e:
-            logging.error('GoldMake\n' + e)
+            pass
         return self.cur_money
 
     def lte__cur_money(self, value):
