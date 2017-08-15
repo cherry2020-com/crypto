@@ -136,7 +136,7 @@ class WechatObject(object):
     def send_msg(self, msg):
         for gold_room in self.gold_rooms:
             gold_room_name = gold_room['UserName']
-            itchat.send(msg + GOLD_LINK, toUserName=gold_room_name)
+            itchat.send(msg, toUserName=gold_room_name)
 
     def run(self, block_thread=False):
         itchat.run(blockThread=block_thread)
