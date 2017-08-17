@@ -39,6 +39,7 @@ class WechatSet(object):
         u'配置': 'get_setting_func',
         u'帮助': 'get_help_func',
         u'浮动': 'set_float_func',
+        u'高低浮动': 'set_high_low_float_func',
         # u'调试': 'set_debug_func',
     }
     ENGLISH_CMD_MAP = {
@@ -47,6 +48,7 @@ class WechatSet(object):
         u'setting': 'get_setting_func',
         u'help': 'get_help_func',
         u'float': 'set_float_func',
+        u'high low float': 'set_high_low_float_func',
         # u'debug': 'set_debug_func',
     }
     FILE_PATH = os.path.join(GOLD_DIR, 'json.txt')
@@ -107,6 +109,7 @@ class WechatSet(object):
 
     set_down_func = set_upper_func
     set_float_func = set_upper_func
+    set_high_low_float_func = set_upper_func
 
     def get_setting_func(self):
         msg = u'获取配置：\n'
@@ -117,10 +120,11 @@ class WechatSet(object):
     def get_help_func(self):
         return u"帮助: \n" \
                u"#: 实时获取当前价格;\n" \
+               u"#配置: 获取当前的配置;\n" \
                u"#上限#(数字): 上限提醒;\n" \
                u"#下限#(数字): 下限提醒;\n" \
                u"#浮动#(数字): 浮动提醒;\n" \
-               u"#配置: 获取当前的配置."
+               u"#高低浮动#(数字): 出现新高或新低时提醒的价格浮动间隔."
 
 
 class WechatObject(object):
@@ -216,18 +220,30 @@ class GoldMake(object):
                 return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
         return ''
 
-    def new_high__cur_money(self):
+    def new_high__cur_money(self, high_low_sep_value):
         if self.tmp_high_money and self.cur_money:
             if self.tmp_high_money < self.cur_money:
-                self.tmp_high_money = self.high_money
-                return self.NEW_HIGH_MONEY_TEMP.format(self.cur_money)
+                if high_low_sep_value:
+                    high_low_sep_value = float(high_low_sep_value)
+                    if (self.cur_money - self.tmp_high_money) >= high_low_sep_value:
+                        self.tmp_high_money = self.high_money
+                        return self.NEW_HIGH_MONEY_TEMP.format(self.cur_money)
+                else:
+                    self.tmp_high_money = self.high_money
+                    return self.NEW_HIGH_MONEY_TEMP.format(self.cur_money)
         return ''
 
-    def new_low__cur_money(self):
+    def new_low__cur_money(self, high_low_sep_value):
         if self.tmp_low_money and self.cur_money:
             if self.tmp_low_money > self.cur_money:
-                self.tmp_low_money = self.low_money
-                return self.NEW_LOW_MONEY_TEMP.format(self.cur_money)
+                if high_low_sep_value:
+                    high_low_sep_value = float(high_low_sep_value)
+                    if (self.tmp_high_money - self.cur_money) >= high_low_sep_value:
+                        self.tmp_low_money = self.low_money
+                        return self.NEW_LOW_MONEY_TEMP.format(self.cur_money)
+                else:
+                    self.tmp_low_money = self.low_money
+                    return self.NEW_LOW_MONEY_TEMP.format(self.cur_money)
         return ''
 
     def get_money_msg(self):
@@ -238,12 +254,12 @@ class GoldMake(object):
         self.lte__cur_money_tmp = 0
         self.gte__cur_money_tmp = 0
 
-    def get_msg(self, high_value, low_value, sep_value):
+    def get_msg(self, high_value, low_value, sep_value, high_low_sep_value):
         msg = self.gte__cur_money(high_value)
         msg += self.lte__cur_money(low_value)
         msg += self.sep__cur_money(sep_value)
-        msg += self.new_high__cur_money()
-        msg += self.new_low__cur_money()
+        msg += self.new_high__cur_money(high_low_sep_value)
+        msg += self.new_low__cur_money(high_low_sep_value)
         return msg
 
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
@@ -266,7 +282,8 @@ if __name__ == '__main__':
             make_obj.refresh_cur_money()
             msg = make_obj.get_msg(json_data.get('set_upper_func'),
                                    json_data.get('set_down_func'),
-                                   json_data.get('set_float_func'))
+                                   json_data.get('set_float_func'),
+                                   json_data.get('set_high_low_float_func'))
             if msg:
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(10, 30)
