@@ -132,7 +132,8 @@ class WechatObject(object):
 
     def send_msg(self, msg):
         for receiver in self.receivers:
-            self.email.send((msg + GOLD_LINK).encode('utf-8'), receiver=receiver)
+            self.email.send((msg + GOLD_LINK).encode('utf-8'), title=msg,
+                            receiver=receiver)
             print 'Send E-mail To %s: %s ...' % (receiver, msg)
 
 
