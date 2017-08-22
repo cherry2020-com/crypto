@@ -2,12 +2,11 @@
 # - * - encoding: UTF-8 - * -
 import sys
 
-import logging
+from utils.send_email import Email
 
 sys.path.extend(['.', '..'])
 import random
 import re
-import itchat
 import json
 import os
 import time
@@ -18,18 +17,12 @@ from utils.fiddler import RawToPython
 
 urllib3.disable_warnings()
 
+EMAIL_RECEIVERS = [
+    'minglei.weng@smallsite.cn',
+    'hongyu.wang@smallsite.cn',
+]
 
-# isFriendChat=True
-# isGroupChat=True
-# isMpChat=True
-@itchat.msg_register(itchat.content.TEXT, isFriendChat=True, isGroupChat=True)
-def text_reply(msg):
-    try:
-        # if msg['User']['NickName'].startswith(u'黄金'):
-        return WechatSet(msg).analysis_cmd()
-    except:
-        pass
-    # return u'本服务不支持您，欢迎联系管理员 ~'
+EMAIL_RECEIVERS = set(EMAIL_RECEIVERS)
 
 
 class WechatSet(object):
@@ -129,21 +122,18 @@ class WechatSet(object):
 
 class WechatObject(object):
 
-    def __init__(self, enable_cmd_qr=False):
-        itchat.auto_login(enableCmdQR=enable_cmd_qr, hotReload=True)
-        itchat.send('Hello, I am start !', toUserName='filehelper')
-        self.gold_rooms = itchat.search_chatrooms(name=u'黄金')
+    def __init__(self, receivers):
+        self.email = Email('Yun_Warning@163.com', 'Wml93640218', '645008699@qq.com',
+                           'Gold Reminder')
+        self.receivers = receivers
 
     def test(self):
         self.send_msg('Hello, I am start !')
 
     def send_msg(self, msg):
-        for gold_room in self.gold_rooms:
-            gold_room_name = gold_room['UserName']
-            itchat.send(msg, toUserName=gold_room_name)
-
-    def run(self, block_thread=False):
-        itchat.run(blockThread=block_thread)
+        for receiver in self.receivers:
+            self.email.send((msg + GOLD_LINK).encode('utf-8'), receiver=receiver)
+            print 'Send E-mail To %s: %s ...' % (receiver, msg)
 
 
 class GoldMake(object):
@@ -265,15 +255,13 @@ class GoldMake(object):
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
 
 if __name__ == '__main__':
-    itchat_obj = WechatObject()
+    itchat_obj = WechatObject(EMAIL_RECEIVERS)
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
-    # itchat_obj.send_msg(make_obj.get_money_msg())
-    # print web_data.text
+    itchat_obj.send_msg(make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
-    itchat_obj.run(False)
     msg = ''
     while True:
         now_time = int(time.time())

@@ -19,15 +19,16 @@ class Email(object):
         self.host = host
         self.port = port
 
-    def send(self, body, title=None):
+    def send(self, body, title=None, receiver=None):
+        receiver = receiver or self.receiver
         msg = MIMEText(body, 'html')
         msg['from'] = self.sender
-        msg['to'] = self.receiver
+        msg['to'] = receiver
         msg['subject'] = title or self.title
         server = smtplib.SMTP(self.host, self.port)
         server.starttls()
         server.login(self.sender, self.password)
-        server.sendmail(self.sender, self.receiver, msg.as_string())
+        server.sendmail(self.sender, receiver, msg.as_string())
         result_info = 'The mail named <%s> to <%s> is sended successly.' % (
-            title, self.receiver)
+            title, receiver)
         self.log.info(result_info)
