@@ -2,8 +2,6 @@
 # - * - encoding: UTF-8 - * -
 import sys
 
-from utils.send_email import Email
-
 sys.path.extend(['.', '..'])
 import random
 import re
@@ -14,6 +12,7 @@ import urllib3
 
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
+from utils.send_email import Email
 
 urllib3.disable_warnings()
 
