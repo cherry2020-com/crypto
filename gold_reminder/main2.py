@@ -19,6 +19,8 @@ urllib3.disable_warnings()
 EMAIL_RECEIVERS = [
     'minglei.weng@smallsite.cn',
     'hongyu.wang@smallsite.cn',
+    # '13511004353@139.com',
+    # '15010785631@139.com'
 ]
 
 EMAIL_RECEIVERS = set(EMAIL_RECEIVERS)
@@ -131,7 +133,7 @@ class WechatObject(object):
 
     def send_msg(self, msg):
         for receiver in self.receivers:
-            self.email.send((msg + GOLD_LINK).encode('utf-8'), title=msg,
+            self.email.send(GOLD_LINK, title=msg,
                             receiver=receiver)
             print 'Send E-mail To %s: %s ...' % (receiver, msg)
 
