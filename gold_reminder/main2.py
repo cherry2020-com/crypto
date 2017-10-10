@@ -171,7 +171,7 @@ class GoldMake(object):
                 r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>',
                 web_data.text) or [0]
             re_find_high = re.findall(
-                r'<li.*?>最高：<span>(.*?)</span></li>'.decode('utf-8'),
+                r'<li.*?>最高：.*?(\d+\.\d+).*?<\/li.*?>'.decode('utf-8'),
                 web_data.text) or [0]
             re_find_low = re.findall(
                 r'<li.*?>最低：<span>(.*?)</span></li>'.decode('utf-8'),
@@ -261,7 +261,7 @@ if __name__ == '__main__':
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
-    itchat_obj.send_msg(make_obj.get_money_msg())
+    # itchat_obj.send_msg(make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
     msg = ''
@@ -277,6 +277,8 @@ if __name__ == '__main__':
             if msg:
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(10, 30)
+            print '.',
+            sys.stdout.flush()
         if clear_time < now_time:
             clear_time = now_time + 600
             make_obj.clear()
