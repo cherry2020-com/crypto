@@ -2,7 +2,8 @@
 # - * - encoding: UTF-8 - * -
 import sys
 
-sys.path.extend(['.', '..'])
+sys.path.extend(['/data/my_tools_env/my_tools/gold_reminder/',
+                 '/data/my_tools_env/my_tools/'])
 import random
 import re
 import json
@@ -135,16 +136,16 @@ class WechatObject(object):
         for receiver in self.receivers:
             self.email.send(GOLD_LINK, title=msg,
                             receiver=receiver)
-            print 'Send E-mail To %s: %s ...' % (receiver, msg)
+            # print u'Send E-mail To %s: %s ...' % (receiver, msg)
 
 
 class GoldMake(object):
     FD_FILE_PATH = os.path.join(GOLD_DIR, 'header.txt')
-    LTE__CUR_MONEY_TEMP = u'低于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
-    GTE__CUR_MONEY_TEMP = u'高于设定阈值：{:.2f} 元\n当前价格：{:.2f} 元\n'
-    SEP__CUR_MONEY_TEMP = u'涨跌浮动超过：{:.2f} 元\n当前价格：{:.2f} 元\n'
-    NEW_HIGH_MONEY_TEMP = u'获得新【高】：{:.2f} 元\n'
-    NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元\n'
+    LTE__CUR_MONEY_TEMP = u'低于阈值：{:.2f} 元 | '
+    GTE__CUR_MONEY_TEMP = u'高于阈值：{:.2f} 元 | '
+    SEP__CUR_MONEY_TEMP = u'涨浮超过：{:.2f} 元 | '
+    NEW_HIGH_MONEY_TEMP = u'获得新【高】：{:.2f} 元 | '
+    NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元 | '
     MONEY_TEMP = u'当前：{:.2f} 元\n' \
                  u'最高：{:.2f} 元\n' \
                  u'最低：{:.2f} 元\n' \
@@ -252,6 +253,8 @@ class GoldMake(object):
         msg += self.sep__cur_money(sep_value)
         msg += self.new_high__cur_money(high_low_sep_value)
         msg += self.new_low__cur_money(high_low_sep_value)
+        if msg:
+            msg += self.get_money_msg()
         return msg
 
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
@@ -261,7 +264,7 @@ if __name__ == '__main__':
     # itchat_obj.test()
     make_obj = GoldMake()
     set_obj = WechatSet()
-    # itchat_obj.send_msg(make_obj.get_money_msg())
+    itchat_obj.send_msg(make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
     msg = ''
