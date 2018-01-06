@@ -15,6 +15,8 @@ from collections import OrderedDict
 
 import logging
 import requests
+import urllib3
+urllib3.disable_warnings()
 
 
 class FiddlerError(Exception):
@@ -152,6 +154,12 @@ class RawToPython(object):
         elif self.method == "POST":
             try:
                 web_data = requests.post(verify=False, **req_param)
+            except:
+                logging.error("fd: requests post error: " + req_param["url"])
+                return
+        elif self.method == "HEAD":
+            try:
+                web_data = requests.head(verify=False, **req_param)
             except:
                 logging.error("fd: requests post error: " + req_param["url"])
                 return
