@@ -169,7 +169,7 @@ class GoldMake(object):
             web_data = self.fd_obj.requests()
             # re_finds = re.findall(r'lineChartData.*?=(.+?);', web_data.text)
             re_finds = re.findall(
-                r'<dd><b>(.+?)</b><i class=".*?"></i>.*?</dd>',
+                r'<dd><b.*?>(.+?)</b><i class=".*?"></i>.*?</dd>',
                 web_data.text) or [0]
             re_find_high = re.findall(
                 r'<li.*?>最高：.*?(\d+\.\d+).*?<\/li.*?>'.decode('utf-8'),
@@ -270,19 +270,22 @@ if __name__ == '__main__':
     msg = ''
     while True:
         now_time = int(time.time())
-        if next_time < now_time:
-            json_data = set_obj.get_json()
-            make_obj.refresh_cur_money()
-            msg = make_obj.get_msg(json_data.get('set_upper_func'),
-                                   json_data.get('set_down_func'),
-                                   json_data.get('set_float_func'),
-                                   json_data.get('set_high_low_float_func'))
-            if msg:
-                itchat_obj.send_msg(msg)
-            next_time = now_time + random.randint(10, 30)
-            print '.',
-            sys.stdout.flush()
-        if clear_time < now_time:
-            clear_time = now_time + 600
-            make_obj.clear()
+        try:
+            if next_time < now_time:
+                json_data = set_obj.get_json()
+                make_obj.refresh_cur_money()
+                msg = make_obj.get_msg(json_data.get('set_upper_func'),
+                                       json_data.get('set_down_func'),
+                                       json_data.get('set_float_func'),
+                                       json_data.get('set_high_low_float_func'))
+                if msg:
+                    itchat_obj.send_msg(msg)
+                next_time = now_time + random.randint(10, 30)
+                print '.',
+                sys.stdout.flush()
+            if clear_time < now_time:
+                clear_time = now_time + 600
+                make_obj.clear()
+        except:
+            pass
         time.sleep(1)

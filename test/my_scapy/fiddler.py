@@ -9,17 +9,12 @@ created = "2016/10/14 0014"
 """
 import json
 import pdb
-
-import os
-import random
 import urllib
 import urlparse
 from collections import OrderedDict
 
 import logging
 import requests
-
-from utils import settings
 
 
 class FiddlerError(Exception):
@@ -130,7 +125,7 @@ class RawToPython(object):
                                    "json": self.req_json})
 
     def __reset_req_param(self, req_param):
-        pdb.set_trace()  # 运行到这里会自动暂停
+        # pdb.set_trace()  # 运行到这里会自动暂停
         if self.url != req_param['url']:
             req_param['headers']['HOST'] = urlparse.urlsplit(req_param['url']).netloc
 
