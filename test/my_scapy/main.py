@@ -7,7 +7,7 @@ import threading
 from collections import Iterable
 from scapy.all import *
 import scapy_http.http
-from scapy_ssl_tls.ssl_tls import *
+# from scapy_ssl_tls.ssl_tls import *
 
 from fiddler import RawToPython
 
@@ -26,7 +26,7 @@ def my_sniff(host, head, iface=None, filter=None, count=None):
 
     def _get_print(packet):
         p_data = packet.getlayer(scapy_http.http.HTTPRequest).fields
-        pdb.set_trace()  # 运行到这里会自动暂停
+        # pdb.set_trace()  # 运行到这里会自动暂停
         if host and p_data.get('HOST', p_data.get('host', '')).lower() != host.lower():
             return
         # pdb.set_trace()  # 运行到这里会自动暂停
@@ -35,11 +35,11 @@ def my_sniff(host, head, iface=None, filter=None, count=None):
             if k.lower() == h_k and v.lower() == h_v:
                 show(['{}: {}'.format(k, v) for k, v in p_data.items()])
                 break
-    # try:
-    sniff(lfilter=lambda x: x.haslayer(scapy_http.http.HTTPRequest), prn=_get_print,
-          iface=iface, filter=filter, count=count)
-    # except:
-    #     pass
+    try:
+        sniff(lfilter=lambda x: x.haslayer(scapy_http.http.HTTPRequest), prn=_get_print,
+              iface=iface, filter=filter, count=count, timeout=10)
+    except:
+        pass
 
 
 def my_request(url):

@@ -9,13 +9,10 @@ import re
 import json
 import os
 import time
-import urllib3
 
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 from utils.send_email import Email
-
-urllib3.disable_warnings()
 
 EMAIL_RECEIVERS = [
     'minglei.weng@smallsite.cn',
@@ -281,7 +278,6 @@ if __name__ == '__main__':
                 if msg:
                     itchat_obj.send_msg(msg)
                 next_time = now_time + random.randint(10, 30)
-                print '.',
                 sys.stdout.flush()
             if clear_time < now_time:
                 clear_time = now_time + 600
