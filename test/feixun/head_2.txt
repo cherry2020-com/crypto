@@ -1,0 +1,10 @@
+GET /checkout-fastbuy.html?vsid=25105654110 HTTP/1.1
+Host: mall.phicomm.com
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Connection: keep-alive
+Cookie: Hm_lpvt_565cfd69908b00e1fe863ce663d94e2e=1517799837; Hm_lvt_565cfd69908b00e1fe863ce663d94e2e=1515722543,1517795769,1517795793; _SID=123e191ffc0250fcdac8691a2a23a670; c_dizhi=null; CACHE_VARY=f35aa8a38a42c3e14ece0185f5a84946-19b8618ae3bc3206884cc07d82348894; MEMBER_IDENT=2831952; MEMBER_LEVEL_ID=1; UNAME=17601605665; __jsluid=677f0fab9111865faa4be9cf86c44241; _VMC_UID=68424a81bd015c6da2876cd497871911; MEIQIA_EXTRA_TRACK_ID=0z1B5OgfKdhtP1xvWRzib7EPXDP
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.1.2 Safari/603.3.8
+Accept-Language: zh-cn
+Referer: https://mall.phicomm.com/vsgoods-goods_detail-17.html?vsid=25105654110
+Accept-Encoding: gzip, deflate
+

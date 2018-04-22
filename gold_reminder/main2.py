@@ -267,21 +267,18 @@ if __name__ == '__main__':
     msg = ''
     while True:
         now_time = int(time.time())
-        try:
-            if next_time < now_time:
-                json_data = set_obj.get_json()
-                make_obj.refresh_cur_money()
-                msg = make_obj.get_msg(json_data.get('set_upper_func'),
-                                       json_data.get('set_down_func'),
-                                       json_data.get('set_float_func'),
-                                       json_data.get('set_high_low_float_func'))
-                if msg:
-                    itchat_obj.send_msg(msg)
-                next_time = now_time + random.randint(10, 30)
-                sys.stdout.flush()
-            if clear_time < now_time:
-                clear_time = now_time + 600
-                make_obj.clear()
-        except:
-            pass
+        if next_time < now_time:
+            json_data = set_obj.get_json()
+            make_obj.refresh_cur_money()
+            msg = make_obj.get_msg(json_data.get('set_upper_func'),
+                                   json_data.get('set_down_func'),
+                                   json_data.get('set_float_func'),
+                                   json_data.get('set_high_low_float_func'))
+            if msg:
+                itchat_obj.send_msg(msg)
+            next_time = now_time + random.randint(5, 10)
+            sys.stdout.flush()
+        if clear_time < now_time:
+            clear_time = now_time + 600
+            make_obj.clear()
         time.sleep(1)
