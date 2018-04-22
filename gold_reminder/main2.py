@@ -256,7 +256,7 @@ class GoldMake(object):
 
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
 
-if __name__ == '__main__':
+def do_while():
     itchat_obj = WechatObject(EMAIL_RECEIVERS)
     # itchat_obj.test()
     make_obj = GoldMake()
@@ -282,3 +282,11 @@ if __name__ == '__main__':
             clear_time = now_time + 600
             make_obj.clear()
         time.sleep(1)
+
+
+if __name__ == '__main__':
+    while True:
+        try:
+            do_while()
+        except Exception:
+            pass
