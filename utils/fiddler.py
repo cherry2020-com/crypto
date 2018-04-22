@@ -14,8 +14,10 @@ from collections import OrderedDict
 
 import logging
 import requests
+import urllib3
 
-from utils import settings
+
+urllib3.disable_warnings()
 
 
 class FiddlerError(Exception):

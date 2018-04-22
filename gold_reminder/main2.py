@@ -2,6 +2,8 @@
 # - * - encoding: UTF-8 - * -
 import sys
 
+import datetime
+
 sys.path.extend(['/data/my_tools_env/my_tools/gold_reminder/',
                  '/data/my_tools_env/my_tools/'])
 import random
@@ -14,9 +16,10 @@ from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 from utils.send_email import Email
 
+
 EMAIL_RECEIVERS = [
     'minglei.weng@smallsite.cn',
-    'hongyu.wang@smallsite.cn',
+    # 'hongyu.wang@smallsite.cn',
     # '13511004353@139.com',
     # '15010785631@139.com'
 ]
@@ -257,6 +260,7 @@ class GoldMake(object):
 GOLD_LINK = u'\nhttp://t.cn/R9BAmdm'
 
 def do_while():
+    print '%s: start' % datetime.datetime.now()
     itchat_obj = WechatObject(EMAIL_RECEIVERS)
     # itchat_obj.test()
     make_obj = GoldMake()
@@ -268,6 +272,7 @@ def do_while():
     while True:
         now_time = int(time.time())
         if next_time < now_time:
+            print ''
             json_data = set_obj.get_json()
             make_obj.refresh_cur_money()
             msg = make_obj.get_msg(json_data.get('set_upper_func'),
@@ -275,6 +280,7 @@ def do_while():
                                    json_data.get('set_float_func'),
                                    json_data.get('set_high_low_float_func'))
             if msg:
+                print '%s: send msg.' % datetime.datetime.now()
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(5, 10)
             sys.stdout.flush()
@@ -282,11 +288,8 @@ def do_while():
             clear_time = now_time + 600
             make_obj.clear()
         time.sleep(1)
+        print ',',
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            do_while()
-        except Exception:
-            pass
+    do_while()
