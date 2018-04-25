@@ -15,13 +15,14 @@ import time
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 from utils.send_email import Email
+import urllib3
 
+
+urllib3.disable_warnings()
 
 EMAIL_RECEIVERS = [
-    'minglei.weng@smallsite.cn',
-    # 'hongyu.wang@smallsite.cn',
-    # '13511004353@139.com',
-    # '15010785631@139.com'
+    '645008699@qq.com',
+    '674564128@qq.com',
 ]
 
 EMAIL_RECEIVERS = set(EMAIL_RECEIVERS)

@@ -14,10 +14,6 @@ from collections import OrderedDict
 
 import logging
 import requests
-import urllib3
-
-
-urllib3.disable_warnings()
 
 
 class FiddlerError(Exception):
@@ -117,15 +113,16 @@ class RawToPython(object):
         self.req_param = {"url": self.url,
                           "headers": self.headers}
         if self.method == "POST":
-            if req_param:
-                if self.req_data:
+            if self.req_data:
+                if req_param:
                     self.req_data.update(req_param)
-                    logging.debug("fd: set_date_param: " + str(req_param))
-                elif self.req_json:
+                self.req_param["data"] = self.req_data
+                logging.debug("fd: set_date_param: " + str(req_param))
+            elif self.req_json:
+                if req_param:
                     self.req_json.update(req_param)
-                    logging.debug("fd: set_json_param: " + str(req_param))
-            self.req_param.update({"data": self.req_data,
-                                   "json": self.req_json})
+                self.req_param["json"] = self.req_json
+                logging.debug("fd: set_json_param: " + str(req_param))
 
     def __reset_req_param(self, req_param):
         if self.url != req_param['url']:
