@@ -54,7 +54,6 @@ class RawToPython(object):
                                   [each.strip() for each in line_split])
         self.method = line_split[0]
         self.url = line_split[1]
-        self.url_parse = urlparse.urlparse(self.url)
         if self.url.startswith("/"):
             if self.headers.get("Origin"):
                 http_host = self.headers.get("Origin")
@@ -65,6 +64,7 @@ class RawToPython(object):
                 http_host = "https://" if self.__is_https else "http://"
                 http_host += self.headers["Host"]
             self.url = http_host + self.url
+        self.url_parse = urlparse.urlparse(self.url)
 
     def __to_headers(self):
         ready_to_dict = []

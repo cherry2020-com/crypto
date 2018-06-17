@@ -13,16 +13,22 @@ import time
 COMMON_PASSWORD = 'Wml93640218.'
 
 SMZDM_ACCOUNTS = [
-    # {'USERNAME': '18410909019', 'PASSWORD': COMMON_PASSWORD},
-    # {'USERNAME': '13840897934', 'PASSWORD': COMMON_PASSWORD},
-    # {'USERNAME': '18842670608', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '15578801243', 'PASSWORD': COMMON_PASSWORD},  # 风险账号
+    {'USERNAME': '15578872074', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '17810358585', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '18410909019', 'PASSWORD': COMMON_PASSWORD},
     {'USERNAME': '13511004353', 'PASSWORD': COMMON_PASSWORD},
-    {'USERNAME': '17180128020', 'PASSWORD': COMMON_PASSWORD},
-    {'USERNAME': '17180128020', 'PASSWORD': COMMON_PASSWORD},
-    {'USERNAME': '17180128060', 'PASSWORD': COMMON_PASSWORD},
-    {'USERNAME': '17180128689', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '13840897934', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '17084142906', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '17084142981', 'PASSWORD': COMMON_PASSWORD},
+    {'USERNAME': '17600196974', 'PASSWORD': COMMON_PASSWORD},  # 风险账号
+    # {'USERNAME': '17180128020', 'PASSWORD': COMMON_PASSWORD},
+    # {'USERNAME': '17180128060', 'PASSWORD': COMMON_PASSWORD},
+    # {'USERNAME': '17180128689', 'PASSWORD': COMMON_PASSWORD},  # 风险账号
+    {'USERNAME': '18842670608', 'PASSWORD': COMMON_PASSWORD},
     {'USERNAME': '15010785631', 'PASSWORD': '1q2w3e4r'},
     {'USERNAME': '17600946098', 'PASSWORD': '1q2w3e4r'},
+    {'USERNAME': '18842624282', 'PASSWORD': '1q2w3e4r'},
 ]
 
 
@@ -69,8 +75,11 @@ class SMZDMDaily(object):
 
 
 if __name__ == '__main__':
-    if not SMZDM_ACCOUNTS:
-        sys.exit()
+    if SMZDM_ACCOUNTS:
+        usernames = {x['USERNAME'] for x in SMZDM_ACCOUNTS}
+        assert len(usernames) == len(SMZDM_ACCOUNTS)
+        print(u'%s account waiting for sign in !' % len(usernames))
+
     for account in SMZDM_ACCOUNTS:
         try:
             smzdm = SMZDMDaily(account['USERNAME'], account['PASSWORD'])
@@ -80,9 +89,12 @@ if __name__ == '__main__':
         except Exception as e:
             print('Fail', e)
         else:
-            msg = result.get('data', {}).get('slogan', '')
+            if isinstance(result, dict):
+                msg = result.get('data', {}).get('slogan', '')
+            else:
+                msg = result
             print(u'Successful: {} - {}'.format(
                 account['USERNAME'], re.sub(r'<.*?>', '', msg)))
         sleep_s = random.randint(5, 10)
-        print ('I will sleep %s s' % sleep_s)
+        print ('%s s' % sleep_s)
         time.sleep(sleep_s)

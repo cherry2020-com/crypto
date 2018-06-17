@@ -1,0 +1,11 @@
+GET /web20/user/useInviteCode?access_token=V3kxeHkwNEtCYWY0YmtnbTRYNzB0ckRLdThRdCtvR2J1am4veHV2dDM4ND0%3D&platform=ios&version=7.7.3&tdk=eyJ0b2tlbklkIjoiWXI0eXYxUjZoOFYwQ2QzN3B0Q3FQSE04SnFiQzVvSVVPczRZNVRLeWhlSklNbE53U1JnUG1WcDU0NWZLaVJHVGNpcFwvWXQ4U2Zic1pNcFJySmwxWEtBPT0iLCJvcyI6ImlPUyIsInByb2ZpbGVUaW1lIjo5NTIsInZlcnNpb24iOiIzLjAuNiJ9&SM_Device_ID=2017101522352849bf9048a0683f4cb214a7ef66216d8a014247917d154636&session=&imei=4BB866AC-D317-428F-883B-D7BCA214A160&screen_height=736&screen_width=414&inviteCode=TEST HTTP/1.1
+Host: as-vip.missfresh.cn
+Origin: https://as-vip.missfresh.cn
+accept: */*
+content-type: application/json;charset=utf-8
+x-region: {"address_code":"110105","station_code":"MRYX|mryx_bj_lfpx", "delivery_type": 0}
+x-version: v4
+user-agent: NewMissFresh/7.7.3 (iPhone; iOS 11.3; Scale/3.00)
+accept-language: zh-Hans-CN;q=1, en-US;q=0.9
+accept-encoding: br, gzip, deflate
+
