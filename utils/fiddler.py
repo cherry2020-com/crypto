@@ -121,7 +121,8 @@ class RawToPython(object):
             elif self.req_json:
                 if req_param:
                     self.req_json.update(req_param)
-                self.req_param["json"] = self.req_json
+                # self.req_param["json"] = self.req_json
+                self.req_param["data"] = json.dumps(self.req_json)
                 logging.debug("fd: set_json_param: " + str(req_param))
 
     def __reset_req_param(self, req_param):

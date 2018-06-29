@@ -1,0 +1,14 @@
+POST /v1/customer/voucher/exchange/code?access_token=NFMwODZRYmZHdVA1U0FHSU10V0I4Z3FWOE04aCt5WkVzL3R0Q1V3K0swTT0=&platform=ios&version=7.7.0&tdk=eyJ0b2tlbklkIjoiWXI0eXYxUjZoOFYwQ2QzN3B0Q3FQQW52dkNjSWtwVzdQaVwvXC9XTURFcWlWNEUyNjdBNWk5VFRtZEtDZEdOSlJCN1dNd2pWcE91TGVxREowOERScHRLUT09Iiwib3MiOiJpT1MiLCJwcm9maWxlVGltZSI6NDQxNSwidmVyc2lvbiI6IjMuMC42In0=&SM_Device_ID=20170920125825c0bf02d2616acaf897900f79d6e4b66a0102d28c9414201e&session=&imei=3D30488D-F7D0-4C86-A270-898AEB006DEC&screen_height=667&screen_width=375 HTTP/1.1
+Host: as-vip.missfresh.cn
+Origin: https://as-vip.missfresh.cn
+accept: */*
+content-type: application/json;charset=utf-8
+x-region: {"address_code":"110105","station_code":"MRYX|mryx_bj_jthm", "delivery_type": 1}
+content-length: 57
+x-tingyun-id: Q1KLryMuSto;c=2;r=1849963681
+x-version: v4
+user-agent: NewMissFresh/7.7.0 (iPhone; iOS 11.3; Scale/3.00)
+accept-language: zh-Hans-CN;q=1
+accept-encoding: br, gzip, deflate
+
+{"form":0,"discount_code":"test","voucher_type":"packet"}

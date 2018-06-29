@@ -10,6 +10,9 @@ import re
 
 import time
 
+sys.path.extend(['/data/my_tools_env/my_tools/many_tools/smzdm/',
+                 '/data/my_tools_env/my_tools/'])
+
 COMMON_PASSWORD = 'Wml93640218.'
 
 SMZDM_ACCOUNTS = [
