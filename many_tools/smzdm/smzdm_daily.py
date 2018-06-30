@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-import os
 import json
 import random
 import sys
+
+import datetime
 import requests
 import re
 
@@ -16,7 +16,7 @@ sys.path.extend(['/data/my_tools_env/my_tools/many_tools/smzdm/',
 COMMON_PASSWORD = 'Wml93640218.'
 
 SMZDM_ACCOUNTS = [
-    {'USERNAME': '15578801243', 'PASSWORD': COMMON_PASSWORD},  # 风险账号
+    {'USERNAME': '15578801243', 'PASSWORD': 'Wml93640218/'},  # 风险账号
     {'USERNAME': '15578872074', 'PASSWORD': COMMON_PASSWORD},
     {'USERNAME': '17810358585', 'PASSWORD': COMMON_PASSWORD},
     {'USERNAME': '18410909019', 'PASSWORD': COMMON_PASSWORD},
@@ -78,6 +78,8 @@ class SMZDMDaily(object):
 
 
 if __name__ == '__main__':
+    print '######################'
+    print datetime.datetime.now()
     if SMZDM_ACCOUNTS:
         usernames = {x['USERNAME'] for x in SMZDM_ACCOUNTS}
         assert len(usernames) == len(SMZDM_ACCOUNTS)
@@ -92,12 +94,13 @@ if __name__ == '__main__':
         except Exception as e:
             print('Fail', e)
         else:
-            if isinstance(result, dict):
-                msg = result.get('data', {}).get('slogan', '')
-            else:
-                msg = result
-            print(u'Successful: {} - {}'.format(
-                account['USERNAME'], re.sub(r'<.*?>', '', msg)))
+            # if isinstance(result, dict):
+            #     msg = result.get('data', {}).get('slogan', '')
+            # else:
+            #     msg = result
+            # print(u'Successful: {} - {}'.format(
+            #     account['USERNAME'], re.sub(r'<.*?>', '', msg)))
+            print(u'Successful: {}'.format(account['USERNAME']))
         sleep_s = random.randint(5, 10)
         print ('%s s' % sleep_s)
         time.sleep(sleep_s)
