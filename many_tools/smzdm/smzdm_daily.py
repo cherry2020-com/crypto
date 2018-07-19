@@ -94,13 +94,17 @@ if __name__ == '__main__':
         except Exception as e:
             print('Fail', e)
         else:
-            # if isinstance(result, dict):
-            #     msg = result.get('data', {}).get('slogan', '')
-            # else:
-            #     msg = result
+            try:
+                if isinstance(result, dict):
+                    msg = result.get('data', {}).get('slogan', '')
+                else:
+                    msg = result
+                result_str = 'Successful'
+            except:
+                result_str = 'Failure'
             # print(u'Successful: {} - {}'.format(
             #     account['USERNAME'], re.sub(r'<.*?>', '', msg)))
-            print(u'Successful: {}'.format(account['USERNAME']))
-        sleep_s = random.randint(5, 10)
+            print(u'{}: {}: {}'.format(datetime.datetime.now(), result_str, account['USERNAME']))
+        sleep_s = random.randint(10, 300)
         print ('%s s' % sleep_s)
         time.sleep(sleep_s)

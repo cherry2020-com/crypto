@@ -283,7 +283,7 @@ def do_while():
             if msg:
                 print '%s: send msg.' % datetime.datetime.now()
                 itchat_obj.send_msg(msg)
-            next_time = now_time + random.randint(5, 10)
+            next_time = now_time + random.randint(1, 5)
             sys.stdout.flush()
         if clear_time < now_time:
             clear_time = now_time + 600
