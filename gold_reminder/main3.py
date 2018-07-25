@@ -77,15 +77,15 @@ class WechatObject(object):
 
 class GoldMake(object):
     FD_FILE_PATH = os.path.join(GOLD_DIR, 'head', 'icbc.txt')
-    LTE__CUR_MONEY_TEMP = u'低于阈值：{:.2f} 元 | '
-    GTE__CUR_MONEY_TEMP = u'高于阈值：{:.2f} 元 | '
-    SEP__CUR_MONEY_TEMP = u'涨浮超过：{:.2f} 元 | '
-    NEW_HIGH_MONEY_TEMP = u'获得新【高】：{:.2f} 元 | '
-    NEW_LOW_MONEY_TEMP = u'获得新【低】：{:.2f} 元 | '
-    MONEY_TEMP = u'当前：{:.2f} 元 | {:.4f} 美元\n' \
-                 u'最高：{:.2f} 元 | {:.4f} 美元\n' \
-                 u'最低：{:.2f} 元 | {:.4f} 美元\n' \
-                 u'涨跌：{} 元 | {} 美元\n'
+    LTE__CUR_MONEY_TEMP = u'低于阈值：¥{:.2f} | '
+    GTE__CUR_MONEY_TEMP = u'高于阈值：¥{:.2f} | '
+    SEP__CUR_MONEY_TEMP = u'涨浮超过：¥{:.2f} | '
+    NEW_HIGH_MONEY_TEMP = u'获得新【高】：¥{:.2f} | '
+    NEW_LOW_MONEY_TEMP = u'获得新【低】：¥{:.2f} | '
+    MONEY_TEMP = u'当前：¥{:.2f} | ${:.4f}\n' \
+                 u'最高：¥{:.2f} | ${:.4f}\n' \
+                 u'最低：¥{:.2f} | ${:.4f}\n' \
+                 u'涨跌：¥{} | ${}\n'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
@@ -183,7 +183,7 @@ class GoldMake(object):
             self.cur_money, self.dollar_cur_money,
             self.high_money, self.dollar_high_money,
             self.low_money, self.dollar_low_money,
-            self.float_money, self.dollar_float_money,)
+            self.float_money.rjust(7), self.dollar_float_money)
 
     def clear(self):
         self.lte__cur_money_tmp = 0
@@ -196,6 +196,7 @@ class GoldMake(object):
         msg += self.new_high__cur_money(high_low_sep_value)
         msg += self.new_low__cur_money(high_low_sep_value)
         if msg:
+            msg += '\n'
             msg += self.get_money_msg()
         return msg
 
@@ -208,12 +209,11 @@ def do_while():
     itchat_obj.send_msg(make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
-    msg = ''
+    json_data = set_obj.get_json()
     while True:
         now_time = int(time.time())
         if next_time < now_time:
             print ''
-            json_data = set_obj.get_json()
             make_obj.refresh_cur_money()
             msg = make_obj.get_msg(json_data.get('set_upper_func'),
                                    json_data.get('set_down_func'),
@@ -222,7 +222,7 @@ def do_while():
             if msg:
                 print '%s: send msg.' % datetime.datetime.now()
                 itchat_obj.send_msg(msg)
-            next_time = now_time + random.randint(1, 5)
+            next_time = now_time + random.randint(5, 8)
             sys.stdout.flush()
         if clear_time < now_time:
             clear_time = now_time + 600
