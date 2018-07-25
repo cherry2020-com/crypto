@@ -4,8 +4,6 @@ import sys
 
 import datetime
 
-from utils import pusher
-
 sys.path.extend(['/data/my_tools_env/my_tools/gold_reminder/',
                  '/data/my_tools_env/my_tools/'])
 import random
@@ -16,6 +14,7 @@ import time
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 from utils.send_email import Email
+from utils import pusher
 import urllib3
 
 
