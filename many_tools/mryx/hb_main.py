@@ -8,8 +8,8 @@ from utils.fiddler import RawToPython
 
 COUNT = 1
 
-# head_file = 'hb_head_for_me.txt'
-head_file = 'hb_head_for_girl.txt'
+head_file = 'hb_head_for_me.txt'
+# head_file = 'hb_head_for_girl.txt'
 code_file = 'hb_codes.txt'
 
 # code

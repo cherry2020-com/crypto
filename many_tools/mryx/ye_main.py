@@ -6,10 +6,10 @@ import pickle
 
 from utils.fiddler import RawToPython
 
-COUNT = 9
+COUNT = 8
 
-# head_file = './ye_head_for_me.txt'
-head_file = 'ye_head_for_girl.txt'
+head_file = './ye_head_for_me.txt'
+# head_file = 'ye_head_for_girl.txt'
 code_file = 'ye_codes.txt'
 
 # code

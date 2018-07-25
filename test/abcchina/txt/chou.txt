@@ -1,0 +1,14 @@
+POST /yx-web/unifyactivity/lottery HTTP/1.1
+Host: enjoy.abchina.com
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Accept-Language: en-us
+Accept-Encoding: gzip, deflate
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8
+Origin: https://enjoy.abchina.com
+Content-Length: 0
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79 BankabciPhone/3.8.6 rv:3.8.7 iOS/11.4
+Referer: https://enjoy.abchina.com/yx-web/unifyactivity/info
+Cookie: ASP.NET_SessionId=1CITVJGBCCAD8FEDEB0A0000D8807FFB; BIGipServerpool_sclf_yx_web=2465065738.31011.0000; WT_FPC=id=10.235.177.245-3195045520.30638630:lv=1529734278389:ss=1529734278389; Hm_lvt_7dedb76dd2a9d779a7b877435162d97f=1521546352
+
