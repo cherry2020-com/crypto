@@ -66,8 +66,9 @@ class WechatObject(object):
         # for receiver in self.push_receivers:
         my_source = 's-3c91ca69-dd35-4275-9d59-5a0608fd'
         receiver_source = 'g-d22d57b4-1dda-4888-84b9-57a92766'
-        url = 'com.icbc.iphoneclient://'
-        content = msg,
+        # url = 'com.icbc.iphoneclient://'
+        url = 'http://t.cn/RVCjPNI'
+        content = msg
         title = u'黄金提醒'
         sound = 'failling'
         pusher.send(my_source, receiver_source, title=title, url=url,
@@ -81,10 +82,10 @@ class GoldMake(object):
     SEP__CUR_MONEY_TEMP = u'涨浮超过：¥{:.2f} | '
     NEW_HIGH_MONEY_TEMP = u'获得新【高】：¥{:.2f} | '
     NEW_LOW_MONEY_TEMP = u'获得新【低】：¥{:.2f} | '
-    MONEY_TEMP = u'当前：¥{:.2f} | ${:.4f}\n' \
-                 u'最高：¥{:.2f} | ${:.4f}\n' \
-                 u'最低：¥{:.2f} | ${:.4f}\n' \
-                 u'涨跌：¥{} | ${}\n'
+
+    MONEY_TEMP = u'涨跌：¥{up_down}\n' \
+                 u'当前：¥{cur:.2f} | ${dollar_cur:.4f}\n' \
+                 u'最高：¥{high:.2f} | 最低：¥{low:.2f}'
 
     def __init__(self):
         self.fd_obj = RawToPython(self.FD_FILE_PATH)
@@ -179,10 +180,10 @@ class GoldMake(object):
 
     def get_money_msg(self):
         return self.MONEY_TEMP.format(
-            self.cur_money, self.dollar_cur_money,
-            self.high_money, self.dollar_high_money,
-            self.low_money, self.dollar_low_money,
-            self.float_money.rjust(7), self.dollar_float_money)
+            cur=self.cur_money, dollar_cur=self.dollar_cur_money,
+            high=self.high_money, dollar_high=self.dollar_high_money,
+            low=self.low_money, dollar_low=self.dollar_low_money,
+            up_down=self.float_money, dollar_update=self.dollar_float_money)
 
     def clear(self):
         self.lte__cur_money_tmp = 0
@@ -195,7 +196,6 @@ class GoldMake(object):
         msg += self.new_high__cur_money(high_low_sep_value)
         msg += self.new_low__cur_money(high_low_sep_value)
         if msg:
-            msg += '\n'
             msg += self.get_money_msg()
         return msg
 
