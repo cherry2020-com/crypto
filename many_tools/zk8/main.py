@@ -26,16 +26,18 @@ def get_web_data(break_names=None):
     if web_data.status_code == 200:
         soups = BeautifulSoup(web_data.text, "lxml")
         new_break_names = []
+        set_break_names = set(break_names or [])
         for tag in soups.find(id='alist').find_all('li'):
             text = tag.text.strip().split()
             if text:
                 name = ' || '.join(text[:-1])
-                if name in break_names or []:
+                if name in set_break_names:
                     break
                 else:
                     new_break_names.append(name)
                 url = "http://www.zuanke8.com/" + tag.a.attrs['href']
-                print name, url
+                # print name, url
+                print ",",
                 result[name] = url
         new_break_names.extend(break_names)
     else:
@@ -63,3 +65,5 @@ if __name__ == '__main__':
                 if k in if_title:
                     send_push(title, url)
         time.sleep(5)
+        print "."
+        sys.stdout.flush()
