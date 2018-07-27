@@ -114,14 +114,14 @@ class GoldMake(object):
         try:
             gold_data = self.get_web_data(u'人民币账户黄金')
             dollar_gold_data = self.get_web_data(u'美元账户黄金')
-            self.cur_money = float(gold_data['middleprice'])
-            self.high_money = float(gold_data['topmiddleprice'])
-            self.low_money = float(gold_data['lowmiddleprice'])
+            self.cur_money = float(gold_data['middleprice']) + 0.2
+            self.high_money = float(gold_data['topmiddleprice']) + 0.2
+            self.low_money = float(gold_data['lowmiddleprice']) + 0.2
             self.float_money = gold_data['openprice_dv']
 
-            self.dollar_cur_money = float(dollar_gold_data['middleprice'])
-            self.dollar_high_money = float(dollar_gold_data['topmiddleprice'])
-            self.dollar_low_money = float(dollar_gold_data['lowmiddleprice'])
+            self.dollar_cur_money = float(dollar_gold_data['middleprice']) + 0.9
+            self.dollar_high_money = float(dollar_gold_data['topmiddleprice']) + 0.9
+            self.dollar_low_money = float(dollar_gold_data['lowmiddleprice']) + 0.9
             self.dollar_float_money = dollar_gold_data['openprice_dv']
         except Exception as e:
             pass
