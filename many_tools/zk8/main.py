@@ -29,7 +29,7 @@ def get_web_data(break_names=None):
         for tag in soups.find(id='alist').find_all('li'):
             text = tag.text.strip().split()
             if text:
-                name = text[0]
+                name = ' || '.join(text[:-1])
                 if name in break_names or []:
                     break
                 else:
@@ -40,7 +40,7 @@ def get_web_data(break_names=None):
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
-    return result, new_break_names[:5]
+    return result, new_break_names[:20]
 
 
 def send_push(content, url):
@@ -54,7 +54,7 @@ def send_push(content, url):
 
 if __name__ == '__main__':
     break_names = []
-    key_messages = [u'放水', u'水了', u'大水', u'秒到', u'速度', u'万家', 'wj', 'bug']
+    key_messages = [u'水' u'秒到', u'速度', u'万家', 'wj', 'bug']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
