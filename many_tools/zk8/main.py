@@ -56,14 +56,15 @@ def send_push(content, url):
 
 if __name__ == '__main__':
     break_names = []
-    key_messages = [u'水' u'秒到', u'速度', u'万家', 'wj', 'bug']
+    key_messages = [u'水', u'秒到', u'速度', u'速领', u'万家', u'毛', u'好价', 'wj', 'bug']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
+            if_title = title.replace(' ', '').lower()
             for k in key_messages:
-                if_title = title.replace(' ', '').lower()
                 if k in if_title:
                     send_push(title, url)
+                    break
         time.sleep(5)
         print "."
         sys.stdout.flush()
