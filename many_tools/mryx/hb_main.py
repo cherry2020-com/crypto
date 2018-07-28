@@ -4,7 +4,10 @@ import random
 import time
 import pickle
 
+import urllib3
+
 from utils.fiddler import RawToPython
+urllib3.disable_warnings()
 
 COUNT = 1
 
