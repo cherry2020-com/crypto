@@ -79,7 +79,8 @@ class GoldMake(object):
     FD_FILE_PATH = os.path.join(GOLD_DIR, 'head', 'icbc.txt')
     LTE__CUR_MONEY_TEMP = u'低于阈值：¥{:.2f} | '
     GTE__CUR_MONEY_TEMP = u'高于阈值：¥{:.2f} | '
-    SEP__CUR_MONEY_TEMP = u'涨浮超过：¥{:.2f} | '
+    SEP__UP_CUR_MONEY_TEMP = u'上涨：¥{:.2f}+ | '
+    SEP__DOWN_CUR_MONEY_TEMP = u'下跌：¥{:.2f}+ | '
     NEW_HIGH_MONEY_TEMP = u'获得新【高】：¥{:.2f} | '
     NEW_LOW_MONEY_TEMP = u'获得新【低】：¥{:.2f} | '
 
@@ -148,10 +149,15 @@ class GoldMake(object):
     def sep__cur_money(self, value):
         if value and self.start_money and self.cur_money:
             value = float(value)
-            sep_money = abs(self.start_money - self.cur_money) - value
+            difference = self.cur_money - self.start_money
+            sep_money = abs(difference) - value
             if sep_money >= 0:
                 self.start_money = self.cur_money
-                return self.SEP__CUR_MONEY_TEMP.format(value, self.cur_money)
+                if difference > 0:
+                    msg = self.SEP__UP_CUR_MONEY_TEMP.format(value, self.cur_money)
+                else:
+                    msg = self.SEP__DOWN_CUR_MONEY_TEMP.format(value, self.cur_money)
+                return msg
         return ''
 
     def new_high__cur_money(self, high_low_sep_value):
@@ -201,6 +207,7 @@ class GoldMake(object):
         if msg:
             msg += self.get_money_msg()
         return msg
+
 
 def do_while():
     print '%s: start' % datetime.datetime.now()

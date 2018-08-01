@@ -35,7 +35,7 @@ def get_web_data(break_names=None):
                     break
                 else:
                     new_break_names.append(name)
-                url = "http://www.zuanke8.com/" + tag.a.attrs['href']
+                url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
                 # print name, url
                 print ",",
                 result[name] = url
@@ -56,14 +56,15 @@ def send_push(content, url):
 
 if __name__ == '__main__':
     break_names = []
-    key_messages = [u'水', u'秒到', u'速度', u'速领', u'万家', u'毛', u'好价', 'wj', 'bug']
+    key_messages = [u'水', u'秒到', u'速度', u'速领', u'万家', u'毛', u'好价', u'利器',
+                    u'免费', u'斐讯', 'wj', 'bug', 'fx']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
             if_title = title.replace(' ', '').lower()
             for k in key_messages:
                 if k in if_title:
-                    send_push(title, url)
+                    send_push(u'[ZK8]' + title, url)
                     break
         time.sleep(5)
         print "."
