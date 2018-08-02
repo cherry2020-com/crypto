@@ -81,11 +81,11 @@ class GoldMake(object):
     GTE__CUR_MONEY_TEMP = u'高于阈值：¥{:.2f} | '
     SEP__UP_CUR_MONEY_TEMP = u'上涨：¥{:.2f}+ | '
     SEP__DOWN_CUR_MONEY_TEMP = u'下跌：¥{:.2f}+ | '
-    NEW_HIGH_MONEY_TEMP = u'获得新【高】：¥{:.2f} | '
-    NEW_LOW_MONEY_TEMP = u'获得新【低】：¥{:.2f} | '
+    NEW_HIGH_MONEY_TEMP = u'新【高】：¥{:.2f} | '
+    NEW_LOW_MONEY_TEMP = u'新【低】：¥{:.2f} | '
 
     MONEY_TEMP = u'涨跌：¥{up_down}\n' \
-                 u'当前：¥{cur:.2f} | ¥{jst_cur:.2f} | ${dollar_cur:.0f} | ¥{down_cur:.2f}\n' \
+                 u'当前：¥{buy_cur:.2f} | ¥{sell_cur:.2f} | ¥{jst_cur:.2f} | ${dollar_cur:.0f}\n' \
                  u'最高：¥{high:.2f} | 最低：¥{low:.2f}'
 
     def __init__(self):
@@ -116,8 +116,8 @@ class GoldMake(object):
             gold_data = self.get_web_data(u'人民币账户黄金')
             dollar_gold_data = self.get_web_data(u'美元账户黄金')
             self.cur_money = float(gold_data['middleprice']) + 0.2
-            self.jst_cur_money = self.cur_money - 0.4 + 3.57
-            self.down_cur_money = self.cur_money - 0.4
+            self.jst_cur_money = self.cur_money - 0.4 + 3.58
+            self.sell_cur_money = self.cur_money - 0.4
             self.high_money = float(gold_data['topmiddleprice']) + 0.2
             self.low_money = float(gold_data['lowmiddleprice']) + 0.2
             self.float_money = gold_data['openprice_dv']
@@ -188,11 +188,11 @@ class GoldMake(object):
 
     def get_money_msg(self):
         return self.MONEY_TEMP.format(
-            cur=self.cur_money, dollar_cur=self.dollar_cur_money,
+            buy_cur=self.cur_money, dollar_cur=self.dollar_cur_money,
             high=self.high_money, dollar_high=self.dollar_high_money,
             low=self.low_money, dollar_low=self.dollar_low_money,
             up_down=self.float_money, dollar_update=self.dollar_float_money,
-            jst_cur=self.jst_cur_money, down_cur=self.down_cur_money)
+            jst_cur=self.jst_cur_money, sell_cur=self.sell_cur_money)
 
     def clear(self):
         self.lte__cur_money_tmp = 0
