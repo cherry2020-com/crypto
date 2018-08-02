@@ -23,7 +23,7 @@ def get_web_data(break_names=None):
     except Exception:
         return {}, break_names
     result = {}
-    if web_data.status_code == 200:
+    if web_data and web_data.status_code == 200:
         soups = BeautifulSoup(web_data.text, "lxml")
         new_break_names = []
         set_break_names = set(break_names or [])
@@ -62,13 +62,18 @@ if __name__ == '__main__':
                     u'一元', u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无',
                     u'白菜', u'免单', u'漏洞',
                     'wj', 'bug', 'fx']
+    exclude_key_messages = [u'有没有', u'求']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
             if_title = title.replace(' ', '').lower()
             for k in key_messages:
                 if k in if_title:
-                    send_push(u'[ZK8]' + title, url)
+                    for ek in exclude_key_messages:
+                        if ek in if_title:
+                            break
+                    else:
+                        send_push(u'[ZK8]' + title, url)
                     break
         time.sleep(5)
         print "."

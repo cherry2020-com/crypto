@@ -80,12 +80,12 @@ class GoldMake(object):
     LTE__CUR_MONEY_TEMP = u'低于阈值：¥{:.2f} | '
     GTE__CUR_MONEY_TEMP = u'高于阈值：¥{:.2f} | '
     SEP__UP_CUR_MONEY_TEMP = u'上涨：¥{:.2f}+ | '
-    SEP__DOWN_CUR_MONEY_TEMP = u'下跌：¥{:.2f}+ | '
+    SEP__DOWN_CUR_MONEY_TEMP = u'下跌：¥{:.2f} | '
     NEW_HIGH_MONEY_TEMP = u'新【高】：¥{:.2f} | '
     NEW_LOW_MONEY_TEMP = u'新【低】：¥{:.2f} | '
 
     MONEY_TEMP = u'涨跌：¥{up_down}\n' \
-                 u'当前：¥{buy_cur:.2f} | ¥{sell_cur:.2f} | ¥{jst_cur:.2f} | ${dollar_cur:.0f}\n' \
+                 u'当前：↑¥{buy_cur:.2f} (¥{jst_cur:.2f} ${dollar_cur:.2f}) | ↓¥{sell_cur:.2f}\n' \
                  u'最高：¥{high:.2f} | 最低：¥{low:.2f}'
 
     def __init__(self):
