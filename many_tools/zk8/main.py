@@ -57,12 +57,12 @@ def send_push(content, url):
 if __name__ == '__main__':
     break_names = []
     key_messages = [u'水', u'神', u'秒到', u'速度', u'速领', u'速撸', u'万家', u'毛',
-                    u'好价', u'利器',
+                    u'好价', u'利器', u'又有了', u'又来了',
                     u'免费', u'斐讯', u'0元', u'零元', u'〇元', u'震惊', u'优惠券', u'1元',
                     u'一元', u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无',
                     u'白菜', u'免单', u'漏洞',
                     'wj', 'bug', 'fx']
-    exclude_key_messages = [u'有没有', u'求']
+    exclude_key_messages = [u'赚神', u'求', u'有没有']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():

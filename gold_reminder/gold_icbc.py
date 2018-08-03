@@ -79,7 +79,7 @@ class GoldMake(object):
     FD_FILE_PATH = os.path.join(GOLD_DIR, 'head', 'icbc.txt')
     LTE__CUR_MONEY_TEMP = u'低于阈值：¥{:.2f} | '
     GTE__CUR_MONEY_TEMP = u'高于阈值：¥{:.2f} | '
-    SEP__UP_CUR_MONEY_TEMP = u'上涨：¥{:.2f}+ | '
+    SEP__UP_CUR_MONEY_TEMP = u'上涨：¥{:.2f} | '
     SEP__DOWN_CUR_MONEY_TEMP = u'下跌：¥{:.2f} | '
     NEW_HIGH_MONEY_TEMP = u'新【高】：¥{:.2f} | '
     NEW_LOW_MONEY_TEMP = u'新【低】：¥{:.2f} | '
