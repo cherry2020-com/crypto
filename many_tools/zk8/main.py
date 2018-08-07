@@ -58,15 +58,16 @@ if __name__ == '__main__':
     break_names = []
     key_messages = [u'神', u'券', u'卷', u'抢',
                     u"有水", u"水了", u"大水", u"洪水", u"水到", u'大毛', u'小毛',
-                    u'秒到', u'速度', u'速领', u'速撸', u'可以', u'有货',
+                    u'秒到', u'速度', u'速领', u'速撸', u'可以了', u'有货', u'防身',
                     u'万家', u'斐讯',
                     u'好价', u'利器', u'又有', u'又来', u'又一',
                     u'免费', u'0元', u'零元', u'〇元', u'震惊', u'1元',
-                    u'10元', u'9.9', u'9块9', u'一元',
+                    u'10元', u'十元', u'9.9', u'9块9', u'一元', u'9元', u'九元',
                     u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无',
                     u'白菜', u'免单', u'漏洞', u'到手',
                     'wj', 'bug', 'fx']
-    exclude_key_messages = [u'赚神', u'求', u'有没有', u'吗', u'收', u'返现', u'推荐办']
+    exclude_key_messages = [u'赚神', u'求', u'有没有', u'吗', u'呢', u'收', u'返现',
+                            u'推荐办']
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
