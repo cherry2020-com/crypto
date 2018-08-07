@@ -9,7 +9,7 @@ import urllib3
 from utils.fiddler import RawToPython
 urllib3.disable_warnings()
 
-COUNT = 8
+COUNT = 5
 
 head_file = './ye_head_for_me.txt'
 # head_file = 'ye_head_for_girl.txt'

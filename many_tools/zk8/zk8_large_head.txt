@@ -1,0 +1,10 @@
+GET /zuixin.php HTTP/1.1
+Host: www.zuanke8.com
+Cookie: Hm_lpvt_da6569f688ba2c32429af00afd9eb8a1=1533374347; Hm_lvt_da6569f688ba2c32429af00afd9eb8a1=1532604337,1532680714,1533024112,1533374336; amvid=f4613f563c7a17eedb0d9764202b37d4; ki1e_2132_lastact=1533374345%09zuixin.php%09; _umdata=70CF403AFFD707DF29A5722FAD5AB02C8F27C4F33CBFE2A54450701C1F5F4DEBADC62DDC112361D0CD43AD3E795C914CD2945B3CB635F2870316C78F9B8037B2; ki1e_2132_lastvisit=1533370738; ki1e_2132_saltkey=YBGBlLnR; ki1e_2132_sendmail=1; ki1e_2132_viewid=tid_4938742; ki1e_2132_pc_size_c=0; _uab_collina=151557100316575466512652
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1 Safari/605.1.15
+Referer: http://www.zuanke8.com/zuixin.php
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
