@@ -54,15 +54,32 @@ def send_push(content, url):
                 content=content, sound=sound)
 
 
+CHANGE_MAPS = {u'〇': '0', u'零': '0', u'一': '1', u'二': '2', u'三': '3', u'四': '4',
+               u'五': '5', u'六': '6', u'七': '7', u'八': '8', u'九': '9', u'十': '10',
+               u'百': '100', u'千': '1000', u'万': '10000', u'０': '0', u'１': '1',
+               u'２': '2', u'３': '3', u'４': '4', u'５': '5', u'６': '6', u'７': '7',
+               u'８': '8', u'９': '9', u'壹': '1', u'贰': '2', u'叁': '3', u'肆': '4',
+               u'伍': '5', u'陆': '6', u'柒': '7', u'捌': '8', u'玖': '9', u'拾': '10',
+               u'佰': '100', u'仟': '1000', u'萬': '10000', u'亿': '100000000'}
+
+
+def change_title(title):
+    new_title = title.replace(' ', '').lower()
+    for i in title:
+        if i in CHANGE_MAPS:
+            new_title = new_title.replace(i, CHANGE_MAPS[i])
+    return new_title
+
+
 if __name__ == '__main__':
     break_names = []
     key_messages = [u'神', u'券', u'卷', u'抢',
                     u"有水", u"水了", u"大水", u"洪水", u"水到", u'大毛', u'小毛',
                     u'秒到', u'速度', u'速领', u'速撸', u'可以了', u'有货', u'防身',
                     u'万家', u'斐讯',
-                    u'好价', u'利器', u'又有', u'又来', u'又一',
-                    u'免费', u'0元', u'零元', u'〇元', u'震惊', u'1元',
-                    u'10元', u'十元', u'9.9', u'9块9', u'一元', u'9元', u'九元',
+                    u'好价', u'利器', u'又有', u'又来', u'又1',
+                    u'免费', u'0元', u'震惊', u'1元',
+                    u'10元', u'9.9', u'9块9', u'9元',
                     u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无',
                     u'白菜', u'免单', u'漏洞', u'到手',
                     'wj', 'bug', 'fx']
@@ -71,7 +88,7 @@ if __name__ == '__main__':
     while True:
         result, break_names = get_web_data(break_names)
         for title, url in result.iteritems():
-            if_title = title.replace(' ', '').lower()
+            if_title = change_title(title)
             for k in key_messages:
                 if k in if_title:
                     for ek in exclude_key_messages:
