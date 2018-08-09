@@ -1,13 +1,12 @@
-POST http://www.caocaokeji.cn/register/customerCount.do?phone=17171717010&page=1 HTTP/1.1
+POST http://www.caocaokeji.cn/register/userCount.do?phone=20180000161&page=1 HTTP/1.1
 Host: www.caocaokeji.cn
 Connection: keep-alive
 Content-Length: 0
-Cache-Control: max-age=0
 Accept: application/json, text/javascript, */*; q=0.01
 Origin: http://www.caocaokeji.cn
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36 MicroMessenger/6.5.2.501 NetType/WIFI WindowsWechat QBCore/3.43.556.400 QQBrowser/9.0.2524.400
 X-Requested-With: XMLHttpRequest
-Referer: http://www.caocaokeji.cn/extend/customerDetails.html?phone=17171717010
+Referer: http://www.caocaokeji.cn/extend/userDetails.html?phone=20180000161
 Accept-Encoding: gzip, deflate
 Accept-Language: zh-CN,zh;q=0.8,en-us;q=0.6,en;q=0.5;q=0.4
 

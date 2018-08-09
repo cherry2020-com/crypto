@@ -1,0 +1,14 @@
+POST https://api.m.jd.com/client.action?functionId=newBabelAwardCollection HTTP/1.1
+Host: api.m.jd.com
+Connection: keep-alive
+Content-Length: 542
+Accept: application/json
+Origin: https://pro.m.jd.com
+User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Mobile Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Referer: https://pro.m.jd.com/mall/active/xw6DGnYNRDuay17B6MDp2rfnPgR/index.html?utm_source=pdappwakeupup_20170001
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: TrackID=1vUuoTvSf90XML7OSSVDB5Z0V0ZoVCXtvr661A6qGvrY-l30ZHyiGBuGSBFJnNUaJP9CfcczwZytqXgdZnvVw8tXb4cmcWwVUhJFdLyNuc-Q; 3AB9D23F7A4B3C9B=JT65OMCG6VTDE4Y2UQJ3QP5RRHK6O3TSFDAGTXHGP7B6ZYYF2KCS7HOHMKT3JCFYYQCFXUHVRZNGH6X6YD6OXDCRNI; __jdc=122270672; mba_muid=358743753; mobilev=html5; abtest=20180808135853652_47; shshshfpa=0f33b37c-7059-4bc4-df19-0ab927276130-1533707957; autoOpenApp_downCloseDate_auto=1533707958231_21600000; shshshfpb=25295b36f6ef34c0586fa20200c5e2adc5b6617452206e415d88a86a02; shshshfp=042198d39a41b58d580258309e4c2598; TrackerID=agFhMocc5GZQaJ9Y00pYSXOg3WahYbeNaoTMzah0ecBQnYSEZqfJhIkNEDybYUcgKIMxV6nmLvBt8rpcYff9sFpWPsnT8FcBPyS_ObvtyHKHLHhxmFe8i7rIz1WpKdv-6MePkchKNejYZm1gdsHcqg; pt_key=AAFbaoa-ADAJhoe-AA7Qhlgc8gxisXsFvRnqlj17GlTRISmTxUkZJNztITc30NCaaFTGMhHIyGQ; pt_pin=weng645008699; pt_token=5nv4nyff; pwdt_id=weng645008699; __jda=122270672.358743753.1524820610.1533707954.1533714674.3; sid=f69b7abb66e569ac6ba7013bdf691ada; USER_FLAG_CHECK=39479d4287c42e1f0c799ea9ea18ee77; warehistory="6254701,"; wq_logid=1533714665.1800834390; wxa_level=1; retina=1; cid=9; webp=1; __jdb=122270672.3.358743753|3.1533714674; __jdv=122270672|pdappwakeupup_20170001|-|none|-|1533714701046; mba_sid=15337146743177181597816484941.3; shshshsID=76c604122e4b7967643212402c8fd474_5_1533714702723
+
+body=%7B%22activityId%22%3A%22xw6DGnYNRDuay17B6MDp2rfnPgR%22%2C%22from%22%3A%22H5node%22%2C%22scene%22%3A%221%22%2C%22args%22%3A%22key%3Dfc605e42757d413baa56d7a945499da8%2CroleId%3D13442560%22%2C%22pageClickKey%22%3A%22Babel_Coupon%22%2C%22mitemAddrId%22%3A%22%22%2C%22geo%22%3A%7B%22lng%22%3A%22%22%2C%22lat%22%3A%22%22%7D%2C%22addressId%22%3A%22%22%2C%22posLng%22%3A%22%22%2C%22posLat%22%3A%22%22%2C%22focus%22%3A%22%22%2C%22innerAnchor%22%3A%22%22%7D&client=wh5&clientVersion=1.0.0&sid=f69b7abb66e569ac6ba7013bdf691ada&uuid=358743753&area=
