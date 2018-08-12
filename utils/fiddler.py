@@ -57,7 +57,7 @@ class RawToPython(object):
                             [each.strip() for each in line_split])
         self.method = line_split[0]
         self.url = line_split[1]
-        if self.url.startswith("/"):
+        if not self.url.startswith("http"):
             if self.__is_https is None:
                 if self.headers.get("Referer"):
                     http_host = self.headers.get("Referer").split(":", 1)[0]
