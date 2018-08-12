@@ -14,6 +14,9 @@ from collections import OrderedDict
 
 import logging
 import requests
+import urllib3
+
+urllib3.disable_warnings()
 
 
 class FiddlerError(Exception):
@@ -25,7 +28,7 @@ class FiddlerError(Exception):
 
 
 class RawToPython(object):
-    def __init__(self, file_name=None, file_raw=None, is_https=False):
+    def __init__(self, file_name=None, file_raw=None, is_https=None):
         if not (file_name or file_raw):
             raise FiddlerError("must had file_name or file_data")
         self.method = None
@@ -51,18 +54,20 @@ class RawToPython(object):
     def __to_method_and_url(self):
         line_split = self.__lines[0].strip().split(" ")
         line_split = filter(lambda ch: ch,
-                                  [each.strip() for each in line_split])
+                            [each.strip() for each in line_split])
         self.method = line_split[0]
         self.url = line_split[1]
         if self.url.startswith("/"):
-            if self.headers.get("Origin"):
-                http_host = self.headers.get("Origin")
-            elif self.headers.get("Referer"):
-                url_list = self.headers.get("Referer").split("/", 3)
-                http_host = "/".join(url_list[:3])
+            if self.__is_https is None:
+                if self.headers.get("Referer"):
+                    http_host = self.headers.get("Referer").split(":", 1)[0]
+                elif self.headers.get("Origin"):
+                    http_host = self.headers.get("Origin").split(':', 1)[0]
+                else:
+                    raise Exception('Had not found HTTP_HOST !')
             else:
-                http_host = "https://" if self.__is_https else "http://"
-                http_host += self.headers["Host"]
+                http_host = "https" if self.__is_https else "http"
+            http_host += "://" + self.headers["Host"]
             self.url = http_host + self.url
         self.url_parse = urlparse.urlparse(self.url)
 
@@ -80,14 +85,15 @@ class RawToPython(object):
     def __to_body(self):
         if self.__lines[-2].strip():
             return
-        line = self.__lines[-1].strip().strip("&")
+        body_data = urllib.unquote(self.__lines[-1])
+        line = body_data.strip("&")
         try:
             self.req_json = json.loads(line)
-        except:
+        except Exception:
             line_split = line.split("&")
             ready_to_dict = []
             for each in line_split:
-                ready_to_dict.append(each.split("="))
+                ready_to_dict.append(each.split("=", 1))
             self.req_data = OrderedDict(ready_to_dict)
 
     def __to_python(self):
@@ -145,7 +151,7 @@ class RawToPython(object):
         if self.method == "GET":
             try:
                 web_data = requests.get(verify=False, **req_param)
-            except:
+            except Exception:
                 logging.error("fd: requests get error: " + req_param["url"])
                 return
             return web_data
