@@ -11,7 +11,7 @@ from utils import pusher
 
 urllib3.disable_warnings()
 
-HIGH_TEMP = 62
+HIGH_TEMP = 68
 TIME_SEP = 10
 
 
@@ -29,10 +29,11 @@ if __name__ == '__main__':
     while True:
         with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
             temp = float(f.read()) / 1000
+        print u'{:.2f}'.format(temp)
         # temp = 66
         if temp >= HIGH_TEMP:
             now_time = time.time()
             if now_time - last_time > TIME_SEP:
                 last_time = now_time
                 send_push(u'[SYS]树莓派温度过高: {:.2f}'.format(temp), None)
-        time.sleep(5)
+        time.sleep(30)

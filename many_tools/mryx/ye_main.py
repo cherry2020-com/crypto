@@ -3,16 +3,17 @@
 import random
 import time
 import pickle
-
+import sys
 import urllib3
 
 from utils.fiddler import RawToPython
 urllib3.disable_warnings()
+sys.path.extend(['/data/my_tools_env/my_tools/'])
 
-COUNT = 5
+COUNT = 8
 
-head_file = './ye_head_for_me.txt'
-# head_file = 'ye_head_for_girl.txt'
+# head_file = './ye_head_for_me.txt'
+head_file = 'ye_head_for_girl.txt'
 code_file = 'ye_codes.txt'
 
 # code
