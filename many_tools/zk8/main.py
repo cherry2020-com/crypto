@@ -2,7 +2,6 @@
 # - * - encoding: UTF-8 - * -
 import sys
 import os
-import urllib3
 import time
 from bs4 import BeautifulSoup
 
@@ -12,8 +11,8 @@ from utils import pusher
 from utils.fiddler import RawToPython
 
 
-urllib3.disable_warnings()
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
+DEBUG = False
 
 
 def get_web_data(break_names=None):
@@ -46,6 +45,9 @@ def get_web_data(break_names=None):
 
 
 def send_push(content, url):
+    if DEBUG:
+        print("TEST: %s" % content)
+        return
     my_source = 's-70924c26-f3a5-4292-ad29-fb1b5877'
     receiver_source = 'g-85ed11d8-f448-4e41-bc1c-0e600f94'
     title = 'zk8'

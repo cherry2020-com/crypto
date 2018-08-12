@@ -150,14 +150,14 @@ class RawToPython(object):
             req_param["url"] = "/".join(url_list)
         if self.method == "GET":
             try:
-                web_data = requests.get(verify=False, **req_param)
+                web_data = requests.get(**req_param)
             except Exception:
                 logging.error("fd: requests get error: " + req_param["url"])
                 return
             return web_data
         elif self.method == "POST":
             try:
-                web_data = requests.post(verify=False, **req_param)
+                web_data = requests.post(**req_param)
             except:
                 logging.error("fd: requests post error: " + req_param["url"])
                 return
