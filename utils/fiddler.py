@@ -64,7 +64,7 @@ class RawToPython(object):
                 elif self.headers.get("Origin"):
                     http_host = self.headers.get("Origin").split(':', 1)[0]
                 else:
-                    raise Exception('Had not found HTTP_HOST !')
+                    http_host = "https"
             else:
                 http_host = "https" if self.__is_https else "http"
             http_host += "://" + self.headers["Host"]
