@@ -126,8 +126,9 @@ class GoldMake(object):
             self.dollar_high_money = float(dollar_gold_data['topmiddleprice']) + 0.9
             self.dollar_low_money = float(dollar_gold_data['lowmiddleprice']) + 0.9
             self.dollar_float_money = dollar_gold_data['openprice_dv']
-        except Exception as e:
-            pass
+        except Exception:
+            time.sleep(60)
+            self.cur_money = self.refresh_cur_money()
         return self.cur_money
 
     def lte__cur_money(self, value):
