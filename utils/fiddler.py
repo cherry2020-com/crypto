@@ -13,6 +13,8 @@ import urlparse
 from collections import OrderedDict
 
 import logging
+
+import datetime
 import requests
 import urllib3
 
@@ -155,16 +157,18 @@ class RawToPython(object):
         if self.method == "GET":
             try:
                 web_data = requests.get(verify=False, **req_param)
+                return web_data
             except Exception as e:
-                logging.error("fd: requests get error: " + req_param["url"])
-                logging.error("fd: requests get error: " + str(e))
-                raise FiddlerRequestException(e)
-            return web_data
+                error_msg = "{time}: fd: requests get error: {url}: {e}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                logging.error(error_msg)
+                raise FiddlerRequestException(error_msg)
         elif self.method == "POST":
             try:
                 web_data = requests.post(verify=False, **req_param)
+                return web_data
             except Exception as e:
-                logging.error("fd: requests post error: " + req_param["url"])
-                logging.error("fd: requests post error: " + str(e))
-                raise FiddlerRequestException(e)
-            return web_data
+                error_msg = "{time}: fd: requests post error: {url}: {e}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                logging.error(error_msg)
+                raise FiddlerRequestException(error_msg)
