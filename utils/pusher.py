@@ -84,11 +84,8 @@ def send(source, receiver,
     with Session(source, receiver,
                  auto_retry=auto_retry,
                  max_retry=max_retry) as session:
-        session.send(title=title,
-         urgent=urgent,
-         sound=sound,
-         content=content,
-         url=url)
+        session.send(title=title, urgent=urgent, sound=sound,
+                     content=content, url=url)
 
 
 class AlertOverHandler(logging.Handler):

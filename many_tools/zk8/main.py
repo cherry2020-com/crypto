@@ -12,7 +12,6 @@ from utils.fiddler import RawToPython
 
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
-DEBUG = False
 
 
 def get_web_data(break_names=None):

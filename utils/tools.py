@@ -11,7 +11,7 @@ from utils.send_email import Email
 def send_push(content, url, my_source, receiver_source, title, sound='default'):
     try:
         pusher.send(my_source, receiver_source, title=title, url=url,
-                    content=content, sound=sound)
+                    content=content, sound=sound, auto_retry=True)
     except Exception as e:
         error_msg = "{time}: PusherError: {title}: {e}".format(
             time=datetime.datetime.now(), title=title, e=e)
