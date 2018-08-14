@@ -15,6 +15,6 @@ def send_push(content, url, my_source, receiver_source, title, sound='default'):
         try:
             email = Email('Yun_Warning@163.com', 'Wml93640218', '645008699@qq.com',
                           'Script Error')
-            email.send(str(e))
+            email.send(title + str(e))
         except Exception as e:
             logging.error("EmailError: PusherError: " + title + ': ' + str(e))
