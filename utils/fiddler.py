@@ -19,6 +19,10 @@ import urllib3
 urllib3.disable_warnings()
 
 
+class FiddlerRequestException(Exception):
+    pass
+
+
 class FiddlerError(Exception):
     def __init__(self, info):
         self.info = info
@@ -150,15 +154,17 @@ class RawToPython(object):
             req_param["url"] = "/".join(url_list)
         if self.method == "GET":
             try:
-                web_data = requests.get(**req_param)
-            except Exception:
+                web_data = requests.get(verify=False, **req_param)
+            except Exception as e:
                 logging.error("fd: requests get error: " + req_param["url"])
-                return
+                logging.error("fd: requests get error: " + str(e))
+                raise FiddlerRequestException(e)
             return web_data
         elif self.method == "POST":
             try:
-                web_data = requests.post(**req_param)
-            except:
+                web_data = requests.post(verify=False, **req_param)
+            except Exception as e:
                 logging.error("fd: requests post error: " + req_param["url"])
-                return
+                logging.error("fd: requests post error: " + str(e))
+                raise FiddlerRequestException(e)
             return web_data

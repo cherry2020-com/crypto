@@ -14,7 +14,7 @@ import time
 from gold_reminder.settings import GOLD_DIR
 from utils.fiddler import RawToPython
 from utils.send_email import Email
-from utils import pusher
+from utils import tools
 import urllib3
 
 
@@ -69,10 +69,9 @@ class WechatObject(object):
         # url = 'com.icbc.iphoneclient://'
         url = 'http://t.cn/RVCjPNI'
         content = msg
-        title = u'黄金提醒'
+        title = u'Gold Reminder'
         sound = 'failling'
-        pusher.send(my_source, receiver_source, title=title, url=url,
-                    content=content, sound=sound)
+        tools.send_push(content, url, my_source, receiver_source, title, sound)
 
 
 class GoldMake(object):

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
-from utils import pusher
+from utils import tools
 from utils.fiddler import RawToPython
 
 
@@ -42,18 +42,6 @@ def get_web_data(break_names=None):
     else:
         new_break_names = break_names
     return result, new_break_names[:20]
-
-
-def send_push(content, url):
-    if DEBUG:
-        print("TEST: %s" % content)
-        return
-    my_source = 's-70924c26-f3a5-4292-ad29-fb1b5877'
-    receiver_source = 'g-85ed11d8-f448-4e41-bc1c-0e600f94'
-    title = 'zk8'
-    sound = 'default'
-    pusher.send(my_source, receiver_source, title=title, url=url,
-                content=content, sound=sound)
 
 
 CHANGE_MAPS = {u'〇': '0', u'零': '0', u'一': '1', u'二': '2', u'三': '3', u'四': '4',
@@ -94,7 +82,11 @@ if __name__ == '__main__':
                         if ek in if_title:
                             break
                     else:
-                        send_push(u'[ZK8]' + title, url)
+                        tools.send_push(
+                            u'[ZK8]' + title, url,
+                            's-70924c26-f3a5-4292-ad29-fb1b5877',
+                            'g-85ed11d8-f448-4e41-bc1c-0e600f94',
+                            'zk8')
                     break
         time.sleep(5)
         print "."
