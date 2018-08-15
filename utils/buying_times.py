@@ -56,7 +56,7 @@ class PanicBuyingTimes(object):
 if __name__ == '__main__':
     while True:
         a = PanicBuyingTimes(['2018-08-15 09:52:00', '2018-07-15 09:52:00',
-                              '2018-08-15 22:20:00', '2018-08-15 19:22:00'])
+                              '2018-08-15 22:21:00', '2018-08-15 22:22:00'])
         if a.run():
             print "T"
         else:
