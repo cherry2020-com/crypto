@@ -38,7 +38,8 @@ class PanicBuyingTimes(object):
                 new_date_times.append([start_date_time, end_date_time])
         self.date_times = sorted(new_date_times, key=lambda x: x[0], reverse=True)
 
-    def run(self):
+    @property
+    def is_start(self):
         if not self.this_time:
             try:
                 self.this_time = self.date_times.pop()
@@ -56,8 +57,8 @@ class PanicBuyingTimes(object):
 if __name__ == '__main__':
     while True:
         a = PanicBuyingTimes(['2018-08-15 09:52:00', '2018-07-15 09:52:00',
-                              '2018-08-15 22:21:00', '2018-08-15 22:22:00'])
-        if a.run():
+                              '2018-08-15 22:21:00', '2018-08-15 22:28:00'])
+        if a.is_start:
             print "T"
         else:
             print "F"
