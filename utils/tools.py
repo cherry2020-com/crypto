@@ -3,6 +3,7 @@
 import logging
 
 import datetime
+import time
 
 from utils import pusher
 from utils.send_email import Email
@@ -27,10 +28,22 @@ def send_push(content, url, my_source, receiver_source, title, sound='default'):
 
 
 def panic_buying_times(YmdHMSs):
+    if isinstance(YmdHMSs, str):
+        YmdHMSs = [YmdHMSs]
     for YmdHMS in YmdHMSs:
-        panic_time = datetime.datetime.strptime(YmdHMS, "%Y%m%d%H%M%S")
+        panic_time = datetime.datetime.strptime(YmdHMS, "%Y-%m-%d %H:%M:%S")
         panic_time -= datetime.timedelta(seconds=3)
         time_diff = datetime.datetime.now() - panic_time
         if 0 <= time_diff.seconds <= 6:
             return True
     return False
+
+
+if __name__ == '__main__':
+    while True:
+        a = panic_buying_times(['2018-08-15 09:52:00'])
+        if a:
+            print "T"
+        else:
+            print "F"
+        time.sleep(0.2)
