@@ -16,7 +16,7 @@ class PanicBuyingTimes(object):
             date_times = [date_times]
         self.date_times = self.make_date_times(date_times)
         self._remove_expired_times()
-        self.this_time = None
+        self.this_time = self.date_times.pop()
 
     @staticmethod
     def make_date_times(date_times):
@@ -40,17 +40,15 @@ class PanicBuyingTimes(object):
 
     @property
     def is_start(self):
-        if not self.this_time:
-            try:
-                self.this_time = self.date_times.pop()
-            except IndexError:
-                raise PanicBuyingTimesException('Error: Had not times to wait !')
         now = datetime.datetime.now()
         start_time, end_time = self.this_time
         if start_time <= now <= end_time:
             return True
         if now >= end_time:
-            self.this_time = None
+            try:
+                self.this_time = self.date_times.pop()
+            except IndexError:
+                raise PanicBuyingTimesException('Error: Had not times to wait !')
         return False
 
 
