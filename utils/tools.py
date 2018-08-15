@@ -24,3 +24,13 @@ def send_push(content, url, my_source, receiver_source, title, sound='default'):
             error_msg = "{time}: EmailError: PusherError: {title}: {e}".format(
                 time=datetime.datetime.now(), title=title, e=e)
             logging.error(error_msg)
+
+
+def panic_buying_times(YmdHMSs):
+    for YmdHMS in YmdHMSs:
+        panic_time = datetime.datetime.strptime(YmdHMS, "%Y%m%d%H%M%S")
+        panic_time -= datetime.timedelta(seconds=3)
+        time_diff = datetime.datetime.now() - panic_time
+        if 0 <= time_diff.seconds <= 6:
+            return True
+    return False
