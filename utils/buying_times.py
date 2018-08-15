@@ -16,7 +16,7 @@ class PanicBuyingTimes(object):
             date_times = [date_times]
         self.date_times = self.make_date_times(date_times)
         self._remove_expired_times()
-        self.this_time = self.date_times.pop()
+        self.this_time = None
 
     @staticmethod
     def make_date_times(date_times):
@@ -39,17 +39,24 @@ class PanicBuyingTimes(object):
         self.date_times = sorted(new_date_times, key=lambda x: x[0], reverse=True)
 
     def run(self):
+        if not self.this_time:
+            try:
+                self.this_time = self.date_times.pop()
+            except IndexError:
+                raise PanicBuyingTimesException('Error: Had not times to wait !')
         now = datetime.datetime.now()
         start_time, end_time = self.this_time
         if start_time <= now <= end_time:
             return True
+        if now >= end_time:
+            self.this_time = None
         return False
 
 
 if __name__ == '__main__':
     while True:
         a = PanicBuyingTimes(['2018-08-15 09:52:00', '2018-07-15 09:52:00',
-                              '2018-08-15 20:20:00', '2018-08-15 19:22:00'])
+                              '2018-08-15 22:20:00', '2018-08-15 19:22:00'])
         if a.run():
             print "T"
         else:
