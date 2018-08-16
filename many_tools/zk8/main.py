@@ -43,7 +43,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
                 if name not in exist_titles:
                     url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
                     # print name, url
-                    print "!",
+                    print "hot|",
                     result[name] = url
                     is_get_new = True
                 new_exist_titles.add(name)
@@ -82,7 +82,7 @@ def get_web_data(request_raw, break_names=None):
                     is_get_new = True
                 url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
                 # print name, url
-                print ",",
+                print "new|",
                 result[name] = url
         new_break_names.extend(break_names)
     else:
@@ -162,11 +162,11 @@ if __name__ == '__main__':
             count = 1
             for title, url in result.iteritems():
                 tools.send_push(
-                    u'[ZK8]' + title, url,
+                    u'[ZK8][HOT]' + title, url,
                     's-70924c26-f3a5-4292-ad29-fb1b5877',
                     'g-85ed11d8-f448-4e41-bc1c-0e600f94',
                     'zk8')
                 time.sleep(1)
             time.sleep(8)
-        print "."
+        print "refresh|"
         sys.stdout.flush()
