@@ -29,7 +29,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
     except Exception as e:
         tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
         time.sleep(60)
-        return {}, break_names
+        return {}, exist_titles
     exist_titles = set(exist_titles) if exist_titles else set()
     new_exist_titles = exist_titles.copy()
     result = {}
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         time.sleep(8)
 
         count += 1
-        if count == 2:
+        if count == 10:
             result, exist_titles = get_web_hot_data(hot_list_request_raw, exist_titles)
             count = 1
             for title, url in result.iteritems():
