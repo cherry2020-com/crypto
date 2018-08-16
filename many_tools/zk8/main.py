@@ -20,9 +20,6 @@ def test_print(*args, **kwargs):
     print args, kwargs
 
 
-tools.send_push = test_print
-
-
 def get_web_hot_data(request_raw, exist_titles=None):
     if exist_titles is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt')) as f:
@@ -115,6 +112,7 @@ def change_title(title):
 
 
 def init():
+    tools.send_push = test_print
     with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
         pickle.dump(set(), f)
     with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
@@ -122,7 +120,7 @@ def init():
 
 
 if __name__ == '__main__':
-    init()
+    # init()
     break_names = None
     exist_titles = None
     key_messages = {'wj', 'bug', 'fx', u'神', u'券', u'卷', u'抢', u'无门槛', u'立减',
