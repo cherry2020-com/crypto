@@ -31,7 +31,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         time.sleep(60)
         return {}, break_names
     exist_titles = set(exist_titles) if exist_titles else set()
-    new_exist_titles = set()
+    new_exist_titles = exist_titles.copy()
     result = {}
     is_get_new = False
     if web_data and web_data.status_code == 200:
@@ -46,7 +46,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     print "hot|",
                     result[name] = url
                     is_get_new = True
-                new_exist_titles.add(name)
+                    new_exist_titles.add(name)
     else:
         new_exist_titles = exist_titles
     if is_get_new:
