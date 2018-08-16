@@ -1,19 +1,19 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
-import sys
 
 import datetime
-
 import random
 import json
-import os
 import time
-sys.path.append('..')
+import sys
+import os
+sys.path.extend(['/data/my_tools_env/my_tools/'])
+
+
 from utils.fiddler import RawToPython
 from utils.send_email import Email
 from utils import tools
 import urllib3
-
 
 urllib3.disable_warnings()
 GOLD_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -91,6 +91,6 @@ if __name__ == '__main__':
                             'g-85ed11d8-f448-4e41-bc1c-0e600f94',
                             'zk8')
                     break
-        time.sleep(5)
+        time.sleep(8)
         print "."
         sys.stdout.flush()

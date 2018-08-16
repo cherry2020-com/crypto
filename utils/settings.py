@@ -10,7 +10,6 @@ import os
 
 import sys
 
-sys.path.extend(['..'])
 SDK_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Log

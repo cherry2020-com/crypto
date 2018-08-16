@@ -2,9 +2,9 @@
 # - * - encoding: UTF-8 - * -
 
 import time
-
 import sys
 import urllib3
+
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 from utils import tools
