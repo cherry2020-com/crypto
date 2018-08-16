@@ -152,6 +152,7 @@ if __name__ == '__main__':
                             's-70924c26-f3a5-4292-ad29-fb1b5877',
                             'g-85ed11d8-f448-4e41-bc1c-0e600f94',
                             'zk8')
+                        print "send_new|",
                         time.sleep(1)
                     break
         time.sleep(8)
@@ -166,6 +167,7 @@ if __name__ == '__main__':
                     's-70924c26-f3a5-4292-ad29-fb1b5877',
                     'g-85ed11d8-f448-4e41-bc1c-0e600f94',
                     'zk8')
+                print "send_hot|",
                 time.sleep(1)
             time.sleep(8)
         print "refresh|"
