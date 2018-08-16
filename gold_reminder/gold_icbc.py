@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
-import logging
 import sys
 
 import datetime
@@ -9,8 +8,7 @@ import random
 import json
 import os
 import time
-
-from gold_reminder.settings import GOLD_DIR
+sys.path.append('..')
 from utils.fiddler import RawToPython
 from utils.send_email import Email
 from utils import tools
@@ -18,7 +16,7 @@ import urllib3
 
 
 urllib3.disable_warnings()
-
+GOLD_DIR = os.path.dirname(os.path.abspath(__file__))
 EMAIL_RECEIVERS = [
     # '645008699@qq.com',
     # '674564128@qq.com',

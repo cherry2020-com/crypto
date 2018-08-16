@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
-import logging
 import sys
 import os
 import time
