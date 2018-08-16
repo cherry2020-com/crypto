@@ -1,0 +1,10 @@
+GET /re.php?mobile=2 HTTP/1.1
+Host: www.zuanke8.com
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Mobile Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: http://www.zuanke8.com/forum.php?mobile=2
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Cookie: _uab_collina=152490035428224118765599; ki1e_2132_saltkey=E07dIGiH; ki1e_2132_lastvisit=1532655852; ki1e_2132_client_token=5345E6B05FB92B585DED61916D3FD6D9; ki1e_2132_connect_is_bind=1; ki1e_2132_connect_uin=5345E6B05FB92B585DED61916D3FD6D9; ki1e_2132_smile=1D1; ki1e_2132_nofavfid=1; ki1e_2132_atarget=1; ki1e_2132_client_created=1534055699; ki1e_2132_connect_login=1; ki1e_2132_auth=4370CncE9q1DEoUq5Fv1SNVpcBNlLKxIq3YcZxKYs%2FV0ihOVpl1RupCr155zF3WYTLCaFQRT9nfHboMWYRqttOLXO8w; _umdata=2BA477700510A7DF521B66DD56F8C6303FEB520B4B9892E27704256AB5233FE757641EF84E1629A6CD43AD3E795C914C4BF716C1033FC8FE74F80DE69137ADC8; Hm_lvt_da6569f688ba2c32429af00afd9eb8a1=1533019107,1533349900,1533540336,1534318097; ki1e_2132_lastviewtime=275134%7C1534327306; ki1e_2132_pc_size_c=0; ki1e_2132_connect_last_report_time=2018-08-16; timestamp=1534414013000; sign=1A5EB9A03438FA5F8B74FBA6ABF0A35C; ki1e_2132_viewid=tid_5195909; ki1e_2132_ulastactivity=1534415131%7C0; ki1e_2132_lastcheckfeed=275134%7C1534415209; ki1e_2132_sendmail=1; Hm_lpvt_da6569f688ba2c32429af00afd9eb8a1=1534415220; ki1e_2132_lastact=1534415226%09forum.php%09; amvid=0e116a4f3488b77bee138c414874717b
+
