@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
+import logging
 import sys
 import os
 import time
@@ -18,7 +19,9 @@ def get_web_data(break_names=None):
     raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     try:
         web_data = raw.requests(timeout=10)
-    except Exception:
+    except Exception as e:
+        tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
+        time.sleep(60)
         return {}, break_names
     result = {}
     if web_data and web_data.status_code == 200:

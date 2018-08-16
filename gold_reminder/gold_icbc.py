@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
+import logging
 import sys
 
 import datetime
 
-sys.path.extend(['/data/my_tools_env/my_tools/gold_reminder/',
-                 '/data/my_tools_env/my_tools/'])
 import random
 import json
 import os
@@ -63,15 +62,12 @@ class WechatObject(object):
                             receiver=receiver)
 
         # pusher
-        # for receiver in self.push_receivers:
         my_source = 's-3c91ca69-dd35-4275-9d59-5a0608fd'
         receiver_source = 'g-d22d57b4-1dda-4888-84b9-57a92766'
-        # url = 'com.icbc.iphoneclient://'
         url = 'http://t.cn/RVCjPNI'
         content = msg
         title = u'Gold Reminder'
-        sound = 'failling'
-        tools.send_push(content, url, my_source, receiver_source, title, sound)
+        tools.send_push(content, url, my_source, receiver_source, title)
 
 
 class GoldMake(object):
@@ -100,20 +96,17 @@ class GoldMake(object):
         self.gte__cur_money_tmp = 0
         self.start_money = self.cur_money
 
-    def get_web_data(self, name):
+    def _get_web_data(self):
         web_data = self.fd_obj.requests()
         web_json = web_data.json()
         market = web_json['market']
-        for each in market:
-            if each['metalname'] == name:
-                return each
-        else:
-            raise Exception('ERROR: No find icbc name in web data!!!')
+        return {x['metalname']: x for x in market}
 
     def refresh_cur_money(self):
         try:
-            gold_data = self.get_web_data(u'人民币账户黄金')
-            dollar_gold_data = self.get_web_data(u'美元账户黄金')
+            web_data = self._get_web_data()
+            gold_data = web_data[u'人民币账户黄金']
+            dollar_gold_data = web_data[u'美元账户黄金']
             self.cur_money = float(gold_data['middleprice']) + 0.2
             self.jst_cur_money = self.cur_money - 0.4 + 3.58
             self.sell_cur_money = self.cur_money - 0.4
@@ -125,7 +118,8 @@ class GoldMake(object):
             self.dollar_high_money = float(dollar_gold_data['topmiddleprice']) + 0.9
             self.dollar_low_money = float(dollar_gold_data['lowmiddleprice']) + 0.9
             self.dollar_float_money = dollar_gold_data['openprice_dv']
-        except Exception:
+        except Exception as e:
+            tools.send_error_msg_by_email("[icbc]refresh_cur_money: " + str(e))
             time.sleep(60)
             self.cur_money = self.refresh_cur_money()
         return self.cur_money
