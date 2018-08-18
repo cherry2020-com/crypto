@@ -2,13 +2,16 @@
 # - * - encoding: UTF-8 - * -
 import time
 
+import sys
+
 from utils.buying_times import PanicBuyingTimes
 from utils.fiddler import RawToPython, FiddlerRequestException
 
-req = RawToPython('./head.txt')
-buying_time = PanicBuyingTimes("2018-08-15 10:00:00")
+file_path = sys.argv[1]
+req = RawToPython(file_path)
+buying_time = PanicBuyingTimes("20:00:00")
 while True:
-    if buying_time.is_start:
+    if buying_time.start(debug=True):
         try:
             web_data = req.requests(timeout=(None, 0.01))
             # web_data = req.requests(timeout=(None, None))
@@ -16,4 +19,4 @@ while True:
         except FiddlerRequestException:
             pass
     else:
-        time.sleep(0.1)
+        time.sleep(0.2)
