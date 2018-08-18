@@ -214,14 +214,14 @@ def do_while():
     while True:
         now_time = int(time.time())
         if next_time < now_time:
-            print ''
+            print 'refresh|'
             make_obj.refresh_cur_money()
             msg = make_obj.get_msg(json_data.get('set_upper_func'),
                                    json_data.get('set_down_func'),
                                    json_data.get('set_float_func'),
                                    json_data.get('set_high_low_float_func'))
             if msg:
-                print '%s: send msg.' % datetime.datetime.now()
+                print '%s: send msg|' % datetime.datetime.now()
                 itchat_obj.send_msg(msg)
             next_time = now_time + random.randint(5, 8)
             sys.stdout.flush()
@@ -229,7 +229,7 @@ def do_while():
             clear_time = now_time + 600
             make_obj.clear()
         time.sleep(1)
-        print ',',
+        print 'step|',
 
 
 if __name__ == '__main__':

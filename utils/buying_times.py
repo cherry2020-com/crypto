@@ -9,14 +9,27 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=3, after_seconds=3):
+    def __init__(self, date_times, before_seconds=2, after_seconds=2):
         self.before_seconds = before_seconds
         self.after_seconds = after_seconds
         if isinstance(date_times, str):
             date_times = [date_times]
-        self.date_times = self.make_date_times(date_times)
+        self.date_times = self._make_correct_date_times(date_times)
+        self.date_times = self.make_date_times(self.date_times)
         self._remove_expired_times()
         self.this_time = self.date_times.pop()
+
+    @staticmethod
+    def _make_correct_date_times(date_times):
+        new_date_times = []
+        for date_time in date_times:
+            date_time = date_time.strip()
+            if len(date_time) == len('00:00:00'):
+                date_time = "{} {}".format(
+                    datetime.date.today().strftime('%Y-%m-%d'),
+                    date_time)
+            new_date_times.append(date_time)
+        return new_date_times
 
     @staticmethod
     def make_date_times(date_times):
@@ -53,11 +66,12 @@ class PanicBuyingTimes(object):
 
 
 if __name__ == '__main__':
+    a = PanicBuyingTimes(['18:18:00', '2018-07-15 09:52:00',
+                          '15:25:00', '2018-08-15 22:28:00'])
     while True:
-        a = PanicBuyingTimes(['2018-08-15 09:52:00', '2018-07-15 09:52:00',
-                              '2018-08-15 22:21:00', '2018-08-15 22:28:00'])
+        now = datetime.datetime.now()
         if a.is_start:
-            print "T"
+            print "T - {}".format(now)
         else:
-            print "F"
+            print "F - {}".format(now)
         time.sleep(0.2)
