@@ -9,7 +9,7 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=2, after_seconds=2):
+    def __init__(self, date_times, before_seconds=3, after_seconds=2):
         self.before_seconds = before_seconds
         self.after_seconds = after_seconds
         if isinstance(date_times, str):
