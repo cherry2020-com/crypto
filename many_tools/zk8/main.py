@@ -6,6 +6,7 @@ import time
 
 import pickle
 from bs4 import BeautifulSoup
+from requests import ConnectTimeout
 
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
@@ -26,9 +27,12 @@ def get_web_hot_data(request_raw, exist_titles=None):
             exist_titles = pickle.load(f)
     try:
         web_data = request_raw.requests(timeout=10)
+    except ConnectTimeout:
+        time.sleep(30)
+        return {}, exist_titles
     except Exception as e:
         tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
-        time.sleep(60)
+        time.sleep(30)
         return {}, exist_titles
     exist_titles = set(exist_titles) if exist_titles else set()
     new_exist_titles = exist_titles.copy()
@@ -36,7 +40,10 @@ def get_web_hot_data(request_raw, exist_titles=None):
     is_get_new = False
     if web_data and web_data.status_code == 200:
         soups = BeautifulSoup(web_data.text, "lxml")
-        for tag in soups.find(id='alist').find_all('li'):
+        soup_find = soups.find(id='alist')
+        if not soup_find:
+            return {}, exist_titles
+        for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
                 name = ' || '.join(text)
@@ -61,9 +68,12 @@ def get_web_data(request_raw, break_names=None):
             break_names = pickle.load(f)
     try:
         web_data = request_raw.requests(timeout=10)
+    except ConnectTimeout:
+        time.sleep(30)
+        return {}, break_names
     except Exception as e:
         tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
-        time.sleep(60)
+        time.sleep(30)
         return {}, break_names
     result = {}
     is_get_new = False
@@ -71,7 +81,10 @@ def get_web_data(request_raw, break_names=None):
         soups = BeautifulSoup(web_data.text, "lxml")
         new_break_names = []
         set_break_names = set(break_names or [])
-        for tag in soups.find(id='alist').find_all('li'):
+        soup_find = soups.find(id='alist')
+        if not soup_find:
+            return {}, break_names
+        for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
                 name = ' || '.join(text[:-1])
