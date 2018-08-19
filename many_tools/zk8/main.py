@@ -11,8 +11,7 @@ from requests import ConnectTimeout
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 from utils import tools
-from utils.fiddler import RawToPython
-
+from utils.fiddler import RawToPython, FiddlerRequestTimeOutException
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -27,7 +26,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
             exist_titles = pickle.load(f)
     try:
         web_data = request_raw.requests(timeout=10)
-    except ConnectTimeout:
+    except FiddlerRequestTimeOutException:
         time.sleep(30)
         return {}, exist_titles
     except Exception as e:
@@ -68,7 +67,7 @@ def get_web_data(request_raw, break_names=None):
             break_names = pickle.load(f)
     try:
         web_data = request_raw.requests(timeout=10)
-    except ConnectTimeout:
+    except FiddlerRequestTimeOutException:
         time.sleep(30)
         return {}, break_names
     except Exception as e:

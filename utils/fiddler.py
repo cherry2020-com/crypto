@@ -25,6 +25,10 @@ class FiddlerRequestException(Exception):
     pass
 
 
+class FiddlerRequestTimeOutException(FiddlerRequestException):
+    pass
+
+
 class FiddlerError(Exception):
     def __init__(self, info):
         self.info = info
@@ -158,6 +162,11 @@ class RawToPython(object):
             try:
                 web_data = requests.get(verify=False, **req_param)
                 return web_data
+            except requests.ConnectTimeout as e:
+                error_msg = "{time}: fd: requests get error: {url}: {e}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                logging.error(error_msg)
+                raise FiddlerRequestTimeOutException(error_msg)
             except Exception as e:
                 error_msg = "{time}: fd: requests get error: {url}: {e}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e)
@@ -167,6 +176,11 @@ class RawToPython(object):
             try:
                 web_data = requests.post(verify=False, **req_param)
                 return web_data
+            except requests.ConnectTimeout as e:
+                error_msg = "{time}: fd: requests post error: {url}: {e}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                logging.error(error_msg)
+                raise FiddlerRequestTimeOutException(error_msg)
             except Exception as e:
                 error_msg = "{time}: fd: requests post error: {url}: {e}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e)

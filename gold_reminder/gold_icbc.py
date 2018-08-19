@@ -10,7 +10,8 @@ import os
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 
-from utils.fiddler import RawToPython
+from utils.fiddler import RawToPython, FiddlerRequestTimeOutException, \
+    FiddlerRequestException
 from utils.send_email import Email
 from utils import tools
 import urllib3
@@ -116,6 +117,9 @@ class GoldMake(object):
             self.dollar_high_money = float(dollar_gold_data['topmiddleprice']) + 0.9
             self.dollar_low_money = float(dollar_gold_data['lowmiddleprice']) + 0.9
             self.dollar_float_money = dollar_gold_data['openprice_dv']
+        except FiddlerRequestTimeOutException as e:
+            time.sleep(60)
+            self.cur_money = self.refresh_cur_money()
         except Exception as e:
             tools.send_error_msg_by_email("[icbc]refresh_cur_money: " + str(e))
             time.sleep(60)
