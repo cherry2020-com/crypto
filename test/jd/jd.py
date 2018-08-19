@@ -10,13 +10,13 @@ from utils.fiddler import RawToPython, FiddlerRequestException
 
 file_path = sys.argv[1]
 req = RawToPython(file_path)
-buying_time = PanicBuyingTimes("20:00:00")
+buying_time = PanicBuyingTimes("22:00:00")
 count = 1
 heart_count = random.randint(300, 600)
 while True:
     if buying_time.start(debug=True):
         try:
-            web_data = req.requests(timeout=(None, 0.01))
+            web_data = req.requests(timeout=(None, 0.001))
             # web_data = req.requests(timeout=(None, None))
             print web_data.json()['subCodeMsg']
         except FiddlerRequestException:
