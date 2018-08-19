@@ -118,11 +118,11 @@ class GoldMake(object):
             self.dollar_low_money = float(dollar_gold_data['lowmiddleprice']) + 0.9
             self.dollar_float_money = dollar_gold_data['openprice_dv']
         except FiddlerRequestTimeOutException as e:
-            time.sleep(60)
+            time.sleep(30)
             self.cur_money = self.refresh_cur_money()
         except Exception as e:
             tools.send_error_msg_by_email("[icbc]refresh_cur_money: " + str(e))
-            time.sleep(60)
+            time.sleep(30)
             self.cur_money = self.refresh_cur_money()
         return self.cur_money
 
