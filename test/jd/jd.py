@@ -10,9 +10,9 @@ from utils.fiddler import RawToPython, FiddlerRequestException
 
 file_path = sys.argv[1]
 req = RawToPython(file_path)
-buying_time = PanicBuyingTimes("2018-08-20 00:00:00")
+buying_time = PanicBuyingTimes("20:00:00")
 count = 1
-heart_count = random.randint(400, 600)
+heart_count = random.randint(300, 600)
 while True:
     if buying_time.start(debug=True):
         try:
