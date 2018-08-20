@@ -55,12 +55,13 @@ class PanicBuyingTimes(object):
     def is_start(self):
         return self.start()
 
-    def start(self, debug=False):
+    def start(self, debug=False, other_info=''):
         now = datetime.datetime.now()
         start_time, end_time = self.this_time
         if start_time <= now <= end_time:
             if debug:
-                print "True - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"))
+                print "True - {} - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"),
+                                              other_info)
             return True
         if now >= end_time:
             try:
@@ -68,7 +69,8 @@ class PanicBuyingTimes(object):
             except IndexError:
                 raise PanicBuyingTimesException('Error: Had not times to wait !')
         if debug:
-            print "False - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"))
+            print "False - {} - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"),
+                                           other_info)
         return False
 
 
