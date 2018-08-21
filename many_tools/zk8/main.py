@@ -144,7 +144,7 @@ if __name__ == '__main__':
                     u'白菜', u'免单', u'漏洞', u'到手', u'大妈', u'黄金', u'洞'}
     exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
                             u'推荐办', u'果蔬', u'油锅', u'有果', u'果熟', u'果烂', u'代下',
-                            u'带下', u'求', }
+                            u'带下', u'求', u'果果'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
