@@ -147,8 +147,7 @@ if __name__ == '__main__':
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
-    email = Email('Yun_Warning@163.com', 'Wml93640218', '645008699@qq.com',
-                  '[ZK8] Many Titles Need To Send By E-mail')
+    email_title = '[ZK8] Many Titles Need To Send By E-mail'
     email_msg_tmp = u"【{}】 - {}\r\n\r\n"
     while True:
         result, break_names = get_web_data(new_list_request_raw, break_names)
@@ -178,7 +177,7 @@ if __name__ == '__main__':
                 email_msg = ""
                 for title, url in result.iteritems():
                     email_msg += email_msg_tmp.format(title, url)
-                email.send(email_msg)
+                tools.send_email(email_title, email_msg)
                 print "send_all_hot|",
                 continue
             for title, url in result.iteritems():
