@@ -6,12 +6,10 @@ import time
 
 import pickle
 from bs4 import BeautifulSoup
-from requests import ConnectTimeout
-
-from utils.send_email import Email
 
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
+from utils.send_email import Email
 from utils import tools
 from utils.fiddler import RawToPython, FiddlerRequestTimeOutException
 
