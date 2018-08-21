@@ -8,6 +8,8 @@ import pickle
 from bs4 import BeautifulSoup
 from requests import ConnectTimeout
 
+from utils.send_email import Email
+
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 from utils import tools
@@ -33,8 +35,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
         time.sleep(30)
         return {}, exist_titles
-    exist_titles = set(exist_titles) if exist_titles else set()
-    new_exist_titles = exist_titles.copy()
+    exist_titles_set = set(exist_titles) if exist_titles else set()
     result = {}
     is_get_new = False
     if web_data and web_data.status_code == 200:
@@ -46,19 +47,18 @@ def get_web_hot_data(request_raw, exist_titles=None):
             text = tag.text.strip().split()
             if text:
                 name = ' || '.join(text)
-                if name not in exist_titles:
+                if name not in exist_titles_set:
                     url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
                     # print name, url
                     print "hot|",
                     result[name] = url
                     is_get_new = True
-                    new_exist_titles.add(name)
-    else:
-        new_exist_titles = exist_titles
+                    exist_titles.append(name)
+    exist_titles_limit = exist_titles[:200]
     if is_get_new:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
-            pickle.dump(new_exist_titles, f)
-    return result, new_exist_titles
+            pickle.dump(exist_titles_limit, f)
+    return result, exist_titles_limit
 
 
 def get_web_data(request_raw, break_names=None):
@@ -126,9 +126,9 @@ def change_title(title):
 def init():
     tools.send_push = test_print
     with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
-        pickle.dump(set(), f)
+        pickle.dump([], f)
     with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
-        pickle.dump(set(), f)
+        pickle.dump([], f)
 
 
 if __name__ == '__main__':
@@ -149,6 +149,9 @@ if __name__ == '__main__':
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
+    email = Email('Yun_Warning@163.com', 'Wml93640218', '645008699@qq.com',
+                  '[ZK8] Many Titles Need To Send By E-mail')
+    email_msg_tmp = u"【{}】 - {}\r\n\r\n"
     while True:
         result, break_names = get_web_data(new_list_request_raw, break_names)
         for title, url in result.iteritems():
@@ -170,9 +173,16 @@ if __name__ == '__main__':
         time.sleep(8)
 
         count += 1
-        if count == 10:
+        if count == 2:
             result, exist_titles = get_web_hot_data(hot_list_request_raw, exist_titles)
             count = 1
+            if len(result) > 5:
+                email_msg = ""
+                for title, url in result.iteritems():
+                    email_msg += email_msg_tmp.format(title, url)
+                email.send(email_msg)
+                print "send_all_hot|",
+                continue
             for title, url in result.iteritems():
                 tools.send_push(
                     u'[ZK8][HOT]' + title, url,

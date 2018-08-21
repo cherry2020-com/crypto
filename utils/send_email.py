@@ -21,7 +21,7 @@ class Email(object):
 
     def send(self, body, title=None, receiver=None):
         receiver = receiver or self.receiver
-        msg = MIMEText(body, 'html')
+        msg = MIMEText(body, 'plain', _charset='utf-8')
         msg['from'] = self.sender
         msg['to'] = receiver
         msg['subject'] = title or self.title
