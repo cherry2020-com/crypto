@@ -171,7 +171,7 @@ if __name__ == '__main__':
         time.sleep(8)
 
         count += 1
-        if count == 2:
+        if count == 10:
             result, exist_titles = get_web_hot_data(hot_list_request_raw, exist_titles)
             count = 1
             if len(result) > 5:
