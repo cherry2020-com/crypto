@@ -23,7 +23,7 @@ def request_jd(req_jd):
 if __name__ == '__main__':
     file_path = sys.argv[1]
     date_times = sys.argv[2] if len(sys.argv) == 3 else None
-    date_times = "2018-08-20 19:10:00"
+    date_times = "2018-08-21 18:00:00"
     buying_time = PanicBuyingTimes(date_times)
     req = RawToPython(file_path)
     count = 0
@@ -35,7 +35,7 @@ if __name__ == '__main__':
                                  other_info='{}/{}'.format(count + 1, heart_count)):
                 t = threading.Thread(target=request_jd, name=uuid.uuid4(), args=(req, ))
                 t.start()
-                time.sleep(0.1)
+                time.sleep(0.11)
                 threadings.append(t)
             else:
                 count += 1
@@ -43,11 +43,11 @@ if __name__ == '__main__':
                     heart_count = random.randint(300, 600)
                     count = 0
                     try:
-                        web_data = req.requests(timeout=10)
+                        web_data = req.requests(timeout=5)
                         print web_data.json()['subCodeMsg']
                     except FiddlerRequestException:
                         pass
                 time.sleep(1)
         except PanicBuyingTimesException as e:
             for t in threadings:
-                t.join()
+                t.join(timeout=2)
