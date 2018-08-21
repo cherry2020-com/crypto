@@ -34,6 +34,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         time.sleep(30)
         return {}, exist_titles
     exist_titles_set = set(exist_titles) if exist_titles else set()
+    new_titles = []
     result = {}
     is_get_new = False
     if web_data and web_data.status_code == 200:
@@ -51,8 +52,8 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     print "hot|",
                     result[name] = url
                     is_get_new = True
-                    exist_titles.append(name)
-    exist_titles_limit = exist_titles[:200]
+                    new_titles.append(name)
+    exist_titles_limit = (new_titles + exist_titles)[:200]
     if is_get_new:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
             pickle.dump(exist_titles_limit, f)
