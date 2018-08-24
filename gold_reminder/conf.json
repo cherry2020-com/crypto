@@ -6,5 +6,5 @@
   "silver_set_high_low_float_func": 0.008,
   "silver_set_upper_func": 10.0,
   "silver_set_down_func": 1.0,
-  "silver_set_float_func": 0.016
+  "silver_set_float_func": 0.01
 }
