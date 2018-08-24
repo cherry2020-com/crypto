@@ -256,8 +256,8 @@ def do_while():
     gold_make_obj = GoldMake(web_data.data)
     silver_make_obj = SilverMake(web_data.data)
     set_obj = WechatSet()
-    # itchat_obj.send_msg(gold_make_obj.get_money_msg())
-    # itchat_obj.send_msg(silver_make_obj.get_money_msg())
+    itchat_obj.send_msg(gold_make_obj.get_money_msg())
+    itchat_obj.send_msg(silver_make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
     json_data = set_obj.get_json()
