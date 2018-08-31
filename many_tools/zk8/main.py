@@ -129,20 +129,30 @@ def init():
         pickle.dump([], f)
 
 
+def custom_send_push(title, url):
+    tools.send_push(
+        u'[ZK8]' + title, url,
+        's-70924c26-f3a5-4292-ad29-fb1b5877',
+        'g-85ed11d8-f448-4e41-bc1c-0e600f94',
+        'zk8')
+
+
 if __name__ == '__main__':
     # init()
     break_names = None
     exist_titles = None
-    key_messages = {'wj', 'bug', 'fx', u'神', u'券', u'卷', u'抢', u'无门槛', u'立减',
+    important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯'}
+    key_messages = {u'神', u'券', u'卷', u'抢', u'无门槛', u'立减',
                     u'防身', u'性价比', u'便宜', u'秒杀',
                     u"有水", u"水了", u"大水", u"洪水", u"水到", u'大毛', u'小毛',
                     u'秒到', u'速度', u'速领', u'速撸', u'可以了', u'有货', u'防身',
-                    u'10000家', u'斐讯', u'好价', u'利器', u'又有', u'又来', u'又1',
+                    u'好价', u'利器', u'又有', u'又来', u'又1',
                     u'免费', u'0元', u'震惊', u'1元', u'9.9', u'9块9', u'9元',
                     u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无', u'活动',
                     u'白菜', u'免单', u'漏洞', u'到手', u'大妈', u'黄金', u'洞'}
     exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
-                            u'推荐办', u'油锅', u'果', u'代下', u'带下', u'投票', u'三网'}
+                            u'推荐办', u'油锅', u'果', u'代下', u'带下', u'投票', u'三网',
+                            u'出售'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
@@ -152,20 +162,22 @@ if __name__ == '__main__':
         result, break_names = get_web_data(new_list_request_raw, break_names)
         for title, url in result.iteritems():
             if_title = change_title(title)
-            for k in key_messages:
-                if k in if_title:
-                    for ek in exclude_key_messages:
-                        if ek in if_title:
-                            break
-                    else:
-                        tools.send_push(
-                            u'[ZK8]' + title, url,
-                            's-70924c26-f3a5-4292-ad29-fb1b5877',
-                            'g-85ed11d8-f448-4e41-bc1c-0e600f94',
-                            'zk8')
-                        print "send_new|",
-                        time.sleep(1)
+            for i_k in important_key_messages:
+                if i_k in if_title:
+                    custom_send_push(title, url)
+                    print "send_important_new|",
                     break
+            else:
+                for k in key_messages:
+                    if k in if_title:
+                        for ek in exclude_key_messages:
+                            if ek in if_title:
+                                break
+                        else:
+                            custom_send_push(title, url)
+                            print "send_new|",
+                            time.sleep(1)
+                        break
         time.sleep(8)
 
         count += 1
