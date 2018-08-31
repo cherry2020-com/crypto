@@ -142,7 +142,7 @@ if __name__ == '__main__':
                     u'超级返', u'线报', u'高返', u'高反', u'有货', u'手慢无', u'活动',
                     u'白菜', u'免单', u'漏洞', u'到手', u'大妈', u'黄金', u'洞'}
     exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
-                            u'推荐办', u'油锅', u'果', u'代下', u'带下', u'投票'}
+                            u'推荐办', u'油锅', u'果', u'代下', u'带下', u'投票', u'三网'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
