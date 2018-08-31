@@ -142,7 +142,8 @@ if __name__ == '__main__':
     break_names = None
     exist_titles = None
     important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯'u"有水", u"水了",
-                              u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞'}
+                              u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
+                              u'首发'}
     key_messages = {u'神', u'券', u'卷', u'抢', u'无门槛', u'立减',
                     u'防身', u'性价比', u'便宜', u'秒杀', u'大毛', u'小毛',
                     u'秒到', u'速度', u'速领', u'速撸', u'可以了', u'有货', u'防身',
