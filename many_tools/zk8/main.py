@@ -178,6 +178,7 @@ if __name__ == '__main__':
                             print "send_new|",
                             time.sleep(1)
                         break
+        print "refresh|"
         time.sleep(8)
 
         count += 1
@@ -200,5 +201,5 @@ if __name__ == '__main__':
                 print "send_hot|",
                 time.sleep(1)
             time.sleep(8)
-        print "refresh|"
+            print "refresh_hot|"
         sys.stdout.flush()
