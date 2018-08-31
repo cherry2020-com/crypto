@@ -141,7 +141,7 @@ if __name__ == '__main__':
     # init()
     break_names = None
     exist_titles = None
-    important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯'u"有水", u"水了",
+    important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯', u"有水", u"水了",
                               u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
                               u'首发'}
     key_messages = {u'神', u'券', u'卷', u'抢', u'无门槛', u'立减',
