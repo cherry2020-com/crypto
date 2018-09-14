@@ -59,13 +59,24 @@ class WechatObject(object):
         for receiver in self.email_receivers:
             self.email.send('', title=msg,
                             receiver=receiver)
-
         # pusher
         my_source = 's-3c91ca69-dd35-4275-9d59-5a0608fd'
         receiver_source = 'g-d22d57b4-1dda-4888-84b9-57a92766'
         url = 'http://t.cn/RVCjPNI'
         content = msg
         title = u'Gold Reminder'
+        tools.send_push(content, url, my_source, receiver_source, title)
+
+    def send_msg_for_silver(self, msg):
+        for receiver in self.email_receivers:
+            self.email.send('', title=msg,
+                            receiver=receiver)
+        # pusher
+        my_source = 's-a7bfaf4c-347a-4e92-9015-36cab440'
+        receiver_source = 'g-a9aabc68-184f-4963-b68a-be634378'
+        url = 'http://t.cn/RVCjPNI'
+        content = msg
+        title = u'Silver Reminder'
         tools.send_push(content, url, my_source, receiver_source, title)
 
 
@@ -257,7 +268,7 @@ def do_while():
     silver_make_obj = SilverMake(web_data.data)
     set_obj = WechatSet()
     itchat_obj.send_msg(gold_make_obj.get_money_msg())
-    itchat_obj.send_msg(silver_make_obj.get_money_msg())
+    itchat_obj.send_msg_for_silver(silver_make_obj.get_money_msg())
     next_time = 0
     clear_time = 0
     json_data = set_obj.get_json()
@@ -283,7 +294,7 @@ def do_while():
             )
             if silver_msg:
                 print '%s: send silver_msg|' % datetime.datetime.now()
-                itchat_obj.send_msg(silver_msg)
+                itchat_obj.send_msg_for_silver(silver_msg)
 
             next_time = now_time + random.randint(5, 8)
             sys.stdout.flush()
