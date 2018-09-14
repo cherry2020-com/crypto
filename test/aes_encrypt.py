@@ -33,8 +33,20 @@ def get_auth_info(aes_key, ip, content_id, stb_id, timestamp=None):
     cipher = AES.new(aes_key)
     encrypted = cipher.encrypt(pad('+'.join(need_aes)))
     result = base64.b64encode(encrypted)
-    result = urllib.quote(result, safe='')
+    # result = urllib.quote(result, safe='')
     return result
+
+
+def change_lower(quote):
+    new_quote = ''
+    while True:
+        find = quote.find('%')
+        if find == -1:
+            new_quote += quote
+            break
+        new_quote += quote[:find] + quote[find: find+3].lower()
+        quote = quote[find+3:]
+    return new_quote
 
 
 if __name__ == '__main__':
@@ -49,6 +61,6 @@ if __name__ == '__main__':
     auth_info = get_auth_info(aes_key, ip, content_id, stb_id, timestamp)
     changed_query['AuthInfo'] = auth_info
     re_changed_url = list(changed_url)
-    re_changed_url[-2] = urllib.urlencode(changed_query)
+    re_changed_url[-2] = change_lower(urllib.urlencode(changed_query))
     result_url = urlparse.urlunparse(re_changed_url)
     print ("url: " + result_url)

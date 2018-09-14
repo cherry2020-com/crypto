@@ -134,7 +134,15 @@ def custom_send_push(title, url):
         u'[ZK8]' + title, url,
         's-70924c26-f3a5-4292-ad29-fb1b5877',
         'g-85ed11d8-f448-4e41-bc1c-0e600f94',
-        'zk8')
+        'ZK8-New')
+
+
+def custom_send_push_hot(title, url):
+    tools.send_push(
+        u'[ZK8][Hot]' + title, url,
+        's-0d7dbf26-0156-4bc2-a7eb-bbb53bc5',
+        'g-7465ca67-140a-4f78-8f38-5226f84b',
+        'ZK8-Hot')
 
 
 if __name__ == '__main__':
@@ -164,7 +172,7 @@ if __name__ == '__main__':
             if_title = change_title(title)
             for i_k in important_key_messages:
                 if i_k in if_title:
-                    custom_send_push(title, url)
+                    custom_send_push('[.]' + title, url)
                     print "send_important_new|",
                     break
             else:
@@ -193,11 +201,7 @@ if __name__ == '__main__':
                 print "send_all_hot|",
                 continue
             for title, url in result.iteritems():
-                tools.send_push(
-                    u'[ZK8][HOT]' + title, url,
-                    's-70924c26-f3a5-4292-ad29-fb1b5877',
-                    'g-85ed11d8-f448-4e41-bc1c-0e600f94',
-                    'zk8')
+                custom_send_push_hot(title, url)
                 print "send_hot|",
                 time.sleep(1)
             time.sleep(8)
