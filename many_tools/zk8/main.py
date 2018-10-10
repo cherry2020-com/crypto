@@ -41,6 +41,8 @@ def get_web_hot_data(request_raw, exist_titles=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, exist_titles
+        if not soup_find.find_all('li'):
+            print "Error_Hot_No_Find|"
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
@@ -52,7 +54,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     result[name] = url
                     is_get_new = True
                     new_titles.append(name)
-    exist_titles_limit = (new_titles + exist_titles)[:200]
+    exist_titles_limit = (new_titles + exist_titles)[:500]
     if is_get_new:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
             pickle.dump(exist_titles_limit, f)
@@ -81,6 +83,8 @@ def get_web_data(request_raw, break_names=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, break_names
+        if not soup_find.find_all('li'):
+            print "Error_New_No_Find|"
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:

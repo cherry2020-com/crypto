@@ -7,24 +7,22 @@ import logging
 import time
 
 from sim_card.gsmmodem import GsmModem
-from sim_card.gsmmodem import InterruptedException, CommandError
+from sim_card.gsmmodem.exceptions import InterruptedException, CommandError
 from sim_card.settings import ALL_SIM_CARDS
-from utils.send_email import Email
+from utils import tools
+
+
+def send_push(title, url, t_type):
+    tools.send_push(
+        u'[{}]'.format(t_type) + title, url,
+        's-e4ad6ffd-6890-493d-8056-119717e2',
+        'g-e0657ee7-1384-49a7-a828-55b9fcfa',
+        t_type)
 
 
 class SimCard(object):
-    email = Email('Yun_Warning@163.com', 'Wml93640218', '645008699@qq.com',
-                  'Sim Card Message')
-    sms_format = """
-            <p>number: [{number}]</p>
-            <p>time: [{time}]</p>
-            <p>text: [{text}]</p>
-            """
-    call_format = """
-    <p>number: [{number}]</p>
-    <p>time: [{time}]</p>
-    <p>ring count: [{ring_count}]</p>
-    """
+    sms_format = u"{text} | {number} | {time}"
+    call_format = u"{number} | {time} | {ring_count}"
 
     def __init__(self, port='/dev/ttyUSB0', baudrate=115200, pin=None):
         self.modem = GsmModem(port, baudrate,
@@ -51,20 +49,23 @@ class SimCard(object):
 
     @staticmethod
     def callback_sms(sms, *args, **kwargs):
-        SimCard.email.send(SimCard.sms_format.format(
-            number=sms.number, time=sms.time, text=sms.text), 'SIM Card - SMS')
+        msg = SimCard.sms_format.format(
+            number=sms.number, time=sms.time, text=sms.text)
+        send_push(msg, msg, 'SMS')
 
     @staticmethod
     def callback_call(call, *args, **kwargs):
         if call.ringCount == 1:
             logging.info('Incoming call from: %s' % call.number)
-            SimCard.email.send(SimCard.call_format.format(
+            msg = SimCard.call_format.format(
                 number=call.number, time=datetime.datetime.now(),
-                ring_count=call.ringCount), 'SIM Card - CALL')
+                ring_count=call.ringCount)
+            send_push(msg, msg, 'CALL')
         if call.ringCount >= 10:
-            SimCard.email.send(SimCard.call_format.format(
+            msg = SimCard.call_format.format(
                 number=call.number, time=datetime.datetime.now(),
-                ring_count=call.ringCount), 'SIM Card - CALL')
+                ring_count=call.ringCount)
+            send_push(msg, msg, 'CALL')
             if call.dtmfSupport:
                 logging.info('Answer number: [%s]' % call.number)
                 call.answer()
@@ -115,7 +116,7 @@ class SimCard(object):
             logging.info('Call has been ended by remote party')
 
 
-ALL_GSM = {}
+ALL_GSM = {'17084140000', SimCard('/dev/tty.usbserial')}
 
 
 def get_all_gsm():
