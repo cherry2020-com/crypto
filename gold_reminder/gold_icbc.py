@@ -7,6 +7,8 @@ import json
 import time
 import sys
 import os
+import traceback
+
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 
@@ -95,7 +97,8 @@ class WebData(object):
             time.sleep(30)
             web_data = self.fd_obj.requests()
         except Exception as e:
-            tools.send_error_msg_by_email("[icbc]gold data refresh: " + str(e))
+            tools.send_error_msg_by_email("[icbc]gold data refresh: " +
+                                          traceback.format_exc())
             time.sleep(30)
             web_data = self.fd_obj.requests()
         web_json = web_data.json()
@@ -132,6 +135,7 @@ class GoldMake(object):
         gold_data = web_data[u'人民币账户黄金']
         dollar_gold_data = web_data[u'美元账户黄金']
         self.cur_money = float(gold_data['middleprice']) + 0.2
+        print "gold:{}|".format(self.cur_money),
         self.jst_cur_money = self.cur_money - 0.4 + 3.58
         self.sell_cur_money = self.cur_money - 0.4
         self.high_money = float(gold_data['topmiddleprice']) + 0.2
@@ -239,6 +243,7 @@ class SilverMake(GoldMake):
         dollar_gold_data = web_data[u'美元账户白银']
         money_step = 0.008
         self.cur_money = float(gold_data['middleprice']) + money_step
+        print "silver:{}|".format(self.cur_money),
         self.sell_cur_money = self.cur_money - money_step
         self.high_money = float(gold_data['topmiddleprice']) + money_step
         self.low_money = float(gold_data['lowmiddleprice']) + money_step
@@ -264,8 +269,9 @@ def do_while():
     itchat_obj = WechatObject(EMAIL_RECEIVERS)
     # itchat_obj.test()
     web_data = WebData()
-    gold_make_obj = GoldMake(web_data.data)
-    silver_make_obj = SilverMake(web_data.data)
+    last_web_data = web_data.data
+    gold_make_obj = GoldMake(last_web_data)
+    silver_make_obj = SilverMake(last_web_data)
     set_obj = WechatSet()
     itchat_obj.send_msg(gold_make_obj.get_money_msg())
     itchat_obj.send_msg_for_silver(silver_make_obj.get_money_msg())
@@ -276,7 +282,11 @@ def do_while():
         now_time = int(time.time())
         if next_time < now_time:
             print 'refresh|'
-            gold_make_obj.reset_cur_money(web_data.refresh())
+            try:
+                last_web_data = web_data.refresh()
+            except Exception as e:
+                pass
+            gold_make_obj.reset_cur_money(last_web_data)
             gold_msg = gold_make_obj.get_msg(
                 json_data['set_upper_func'], json_data['set_down_func'],
                 json_data['set_float_func'], json_data['set_high_low_float_func']
@@ -285,7 +295,7 @@ def do_while():
                 print '%s: send gold_msg|' % datetime.datetime.now()
                 itchat_obj.send_msg(gold_msg)
 
-            silver_make_obj.reset_cur_money(web_data.data)
+            silver_make_obj.reset_cur_money(last_web_data)
             silver_msg = silver_make_obj.get_msg(
                 json_data['silver_set_upper_func'],
                 json_data['silver_set_down_func'],
@@ -295,16 +305,22 @@ def do_while():
             if silver_msg:
                 print '%s: send silver_msg|' % datetime.datetime.now()
                 itchat_obj.send_msg_for_silver(silver_msg)
-
-            next_time = now_time + random.randint(5, 8)
+            sleep_seconds = random.randint(5, 8)
+            next_time = now_time + sleep_seconds
+            print 'sleep:{}|'.format(sleep_seconds),
             sys.stdout.flush()
         if clear_time < now_time:
             clear_time = now_time + 600
             gold_make_obj.clear()
             silver_make_obj.clear()
         time.sleep(1)
-        print 'step|',
 
+
+def get_version():
+    versions = [
+        ['ver 1.1', u'近期发现脚本无故停止，目前没有找到具体原因，现加入系统日志，监控错误']
+    ]
+    return versions[-1][0], versions[-1][1]
 
 if __name__ == '__main__':
     do_while()

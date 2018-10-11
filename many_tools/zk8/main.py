@@ -5,6 +5,8 @@ import os
 import time
 
 import pickle
+import traceback
+
 from bs4 import BeautifulSoup
 
 sys.path.extend(['/data/my_tools_env/my_tools/'])
@@ -29,7 +31,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         time.sleep(30)
         return {}, exist_titles
     except Exception as e:
-        tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
+        tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
         return {}, exist_titles
     exist_titles_set = set(exist_titles) if exist_titles else set()
@@ -41,8 +43,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, exist_titles
-        if not soup_find.find_all('li'):
-            print "Error_Hot_No_Find|"
+        print "Hot_Find_%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
@@ -71,7 +72,7 @@ def get_web_data(request_raw, break_names=None):
         time.sleep(30)
         return {}, break_names
     except Exception as e:
-        tools.send_error_msg_by_email("[zk8]get_web_data: " + str(e))
+        tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
         return {}, break_names
     result = {}
@@ -83,8 +84,7 @@ def get_web_data(request_raw, break_names=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, break_names
-        if not soup_find.find_all('li'):
-            print "Error_New_No_Find|"
+        print "New_Find_%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
