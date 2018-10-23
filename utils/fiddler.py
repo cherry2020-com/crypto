@@ -8,6 +8,7 @@ author = "minglei.weng@dianjoy.com"
 created = "2016/10/14 0014"
 """
 import json
+import traceback
 import urllib
 import urlparse
 from collections import OrderedDict
@@ -177,12 +178,17 @@ class RawToPython(object):
                 web_data = requests.post(verify=False, **req_param)
                 return web_data
             except requests.Timeout as e:
-                error_msg = "{time}: fd: requests post error: {url}: {e}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e,
+                    detail=traceback.format_exc())
                 logging.error(error_msg)
                 raise FiddlerRequestTimeOutException(error_msg)
             except Exception as e:
-                error_msg = "{time}: fd: requests post error: {url}: {e}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e)
+                error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
+                    time=datetime.datetime.now(), url=req_param["url"], e=e,
+                    detail=traceback.format_exc())
                 logging.error(error_msg)
                 raise FiddlerRequestException(error_msg)
+        else:
+            raise FiddlerRequestException('{time}:No Find Method'.format(
+                    time=datetime.datetime.now()))
