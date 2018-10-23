@@ -3,7 +3,9 @@
 
 import datetime
 import os
+import sys
 
+sys.path.extend(['/data/my_tools_env/my_tools/'])
 from utils.fiddler import RawToPython
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
