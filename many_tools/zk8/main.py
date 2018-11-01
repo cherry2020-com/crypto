@@ -21,6 +21,16 @@ def test_print(*args, **kwargs):
     print args, kwargs
 
 
+def change_url(url):
+    removes = ['&fromguid=', '&extra=', '&mobile', '&mobile']
+    for each in removes:
+        index = url.find(each)
+        if index != -1:
+            url = url[:index]
+            break
+    return url
+
+
 def get_web_hot_data(request_raw, exist_titles=None):
     if exist_titles is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt')) as f:
@@ -49,7 +59,8 @@ def get_web_hot_data(request_raw, exist_titles=None):
             if text:
                 name = ' || '.join(text)
                 if name not in exist_titles_set:
-                    url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
+                    url = "http://www.zuanke8.com/" + tag.a.attrs['href']
+                    url = change_url(url)
                     # print name, url
                     print "hot|",
                     result[name] = url
@@ -94,7 +105,8 @@ def get_web_data(request_raw, break_names=None):
                 else:
                     new_break_names.append(name)
                     is_get_new = True
-                url = "http://www.zuanke8.com/" + tag.a.attrs['href'] + "&mobile=no"
+                url = "http://www.zuanke8.com/" + tag.a.attrs['href']
+                url = change_url(url)
                 # print name, url
                 print "new|",
                 result[name] = url
