@@ -19,6 +19,8 @@ CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 NEW_HOT_COUNT = 0
 NEW_NEW_COUNT = 0
 
+NEW_NEW_SAVE_COUNT = 10
+NEW_HOT_SAVE_COUNT = 10
 
 def test_print(*args, **kwargs):
     print args, kwargs
@@ -72,7 +74,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     new_titles.append(name)
     exist_titles_limit = (new_titles + exist_titles)[:500]
     if is_get_new:
-        if NEW_HOT_COUNT > 10:
+        if NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
             NEW_HOT_COUNT = 0
             print "Hot_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
@@ -126,7 +128,7 @@ def get_web_data(request_raw, break_names=None):
         new_break_names = break_names
     break_names = new_break_names[:20]
     if is_get_new:
-        if NEW_NEW_COUNT > 10:
+        if NEW_NEW_COUNT > NEW_NEW_SAVE_COUNT:
             NEW_NEW_COUNT = 0
             print "New_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
