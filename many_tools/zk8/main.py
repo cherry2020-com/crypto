@@ -57,7 +57,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, exist_titles
-        print "Hot_Find_%s|" % len(soup_find.find_all('li')),
+        print "Hot_Find-%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
@@ -74,11 +74,12 @@ def get_web_hot_data(request_raw, exist_titles=None):
     if is_get_new:
         if NEW_HOT_COUNT > 10:
             NEW_HOT_COUNT = 0
-            print "new_hot_save|",
+            print "Hot_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
                 pickle.dump(exist_titles_limit, f)
         else:
             NEW_HOT_COUNT += len(result)
+            print "Hot_Count-%s|" % NEW_HOT_COUNT,
     return result, exist_titles_limit
 
 
@@ -118,7 +119,7 @@ def get_web_data(request_raw, break_names=None):
                 url = "http://www.zuanke8.com/" + tag.a.attrs['href']
                 url = change_url(url)
                 # print name, url
-                print "new|",
+                print "New|",
                 result[name] = url
         new_break_names.extend(break_names)
     else:
@@ -127,11 +128,12 @@ def get_web_data(request_raw, break_names=None):
     if is_get_new:
         if NEW_NEW_COUNT > 10:
             NEW_NEW_COUNT = 0
-            print "new_new_save|",
+            print "New_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
                 pickle.dump(break_names, f)
         else:
             NEW_NEW_COUNT += len(result)
+            print "New_Count-%s|" % NEW_NEW_COUNT,
     return result, break_names
 
 
@@ -205,7 +207,7 @@ if __name__ == '__main__':
             for i_k in important_key_messages:
                 if i_k in if_title:
                     custom_send_push('[.]' + title, url)
-                    print "send_important_new|",
+                    print "Send_Important_New|",
                     break
             else:
                 for k in key_messages:
@@ -215,10 +217,10 @@ if __name__ == '__main__':
                                 break
                         else:
                             custom_send_push(title, url)
-                            print "send_new|",
+                            print "Send_New|",
                             time.sleep(1)
                         break
-        print "refresh|"
+        print "Refresh|"
         time.sleep(8)
 
         count += 1
@@ -230,12 +232,12 @@ if __name__ == '__main__':
                 for title, url in result.iteritems():
                     email_msg += email_msg_tmp.format(title, url)
                 tools.send_email(email_title, email_msg)
-                print "send_all_hot|",
+                print "Send_All_Hot-%s|" % len(result),
                 continue
             for title, url in result.iteritems():
                 custom_send_push_hot(title, url)
-                print "send_hot|",
+                print "Send_Hot|",
                 time.sleep(1)
             time.sleep(8)
-            print "refresh_hot|"
+            print "Refresh_Hot|"
         sys.stdout.flush()
