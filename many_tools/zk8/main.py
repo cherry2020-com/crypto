@@ -16,6 +16,9 @@ from utils.fiddler import RawToPython, FiddlerRequestTimeOutException
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
+NEW_HOT_COUNT = 0
+NEW_NEW_COUNT = 0
+
 
 def test_print(*args, **kwargs):
     print args, kwargs
@@ -32,6 +35,7 @@ def change_url(url):
 
 
 def get_web_hot_data(request_raw, exist_titles=None):
+    global NEW_HOT_COUNT
     if exist_titles is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt')) as f:
             exist_titles = pickle.load(f)
@@ -68,12 +72,18 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     new_titles.append(name)
     exist_titles_limit = (new_titles + exist_titles)[:500]
     if is_get_new:
-        with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
-            pickle.dump(exist_titles_limit, f)
+        if NEW_HOT_COUNT > 10:
+            NEW_HOT_COUNT = 0
+            print "new_hot_save|",
+            with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
+                pickle.dump(exist_titles_limit, f)
+        else:
+            NEW_HOT_COUNT += len(result)
     return result, exist_titles_limit
 
 
 def get_web_data(request_raw, break_names=None):
+    global NEW_NEW_COUNT
     if break_names is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt')) as f:
             break_names = pickle.load(f)
@@ -115,8 +125,13 @@ def get_web_data(request_raw, break_names=None):
         new_break_names = break_names
     break_names = new_break_names[:20]
     if is_get_new:
-        with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
-            pickle.dump(break_names, f)
+        if NEW_NEW_COUNT > 10:
+            NEW_NEW_COUNT = 0
+            print "new_new_save|",
+            with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
+                pickle.dump(break_names, f)
+        else:
+            NEW_NEW_COUNT += len(result)
     return result, break_names
 
 
