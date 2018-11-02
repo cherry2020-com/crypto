@@ -27,13 +27,13 @@ def test_print(*args, **kwargs):
 
 
 def change_url(url):
-    removes = ['&fromguid=', '&extra=', '&mobile', '&mobile']
+    removes = ['&fromguid=', '&extra=', '&mobile']
     for each in removes:
         index = url.find(each)
         if index != -1:
             url = url[:index]
             break
-    return url
+    return url + '&mobile=no'
 
 
 def get_web_hot_data(request_raw, exist_titles=None):
