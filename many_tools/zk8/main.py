@@ -126,7 +126,7 @@ def get_web_data(request_raw, break_names=None):
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
-    break_names = new_break_names[:20]
+    break_names = new_break_names[:50]
     if is_get_new:
         if NEW_NEW_COUNT > NEW_NEW_SAVE_COUNT:
             NEW_NEW_COUNT = 0
