@@ -187,7 +187,8 @@ if __name__ == '__main__':
     important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯', u"有水", u"水了",
                               u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
                               u'首发', 'ruan', u'软件', u'速来', u'快去', u'手慢无',
-                              u'神券', u'神卷', u'无门槛', u'毛', u'速度', u'速领', u'速撸'}
+                              u'神券', u'神卷', u'无门槛', u'毛', u'速度', u'速领', u'速撸',
+                              u'好用'}
     key_messages = {u'神', u'券', u'卷', u'抢', u'立减',
                     u'防身', u'性价比', u'便宜', u'秒杀',
                     u'秒到', u'可以了', u'有货', u'防身',
@@ -196,7 +197,8 @@ if __name__ == '__main__':
                     u'高反', u'有货', u'活动', u'白菜', u'免单', u'到手', u'大妈',
                     u'美滋滋', u'果', u'菓', u'整理', u'一抖'}
     exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
-                            u'推荐办', u'油锅', u'代下', u'带下', u'三网', u'出售'}
+                            u'推荐办', u'油锅', u'代下', u'带下', u'三网',
+                            u'助力', u'点赞', u'秒审', u'代刷', u'售'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
