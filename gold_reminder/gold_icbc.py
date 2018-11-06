@@ -305,7 +305,7 @@ def do_while():
             if silver_msg:
                 print '%s: send silver_msg|' % datetime.datetime.now()
                 itchat_obj.send_msg_for_silver(silver_msg)
-            sleep_seconds = random.randint(5, 8)
+            sleep_seconds = random.randint(10, 15)
             next_time = now_time + sleep_seconds
             print 'sleep:{}|'.format(sleep_seconds),
             sys.stdout.flush()
