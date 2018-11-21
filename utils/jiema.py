@@ -14,6 +14,7 @@ class YiMa(object):
         self.url = 'http://api.fxhyd.cn/UserInterface.aspx'
         self.token = token
         self.item_id = item_id
+        self._is_release_mobile = True
 
     def login(self, username, password):
         pass
@@ -31,10 +32,14 @@ class YiMa(object):
             mobile = web_data.text.replace('success|', '')
             if not mobile.isalnum():
                 raise Exception('get number error: ' + mobile)
+            self._is_release_mobile = False
             return mobile
         raise Exception('get number error: ' + web_data.text)
 
     def release_mobile(self, mobile):
+        if self._is_release_mobile:
+            print '--> had release mobile'
+            return
         params = {'action': 'release', 'token': self.token,
                   'itemid': self.item_id, 'mobile': mobile}
         web_data = requests.get(self.url, params)
@@ -43,6 +48,7 @@ class YiMa(object):
                 print '--> release mobile success'
             else:
                 print '--> explanation:', self.get_error(web_data.text)
+            self._is_release_mobile = True
         else:
             raise Exception('release mobile error: ' + web_data.status_code)
 

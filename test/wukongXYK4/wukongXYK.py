@@ -12,11 +12,13 @@ from utils.user_agents import UserAgents
 mobile = None
 jiema = YiMa(28015)
 ua = UserAgents()
+p_url = None
 while True:
     try:
-        get_p = requests.get('http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=eda47229c37d453b8ea104cb04282113&orderno=YZ201810105515iB3a1J&returnType=2&count=1')
-        p_json = get_p.json()['RESULT'][0]
-        p_url = 'http://' + p_json['ip'] + ':' + p_json['port']
+        if not p_url:
+            get_p = requests.get('http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=eda47229c37d453b8ea104cb04282113&orderno=YZ201810105515iB3a1J&returnType=2&count=1')
+            p_json = get_p.json()['RESULT'][0]
+            p_url = ('http://' + p_json['ip'] + ':' + p_json['port'])
         print p_url
         mobile = jiema.get_mobile()
         nua = ua.get_random()
@@ -44,7 +46,8 @@ while True:
             break
     except:
         jiema.release_mobile(mobile)
-        pass
-    sleep = random.randint(10, 30)
-    print '---> sleep %ss' % sleep
-    time.sleep(sleep)
+    else:
+        sleep = random.randint(10, 30)
+        print '---> sleep %ss' % sleep
+        time.sleep(sleep)
+        p_url = None
