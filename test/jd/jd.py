@@ -10,7 +10,7 @@ from utils.fiddler import RawToPython, FiddlerRequestException
 
 file_path = sys.argv[1]
 req = RawToPython(file_path)
-buying_time = PanicBuyingTimes("2018-08-20 18:00:00")
+buying_time = PanicBuyingTimes("2018-11-21 10:00:00")
 count = 0
 heart_count = 1
 while True:

@@ -154,6 +154,8 @@ class RawToPython(object):
             self.set_param()
         req_param = self.req_param
         req_param.update(kwargs)
+        if 'timeout' not in req_param:
+            req_param['timeout'] = 30
         self.__reset_req_param(req_param)
         if is_test:
             url_list = req_param["url"].split("/", 3)

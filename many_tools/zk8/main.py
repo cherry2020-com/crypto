@@ -67,21 +67,19 @@ def get_web_hot_data(request_raw, exist_titles=None):
                 if name not in exist_titles_set:
                     url = "http://www.zuanke8.com/" + tag.a.attrs['href']
                     url = change_url(url)
-                    # print name, url
-                    print "hot|",
                     result[name] = url
                     is_get_new = True
                     new_titles.append(name)
-    exist_titles_limit = (new_titles + exist_titles)[:500]
+    exist_titles_limit = (new_titles + exist_titles)[:1000]
     if is_get_new:
+        NEW_HOT_COUNT += len(result)
         if NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
+            print "Hot_Saved-%s/%s|" % (NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
             NEW_HOT_COUNT = 0
-            print "Hot_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
                 pickle.dump(exist_titles_limit, f)
         else:
-            NEW_HOT_COUNT += len(result)
-            print "Hot_Count-%s|" % NEW_HOT_COUNT,
+            print "Hot_Count-%s/%s|" % (NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
     return result, exist_titles_limit
 
 
@@ -120,22 +118,20 @@ def get_web_data(request_raw, break_names=None):
                     is_get_new = True
                 url = "http://www.zuanke8.com/" + tag.a.attrs['href']
                 url = change_url(url)
-                # print name, url
-                print "New|",
                 result[name] = url
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
     break_names = new_break_names[:50]
     if is_get_new:
+        NEW_NEW_COUNT += len(result)
         if NEW_NEW_COUNT > NEW_NEW_SAVE_COUNT:
+            print "New_Saved-%s/%s|" % (NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
             NEW_NEW_COUNT = 0
-            print "New_Saved|",
             with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
                 pickle.dump(break_names, f)
         else:
-            NEW_NEW_COUNT += len(result)
-            print "New_Count-%s|" % NEW_NEW_COUNT,
+            print "New_Count-%s/%s|" % (NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
     return result, break_names
 
 
