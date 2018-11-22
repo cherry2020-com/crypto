@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import Queue
-import logging
 import random
 
+import os
 import requests
 import time
 from requests import RequestException
@@ -11,7 +11,7 @@ from requests import RequestException
 
 class XunDaiLi(object):
 
-    def __init__(self, spider_id, order_no, max_count=10, reuse_count=5,
+    def __init__(self, spider_id, order_no, max_count=5, reuse_count=5,
                  structure='requests'):
         self._spider_id = spider_id
         self._order_no = order_no
@@ -20,6 +20,7 @@ class XunDaiLi(object):
         self._structure = structure
         self.proxies = Queue.Queue()
         self._session = requests.Session()
+        self._base_name = os.path.splitext(os.path.basename(__file__))[0]
 
     def _test(self):
         pass
@@ -46,7 +47,7 @@ class XunDaiLi(object):
                   'count': self._max_count, 'returnType': 2}
         while True:
             try:
-                print u'发送新的请求'
+                print u'[%s]发送新的请求' % self._base_name
                 web_data = self._session.get(url, params=params, timeout=10)
             except RequestException:
                 print 'ERROR: request get'
@@ -57,10 +58,10 @@ class XunDaiLi(object):
 
     def _resolve_error(self, web_json):
         error_code_map = {
-            '10036': u'提取过快，请至少5秒提取一次',
-            '10038': u'提取过快，请至少5秒提取一次',
-            '10055': u'提取过快，请至少5秒提取一次',
-            '10032': u'今日提取已达上限，请隔日提取或额外购买',
+            '10036': u'[%s]【10036】提取过快，请至少5秒提取一次' % self._base_name,
+            '10038': u'[%s]【10038】提取过快，请至少5秒提取一次' % self._base_name,
+            '10055': u'[%s]【10055】提取过快，请至少5秒提取一次' % self._base_name,
+            '10032': u'[%s]【10032】今日提取已达上限，请隔日提取或额外购买' % self._base_name,
         }
         code = web_json['ERRORCODE']
         return code, error_code_map.get(code)
@@ -82,11 +83,12 @@ class XunDaiLi(object):
 
 
 if __name__ == '__main__':
-    p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J', max_count=1)
-    print p.get_proxy()
-    print p.get_proxy()
-    print p.get_proxy()
+    # p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J', max_count=1)
+    # print p.get_proxy()
+    # print p.get_proxy()
+    # print p.get_proxy()
     # print p.get_proxy()
     # print p.get_proxy()
     # print p.get_proxy()
     # 948
+    print os.path.splitext(os.path.basename(__file__))
