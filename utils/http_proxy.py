@@ -22,8 +22,13 @@ class XunDaiLi(object):
         self._session = requests.Session()
         self._base_name = os.path.splitext(os.path.basename(__file__))[0]
 
-    def _test(self):
-        pass
+    def _is_valid(self, proxy):
+        try:
+            requests.get('http://www.baidu.com', proxies=proxy, timeout=3)
+        except RequestException:
+            print u'[%s]代理失效: %s' % (self._base_name, proxy['http'])
+            return False
+        return True
 
     def get_proxy(self):
         if self.proxies.empty():
@@ -54,7 +59,7 @@ class XunDaiLi(object):
             else:
                 if web_data.status_code == 200:
                     break
-        return self._session.get(url, params=params).json()
+        return web_data.json()
 
     def _resolve_error(self, web_json):
         error_code_map = {
@@ -70,11 +75,15 @@ class XunDaiLi(object):
         proxies = web_json['RESULT']
         all_proxies = []
         for proxy in proxies:
+            p_url = 'http://' + proxy['ip'] + ':' + proxy['port']
+            print u'[%s]【新】%s' % (self._base_name, p_url)
+            requests_stru = {'http': p_url, 'https': p_url}
             if self._structure == 'requests':
-                p_url = 'http://' + proxy['ip'] + ':' + proxy['port']
-                each = {'http': p_url, 'https': p_url}
+                each = requests_stru
             else:
                 each = proxy
+            if not self._is_valid(requests_stru):
+                continue
             for _ in range(self._reuse_count):
                 all_proxies.append(each)
         random.shuffle(all_proxies)
@@ -83,8 +92,8 @@ class XunDaiLi(object):
 
 
 if __name__ == '__main__':
-    # p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J', max_count=1)
-    # print p.get_proxy()
+    p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J', max_count=1)
+    print p.get_proxy()
     # print p.get_proxy()
     # print p.get_proxy()
     # print p.get_proxy()

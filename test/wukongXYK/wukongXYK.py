@@ -13,7 +13,7 @@ from utils.user_agents import UserAgents
 mobile = None
 jiema = YiMa(28015)
 ua = UserAgents()
-p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J', max_count=1)
+p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J')
 while True:
     try:
         each_p = p.get_proxy()
