@@ -7,6 +7,7 @@ import time
 import pickle
 import traceback
 
+import datetime
 from bs4 import BeautifulSoup
 
 sys.path.extend(['/data/my_tools_env/my_tools/'])
@@ -220,7 +221,7 @@ if __name__ == '__main__':
                             print "Send_New|",
                             time.sleep(1)
                         break
-        print "Refresh|"
+        print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(8)
 
         count += 1
@@ -239,5 +240,5 @@ if __name__ == '__main__':
                 print "Send_Hot|",
                 time.sleep(1)
             time.sleep(8)
-            print "Refresh_Hot|"
+            print "Refresh_Hot|%s|" % datetime.datetime.now()
         sys.stdout.flush()
