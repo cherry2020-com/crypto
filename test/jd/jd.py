@@ -10,11 +10,11 @@ from utils.fiddler import RawToPython, FiddlerRequestException
 
 file_path = sys.argv[1]
 req = RawToPython(file_path)
-buying_time = PanicBuyingTimes("2018-11-21 10:00:00")
+buying_time = PanicBuyingTimes(["2018-11-27 10:00:00"])
 count = 0
 heart_count = 1
 while True:
-    if buying_time.start(debug=True, other_info='{}/{}'.format(count + 1, heart_count)):
+    if buying_time.start(debug=True, other_info='{}/{}#'.format(count + 1, heart_count)):
         try:
             web_data = req.requests(timeout=(None, 0.001))
             # web_data = req.requests(timeout=(None, None))

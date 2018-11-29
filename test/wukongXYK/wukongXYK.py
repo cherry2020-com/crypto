@@ -1,8 +1,9 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import random
+import sys
 
-import requests
+sys.path.extend(['/data/my_tools_env/my_tools/'])
+import random
 import time
 
 from utils.fiddler import RawToPython
@@ -14,11 +15,15 @@ mobile = None
 jiema = YiMa(28015)
 ua = UserAgents()
 p = XunDaiLi('eda47229c37d453b8ea104cb04282113', 'YZ201810105515iB3a1J')
+error_mobile = set()
 while True:
     try:
         each_p = p.get_proxy()
         print each_p['http']
         mobile = jiema.get_mobile()
+        if int(mobile) in error_mobile:
+            print '--> exist error mobile'
+            raise Exception('mobile error')
         nua = ua.get_random()
         print '-->', nua
         fd = RawToPython('1head')
@@ -27,6 +32,7 @@ while True:
         web_data = fd.requests(proxies=each_p)
         print web_data.text
         if web_data.json()['code'] != 0:
+            error_mobile.add(int(mobile))
             print '-->', 'mobile error'
             raise Exception('mobile error')
         code = jiema.get_sms_code(mobile=mobile)
