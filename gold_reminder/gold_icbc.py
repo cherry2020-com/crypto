@@ -281,7 +281,7 @@ def do_while():
     while True:
         now_time = int(time.time())
         if next_time < now_time:
-            print 'refresh|'
+            print 'refresh|%s|' % datetime.datetime.now()
             try:
                 last_web_data = web_data.refresh()
             except Exception as e:
