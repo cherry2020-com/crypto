@@ -8,7 +8,7 @@ import time
 
 from utils.fiddler import RawToPython
 from utils.http_proxy import XunDaiLi
-from utils.jiema import YiMa
+from utils.yima import YiMa
 from utils.user_agents import UserAgents
 
 mobile = None
