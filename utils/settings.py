@@ -14,12 +14,11 @@ SDK_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Log
 Log_Name = "Run.log"
-Log_Format = "<%(levelname)s>: %(asctime)s --> %(message)s"
-# Log_Format = "<%(levelname)s>| %(message)s"
+Log_Format = u"%(asctime)s::%(levelname)s::%(filename)s::%(message)s"
 logging.getLogger("requests").setLevel(logging.ERROR)
 logging.basicConfig(
     # filename=Log_Name,
     stream=sys.stdout,
-    # level=logging.DEBUG,
-    level=logging.INFO,
+    level=logging.DEBUG,
+    # level=logging.INFO,
     format=Log_Format)
