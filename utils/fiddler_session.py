@@ -152,7 +152,6 @@ class RawToPython(object):
             cookies_dict[cookie_key] = cookie_value
         self.session.cookies = cookiejar_from_dict(cookies_dict)
 
-
     def __to_python(self):
         self.__to_headers()
         self.__to_method_and_url()
