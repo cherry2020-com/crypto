@@ -1,0 +1,10 @@
+GET /cookies/set/sessioncookie/123456789 HTTP/1.1
+Host: httpbin.org
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: keep-alive
+Cookie: citicbank=73aef7319edf1be6c0a66a0be42eef76; Path=/; JSESSIONID_BASEH5=30B79BCB2B02905E3F8751989A05ED0F; Domain=.creditcard.ecitic.com; JSESSIONID_OAUTH=30B79BCB2B02905E3F8751989A05ED0F; citicbank_cookie=!85Wcs80+uw0IIue7WDSPiZPLSyIDtEgjuuDemcXIFCIDGKRooBGuLgnpcBFEtMAzZeNBjTruzVtUY6Q; path=/;
+

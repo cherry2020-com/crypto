@@ -18,6 +18,7 @@ import logging
 import datetime
 import requests
 import urllib3
+from utils import settings
 
 urllib3.disable_warnings()
 
@@ -125,22 +126,26 @@ class RawToPython(object):
         self.url_parse = urlparse.urlparse(self.url)
 
     def set_param(self, url_param=None, req_param=None):
-        if url_param:
+        if url_param is not None:
             self.__set_url_param(url_param)
         self.req_param = {"url": self.url,
                           "headers": self.headers}
         if self.method == "POST":
-            if self.req_data:
-                if req_param:
+            if self.req_data is not None:
+                if req_param is not None:
                     self.req_data.update(req_param)
                 self.req_param["data"] = self.req_data
                 logging.debug("fd: set_date_param: " + str(req_param))
-            elif self.req_json:
-                if req_param:
+            elif self.req_json is not None:
+                if req_param is not None:
                     self.req_json.update(req_param)
                 # self.req_param["json"] = self.req_json
                 self.req_param["data"] = json.dumps(self.req_json)
                 logging.debug("fd: set_json_param: " + str(req_param))
+
+    def set_head(self, **kwargs):
+        self.headers = self.headers or {}
+        self.headers.update(kwargs)
 
     def __reset_req_param(self, req_param):
         if self.url != req_param['url']:

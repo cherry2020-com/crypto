@@ -19,6 +19,6 @@ logging.getLogger("requests").setLevel(logging.ERROR)
 logging.basicConfig(
     # filename=Log_Name,
     stream=sys.stdout,
-    level=logging.DEBUG,
-    # level=logging.INFO,
+    # level=logging.DEBUG,
+    level=logging.INFO,
     format=Log_Format)

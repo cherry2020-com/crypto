@@ -1,0 +1,14 @@
+POST /citiccard/gwapi/uc/winterpig/prop/use HTTP/1.1
+Host: s.creditcard.ecitic.com
+Content-Type: application/json;charset=utf-8
+Accept: */*
+Accept-Language: zh-cn
+Accept-Encoding: br, gzip, deflate
+Connection: keep-alive
+Cookie: citicbank=73aef7319edf1be6c0a66a0be42eef76; Path=/; JSESSIONID_BASEH5=30B79BCB2B02905E3F8751989A05ED0F; Domain=.creditcard.ecitic.com; JSESSIONID_OAUTH=30B79BCB2B02905E3F8751989A05ED0F; citicbank_cookie=!85Wcs80+uw0IIue7WDSPiZPLSyIDtEgjuuDemcXIFCIDGKRooBGuLgnpcBFEtMAzZeNBjTruzVtUY6Q; path=/;
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 12_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16B92 MicroMessenger/6.7.4(0x1607042c) NetType/WIFI Language/zh_CN
+Referer: https://servicewechat.com/wx13b9861d3e9fcdb0/10/page-frame.html
+Content-Length: 30
+X-Requested-With: XMLHttpRequest
+
+{"goodsId":"mcs2018182610008"}
