@@ -2,8 +2,8 @@
   "set_high_low_float_func": 0.1,
   "set_upper_func": 300.0,
   "set_down_func": 200.0,
-  "set_float_func": 0.3,
-  "silver_set_high_low_float_func": 0.008,
+  "set_float_func": 0.5,
+  "silver_set_high_low_float_func": 0.01,
   "silver_set_upper_func": 10.0,
   "silver_set_down_func": 1.0,
   "silver_set_float_func": 0.01

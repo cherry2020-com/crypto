@@ -15,7 +15,9 @@ goodsIds = {
     u'夜明猪': 'mcs2018182610014',
     u'黑珍猪': 'mcs2018182610006',
 }
-Cookie = 'citicbank=4360a3b49d0a8b0ee02de8312f9a2552; Path=/; JSESSIONID_BASEH5=178FD9425168F0CCA95F1B714A192D96; Domain=.creditcard.ecitic.com; JSESSIONID_OAUTH=178FD9425168F0CCA95F1B714A192D96; citicbank_cookie=!qp7bafbfXfN5Mci7WDSPiZPLSyIDtCKAOGujvplv+SbeTYBD4vhrHOgCW5Exvu4x2LZ/TC7KOMXLIkE; path=/;'
+Cookie = 'citicbank=73aef7319edf1be6c0a66a0be42eef76; Path=/; JSESSIONID_BASEH5=EC3E4799E8D54B1936C4E7648AFC66B4; Domain=.creditcard.ecitic.com; JSESSIONID_OAUTH=EC3E4799E8D54B1936C4E7648AFC66B4; citicbank_cookie=!9YN1J1lINmJ0xdG7WDSPiZPLSyIDtM11grv2P3Kw496grK7nmUqfjvNf6BiJ8PUeLEz2vzzDakc6RqA; path=/;'
+
+
 use_tool_fd = RawToPython('./head/used_tool.txt')
 use_tool_fd.set_head(Cookie=Cookie)
 start_fd = RawToPython('./head/start.txt')
@@ -62,6 +64,6 @@ while True:
                 print(u"{}-->{}".format(sec, r.json()['retMsg']))
             sleep_time = random.randint(3, 5)
             print '-->', sleep_time, 's'
-            time.sleep(sleep_time)
+            # time.sleep(sleep_time)
     except Exception:
         pass
