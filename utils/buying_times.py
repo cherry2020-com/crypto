@@ -10,7 +10,7 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=2, after_seconds=5):
+    def __init__(self, date_times, before_seconds=3, after_seconds=5):
         self.before_seconds = before_seconds
         self.after_seconds = after_seconds
         self.date_times_queue = Queue.Queue()
@@ -67,7 +67,7 @@ class PanicBuyingTimes(object):
         start_time, end_time = self.this_time
         if start_time <= now <= end_time:
             if debug:
-                print "True - {} - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"),
+                print "{} - True - {} - {}".format(start_time, now.strftime("%Y-%m-%d %H:%M:%S"),
                                               other_info)
             return True
         if now >= end_time:
@@ -76,7 +76,7 @@ class PanicBuyingTimes(object):
             except Queue.Empty:
                 raise PanicBuyingTimesException('Error: Had not times to wait !')
         if debug:
-            print "False - {} - {}".format(now.strftime("%Y-%m-%d %H:%M:%S"),
+            print "{} - False - {} - {}".format(start_time, now.strftime("%Y-%m-%d %H:%M:%S"),
                                            other_info)
         return False
 

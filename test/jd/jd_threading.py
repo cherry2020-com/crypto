@@ -22,7 +22,7 @@ def request_jd(req_jd):
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2018-10-22 00:00:00"
+    date_times = "2018-11-03 14:00:00"
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     buying_time = PanicBuyingTimes(date_times)
     req = RawToPython(file_path)
