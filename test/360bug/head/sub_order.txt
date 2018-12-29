@@ -1,0 +1,15 @@
+POST http://m.bang.360.cn/youpin/sub_torder HTTP/1.1
+Host: m.bang.360.cn
+Connection: keep-alive
+Content-Length: 192
+Accept: application/json
+Origin: http://m.bang.360.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Mobile Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Referer: http://m.bang.360.cn/youpin/tinfo?product_id={product_id}&from_page=fulishe_tuijian&num=1
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: utoken=71037ad4b67ed220f1fdce07578f2c49; client_citycode=XDetJxUXz1tSGN%2FMJlfiUQ%3D%3D; client_cityname=zlNk86ZsnKztOZtJeFWfxA%3D%3D; UM_distinctid=167abe2fa290-0daa398c8a4a93-5d1f391c-13c680-167abe2fa2a15f; self_cps=wxtg; cps_src=SELF_ENTERPRISE; Hm_lvt_3792a17d88db1d642cabc993daa66b8d=1546050372,1546050596; Hm_lpvt_3792a17d88db1d642cabc993daa66b8d=1546050601; MBANGSESSID=55bbkqo72cqh3q1b26r4gvvcr4; Hm_lvt_6ad31aa2e6aca2beaffbb71ea6b34941=1544777038,1546050723; BANGUSER=6WkDiWu%2Fa0eb32rwFIh7Mnj4kM6fsZk7kCQIxTRxKwo%3D; CNZZDATA1259077454=1035658592-1544774493-%7C1546061746; Hm_lpvt_6ad31aa2e6aca2beaffbb71ea6b34941=1546066333
+
+value_added_server_list%5B%5D=27&product_id={product_id}&product_num=1&yj_id=154674&pay_method=1&bank_code=&qita_desc=&youhui_code=&redpacket_code=&postkey={postkey}&from_page=fulishe_tuijian

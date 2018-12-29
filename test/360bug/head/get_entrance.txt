@@ -1,0 +1,10 @@
+GET http://m.bang.360.cn/youpinfulishe?self_enterprise=wxtg HTTP/1.1
+Host: bang.360.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Mobile Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7
+Cookie: client_citycode=XDetJxUXz1tSGN%2FMJlfiUQ%3D%3D; client_cityname=zlNk86ZsnKztOZtJeFWfxA%3D%3D; UM_distinctid=167abe2fa290-0daa398c8a4a93-5d1f391c-13c680-167abe2fa2a15f; self_cps=wxtg; cps_src=SELF_ENTERPRISE; Hm_lvt_3792a17d88db1d642cabc993daa66b8d=1546050372,1546050596; BANGUSER=6WkDiWu%2Fa0eb32rwFIh7Mnj4kM6fsZk7kCQIxTRxKwo%3D; CNZZDATA1259008268=630143679-1546049578-%7C1546065782; Hm_lpvt_3792a17d88db1d642cabc993daa66b8d=1546068416; bang_session=eyJpdiI6IjR1NzN4ZDBITVc4NlIxOVY0WTdzNlE9PSIsInZhbHVlIjoiZGZnc3NoUmMzSDBBTmdhWGZTYUFSSW5NNncrYTJJa1BjY2tiUFk3SFdYZ1JOcXA3d0hoK3VDc1Y2U3lOWmpvQUh0cmpmQnNqOGMyRU5PYzJmc0ZqNmc9PSIsIm1hYyI6IjViMGIxZDZlMjZiZDQxZDk2NmJmNzZmYTA5ZmJmMzA1YWNmZjA2MGMzN2Q5ZmM2MDE2MTRkZjM4MjAyZjFlOWYifQ%3D%3D

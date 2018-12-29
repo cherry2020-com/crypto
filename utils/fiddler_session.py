@@ -16,36 +16,10 @@ import logging
 import datetime
 
 import requests
-import urllib3
 from requests.cookies import cookiejar_from_dict, RequestsCookieJar
 from requests.structures import CaseInsensitiveDict
 
 from utils import settings
-
-urllib3.disable_warnings()
-
-
-class RequestsOrderedCookieJar(RequestsCookieJar):
-    def __init__(self, *args, **kwargs):
-        super(RequestsOrderedCookieJar, self).__init__(*args, **kwargs)
-        self._cookies = OrderedDict()
-
-    def set_cookie(self, cookie, *args, **kwargs):
-        if (hasattr(cookie.value, 'startswith') and cookie.value.startswith('"')
-                and cookie.value.endswith('"')):
-            cookie.value = cookie.value.replace('\\"', '')
-        c = self._cookies
-        self._cookies_lock.acquire()
-        try:
-            if cookie.domain not in c:
-                c[cookie.domain] = OrderedDict()
-            c2 = c[cookie.domain]
-            if cookie.path not in c2:
-                c2[cookie.path] = OrderedDict()
-            c3 = c2[cookie.path]
-            c3[cookie.name] = cookie
-        finally:
-            self._cookies_lock.release()
 
 
 class FiddlerRequestException(Exception):
@@ -115,6 +89,7 @@ class RawToPython(object):
             self.__url_host = http_host
             self.url = http_host + self.url
         self.url_parse = urlparse.urlparse(self.url)
+        self.__url_host = self.url_parse.scheme + '://' + self.url_parse.netloc
 
     def __to_headers(self):
         self.session.headers = CaseInsensitiveDict()
@@ -191,7 +166,7 @@ class RawToPython(object):
     def __reset_req_param(self, req_param):
         if req_param['url'].startswith(self.__url_host + '/'):
             return
-        req_param['headers']['HOST'] = urlparse.urlsplit(req_param['url']).netloc
+        self.session.headers['HOST'] = urlparse.urlsplit(req_param['url']).netloc
 
     def __requests_reset_url(self, req_param, reset_url):
         if not reset_url:
