@@ -1,0 +1,12 @@
+GET http://bang.360.cn/youpinfulishe?self_enterprise=wxtg HTTP/1.1
+Host: bang.360.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: http://bang.360.cn/youpinfulishe?self_enterprise=wxtg
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: __utma=148900148.1811518404.1489920916.1489920916.1489920916.1; __gid=54771369.522932345.1489318496710.1489920919117.5; __huid=11MBQjmeyV1hIcJf2J3jPIvg8H6SfO09kh4faTawOyXyE=; __guid=237974873.1160061341735399936.1534343201001.0605; client_citycode=iTZE0S9Wum1Qc9ZnBAoOFQ%3D%3D; client_cityname=VaRBJjyjqXBILkQ75W7ClQ%3D%3D; self_cps=wxtg; cps_src=SELF_ENTERPRISE; UM_distinctid=167f9d51290717-07129d540da023-8383268-100200-167f9d51291106; CNZZDATA1259008268=1326133416-1546082917-%7C1546082917; Hm_lvt_3792a17d88db1d642cabc993daa66b8d=1546084750; BANGUSER=Nzsqut7IlT5g5QrUyyCKaHxx2sVBc%2Fqbbm0jegYYBoI%3D; Hm_lpvt_3792a17d88db1d642cabc993daa66b8d=1546086340; bang_session=eyJpdiI6ImxtQWR2ZXVUYnpJdHJEXC9UVDFIM3VRPT0iLCJ2YWx1ZSI6IjFpN0hCK0dtNmxBSFdHYVNkZkxLUTU0eUhpTzhlWWVCTEtQdE12TGwzWWwzUmJKeDFRWG1vU1FDZml1S1NSSWZ1bWV5U1wvSXlWdk1uek1IYTlUU1wvbkE9PSIsIm1hYyI6IjkwY2EzMzc5Y2Q0MjY3OWNhNjFmNTY0ZWVlYmExODAxYTYxZGQ0Y2U2YjA1NmUzMmJmMDAxMWQzODQ0NzU1MjUifQ%3D%3D
+
