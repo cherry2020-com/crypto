@@ -76,8 +76,8 @@ class PanicBuyingTimes(object):
             sleep_time = random.randint(*self.false_sleep_second_randint_param)
             if self.debug_info:
                 print "IS_START: False | Sleep Time: {}s".format(sleep_time)
-            for _ in xrange(sleep_time * 100):
-                time.sleep(0.01)
+            for _ in xrange(sleep_time * 10):
+                time.sleep(0.1)
                 _is_start = self._start(debug_info=False)
                 if _is_start:
                     return True
@@ -103,9 +103,9 @@ class PanicBuyingTimes(object):
 
 
 if __name__ == '__main__':
-    a = PanicBuyingTimes(['22:43:00', '2018-07-15 09:52:00',
+    a = PanicBuyingTimes(['22:47:00', '2018-07-15 09:52:00',
                           '22:55:00', '2018-08-15 22:28:00'],
-                         false_sleep_second_randint_param=(1, 5), true_sleep_second=0.01)
+                         false_sleep_second_randint_param=(60, 70), true_sleep_second=0.01)
     while True:
         now = datetime.datetime.now()
         if a.is_start:
