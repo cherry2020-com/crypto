@@ -50,7 +50,8 @@ if __name__ == '__main__':
                 post_key, yj_id = get_postkey(postkey_request.text)
 
                 with open('./head/sub_order.txt') as f:
-                    sub_order_raw = f.read().format(product_id=product_id, postkey=post_key)
+                    sub_order_raw = f.read().format(product_id=product_id,
+                                                    postkey=post_key)
                 sub_order = RawToPython(None, sub_order_raw)
                 sub_order.session.cookies = postkey.session.cookies
                 if yj_id:
