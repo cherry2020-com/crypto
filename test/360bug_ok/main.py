@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import os
 import random
 import re
 import time
@@ -12,6 +13,7 @@ from utils.fiddler_session import RawToPython
 
 DEBUG = False
 USER = '176****5665'
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def get_product_id(entrance_text):
@@ -43,7 +45,11 @@ def get_postkey(postkey_text):
 
 
 if __name__ == '__main__':
-    entrance = RawToPython('./head/get_entrance.txt')
+    entrance_path = os.path.join(DIR, 'head', 'get_entrance.txt')
+    postkey_path = os.path.join(DIR, 'head', 'get_postkey.txt')
+    sub_order_path = os.path.join(DIR, 'head', 'sub_order.txt')
+
+    entrance = RawToPython(entrance_path)
     time_is = PanicBuyingTimes(['2018-12-29 22:00:00'])
     while True:
         entrance_request = entrance.requests()
@@ -51,7 +57,7 @@ if __name__ == '__main__':
         if entrance_request.status_code == 200:
             product_id = get_product_id(entrance_request.text)
             if product_id is not None:
-                with open('./head/get_postkey.txt') as f:
+                with open(postkey_path) as f:
                     postkey_raw = f.read().format(product_id=product_id)
                 postkey = RawToPython(None, postkey_raw)
                 postkey.session.cookies = entrance.session.cookies
@@ -60,7 +66,7 @@ if __name__ == '__main__':
                 if postkey_request.status_code == 200:
                     post_key, yj_id = get_postkey(postkey_request.text)
 
-                    with open('./head/sub_order.txt') as f:
+                    with open(sub_order_path) as f:
                         sub_order_raw = f.read().format(product_id=product_id,
                                                         postkey=post_key)
                     sub_order = RawToPython(None, sub_order_raw)
