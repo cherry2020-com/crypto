@@ -76,9 +76,11 @@ if __name__ == '__main__':
                     sub_order_request = sub_order.requests()
                     print u'--> 抢购结果: {}'.format(sub_order_request.text)
                     break
-        if time_is.is_start:
-            sleep_time = 0.01
-        else:
-            sleep_time = random.randint(5, 20)
+        sleep_time = random.randint(5, 20)
         print u'--> 延时: {}s'.format(sleep_time)
-        time.sleep(sleep_time)
+        for i in range(sleep_time):
+            if time_is.is_start:
+                time.sleep(0.01)
+                break
+            else:
+                time.sleep(0.5)

@@ -51,7 +51,7 @@ if __name__ == '__main__':
     sub_order_path = os.path.join(DIR, 'head', 'sub_order.txt')
 
     entrance = RawToPython(entrance_path)
-    time_is = PanicBuyingTimes(['2018-12-29 22:00:00'])
+    time_is = PanicBuyingTimes(['2018-12-29 22:00:00', '2018-12-29 23:00:00'], after_seconds=60)
     while True:
         entrance_request = entrance.requests()
         print u'--> 入口请求状态码: {}'.format(entrance_request.status_code)
