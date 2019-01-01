@@ -31,7 +31,7 @@ _NEW_MY_HOT_COUNT = 0
 def test_print(*args, **kwargs):
     print args, kwargs
 
-# tools.send_push = test_print
+tools.send_push = test_print
 
 
 def change_url(uri):
@@ -75,9 +75,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
             if text:
                 name = ' || '.join(text)
                 if name not in exist_titles_set:
-                    uri = tag.a.attrs['href']
-                    uri = change_url(url)
-                    result[name] = uri
+                    result[name] = tag.a.attrs['href']
                     is_get_new = True
                     new_titles.append(name)
     exist_titles_limit = (new_titles + exist_titles)[:1000]
@@ -174,13 +172,14 @@ def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
             text = tag.a.h1.text.strip().split()
             if text:
                 name = ' || '.join(text)
-                replies_count = tag.a.find(class_='replies').text
-                replies_count = int(replies_count or 0)
-                if name in set_break_names or replies_count < 10:
+                if name in set_break_names:
                     break
                 else:
-                    new_break_names.append(name)
-                    is_get_new = True
+                    replies_count = tag.a.find(class_='replies').text
+                    replies_count = int(replies_count or 0)
+                    if replies_count >= 10:
+                        new_break_names.append(name)
+                        is_get_new = True
 
                 result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
         new_break_names.extend(break_names)
