@@ -141,9 +141,8 @@ def get_web_data(request_raw, break_names=None):
     return result, break_names, web_data
 
 
-def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
+def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
     global _NEW_MY_HOT_COUNT
-    assert (request_raw and not web_data) or (not request_raw and web_data)
     if break_names is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_my_hot_titles.txt')) as f:
             break_names = pickle.load(f)
@@ -282,7 +281,7 @@ if __name__ == '__main__':
                             time.sleep(0.5)
                         break
         result, my_hot_break_names = get_web_data_for_my_hot(
-            break_names=my_hot_break_names, web_data=web_data)
+            new_list_request_raw, my_hot_break_names, web_data)
         for title, uri in result.iteritems():
             custom_send_push('[MHot]' + title, change_url(uri))
             print "Send_My_Hot|",
