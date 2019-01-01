@@ -8,7 +8,6 @@ author = "minglei.weng@dianjoy.com"
 created = "2016/10/14 0014"
 """
 import json
-import traceback
 import urllib
 import urlparse
 from collections import OrderedDict
@@ -16,10 +15,14 @@ import logging
 import datetime
 
 import requests
-from requests.cookies import cookiejar_from_dict, RequestsCookieJar
+import urllib3
+from requests.cookies import cookiejar_from_dict
 from requests.structures import CaseInsensitiveDict
 
 from utils import settings
+
+
+urllib3.disable_warnings()
 
 
 class FiddlerRequestException(Exception):
