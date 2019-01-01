@@ -253,11 +253,8 @@ if __name__ == '__main__':
                     u'利器', u'又有', u'来了', u'又1', u'免费', u'0元', u'震惊',
                     u'1元', u'9.9', u'9块9', u'9元', u'超级返', u'线报', u'高返',
                     u'高反', u'有货', u'活动', u'白菜', u'免单', u'到手', u'大妈',
-                    u'美滋滋', u'果', u'菓', u'整理', u'一抖'}
-    # exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
-    #                         u'推荐办', u'油锅', u'代下', u'带下', u'三网',
-    #                         u'助力', u'点赞', u'秒审', u'代刷', u'售'}
-    exclude_key_messages = set()
+                    u'美滋滋', u'果', u'菓', u'锅', u'整理', u'一抖'}
+    exclude_key_messages = {u'求', u'有没有', u'吗', u'呢', u'么'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
@@ -266,11 +263,10 @@ if __name__ == '__main__':
     while True:
         result, break_names, web_data = get_web_data(new_list_request_raw, break_names)
         for title, uri in result.iteritems():
-            url = change_url(uri)
             if_title = change_title(title)
             for i_k in important_key_messages:
                 if i_k in if_title:
-                    custom_send_push('[.]' + title, url)
+                    custom_send_push('[.]' + title, change_url(uri))
                     print "Send_Important_New|",
                     break
             else:
@@ -280,15 +276,14 @@ if __name__ == '__main__':
                             if ek in if_title:
                                 break
                         else:
-                            custom_send_push(title, url)
+                            custom_send_push(title, change_url(uri))
                             print "Send_New|",
                             time.sleep(0.5)
                         break
         result, my_hot_break_names = get_web_data_for_my_hot(
             break_names=my_hot_break_names, web_data=web_data)
         for title, uri in result.iteritems():
-            url = change_url(uri)
-            custom_send_push('[M-HOT]' + title, url)
+            custom_send_push('[MHot]' + title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(random.randint(2, 5))
@@ -301,14 +296,12 @@ if __name__ == '__main__':
             if len(result) > 5:
                 email_msg = ""
                 for title, uri in result.iteritems():
-                    url = change_url(uri)
-                    email_msg += email_msg_tmp.format(title, url)
+                    email_msg += email_msg_tmp.format(title, change_url(uri))
                 tools.send_email(email_title, email_msg)
                 print "Send_All_Hot-%s|" % len(result),
                 continue
             for title, uri in result.iteritems():
-                url = change_url(uri)
-                custom_send_push_hot(title, url)
+                custom_send_push_hot(title, change_url(uri))
                 print "Send_Hot|",
                 time.sleep(0.5)
             print "Refresh_Hot|%s|" % datetime.datetime.now()
