@@ -20,7 +20,7 @@ CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 1
-NEW_MY_HOT_SAVE_COUNT = 3
+NEW_MY_HOT_SAVE_COUNT = 5
 
 
 _NEW_HOT_COUNT = 0
