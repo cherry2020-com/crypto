@@ -21,6 +21,7 @@ CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 1
 NEW_MY_HOT_SAVE_COUNT = 5
+NEW_MY_HOT_SEND_COMMENT_COUNT = 15
 
 
 _NEW_HOT_COUNT = 0
@@ -175,7 +176,7 @@ def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
                     continue
                 replies_count = tag.a.find(class_='replies').text
                 replies_count = int(replies_count or 0)
-                if replies_count < 10:
+                if replies_count < NEW_MY_HOT_SEND_COMMENT_COUNT:
                     continue
                 new_break_names.append(name)
                 is_get_new = True
