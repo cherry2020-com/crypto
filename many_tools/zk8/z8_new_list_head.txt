@@ -1,10 +1,11 @@
-GET /plugin.php?id=ejew_mynthread&mobile=2 HTTP/1.1
+GET /forum.php?mod=forumdisplay&fid=15&mobile=2&orderby=dateline HTTP/1.1
 Host: www.zuanke8.com
 Cache-Control: max-age=0
 Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Mobile Safari/537.36
+User-Agent: Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Mobile Safari/537.36
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
 Accept-Encoding: gzip, deflate
-Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
-Cookie: _uab_collina=152490035428224118765599; _umdata=2BA477700510A7DF521B66DD56F8C6303FEB520B4B9892E27704256AB5233FE757641EF84E1629A6CD43AD3E795C914C083574406849B191E66BA4BE4DFC89CD; Hm_lvt_da6569f688ba2c32429af00afd9eb8a1=1531377602,1531792278; ki1e_2132_pc_size_c=0; ki1e_2132_saltkey=E07dIGiH; ki1e_2132_lastvisit=1532655852; ki1e_2132_sendmail=1; Hm_lpvt_da6569f688ba2c32429af00afd9eb8a1=1532659453; ki1e_2132_lastact=1532659470%09member.php%09logging; amvid=221ab7ed7d226920698f278d7351c0f2
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: ki1e_2132_saltkey=x0MufCC0; ki1e_2132_lastvisit=1546320511; ki1e_2132_pc_size_c=0; ki1e_2132_atarget=1; ki1e_2132_sendmail=1; _uab_collina=154632411330379152584491; Hm_lvt_da6569f688ba2c32429af00afd9eb8a1=1546324114; Hm_lpvt_da6569f688ba2c32429af00afd9eb8a1=1546324114; ki1e_2132_lastact=1546324170%09forum.php%09forumdisplay; ki1e_2132_forum_lastvisit=D_15_1546324170; amvid=823118fcd43b76ceaed13eee6e2d3b2b
+Connection: keep-alive
 
