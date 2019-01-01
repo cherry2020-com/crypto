@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
-import random
 import sys
 import os
 import time
@@ -14,42 +13,32 @@ from bs4 import BeautifulSoup
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 from utils import tools
-from utils.fiddler_session import RawToPython, FiddlerRequestTimeOutException
+from utils.fiddler import RawToPython, FiddlerRequestTimeOutException
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
+NEW_HOT_COUNT = 0
+NEW_NEW_COUNT = 0
+
 NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 10
-NEW_MY_HOT_SAVE_COUNT = 10
-
-
-_NEW_HOT_COUNT = 0
-_NEW_NEW_COUNT = 0
-_NEW_MY_HOT_COUNT = 0
-
-
 
 def test_print(*args, **kwargs):
     print args, kwargs
 
 
-tools.send_push = test_print
-
-
-def change_url(uri):
-    need_str = ['mod=', 'tid=']
-    uri_main, uri_others = uri.split('?')
-    uri_others = uri_others.split('&')
-    need_others = []
-    for other in uri_others:
-        for n in need_str:
-            if other.startswith(n):
-                need_others.append(other)
-    return 'http://www.zuanke8.com/' + uri_main + '?' + '&'.join(need_others)
+def change_url(url):
+    removes = ['&fromguid=', '&extra=', '&mobile']
+    for each in removes:
+        index = url.find(each)
+        if index != -1:
+            url = url[:index]
+            break
+    return url + '&mobile=no'
 
 
 def get_web_hot_data(request_raw, exist_titles=None):
-    global _NEW_HOT_COUNT
+    global NEW_HOT_COUNT
     if exist_titles is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt')) as f:
             exist_titles = pickle.load(f)
@@ -77,26 +66,26 @@ def get_web_hot_data(request_raw, exist_titles=None):
             if text:
                 name = ' || '.join(text)
                 if name not in exist_titles_set:
-                    uri = tag.a.attrs['href']
-                    uri = change_url(url)
-                    result[name] = uri
+                    url = "http://www.zuanke8.com/" + tag.a.attrs['href']
+                    url = change_url(url)
+                    result[name] = url
                     is_get_new = True
                     new_titles.append(name)
     exist_titles_limit = (new_titles + exist_titles)[:1000]
     if is_get_new:
-        _NEW_HOT_COUNT += len(result)
-        if _NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
-            print "Hot_Saved-%s/%s|" % (_NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
-            _NEW_HOT_COUNT = 0
+        NEW_HOT_COUNT += len(result)
+        if NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
+            print "Hot_Saved-%s/%s|" % (NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
+            NEW_HOT_COUNT = 0
             with open(os.path.join(CUR_DIR, 'z8_exist_hot_titles.txt'), 'wb+') as f:
                 pickle.dump(exist_titles_limit, f)
         else:
-            print "Hot_Count-%s/%s|" % (_NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
+            print "Hot_Count-%s/%s|" % (NEW_HOT_COUNT, NEW_HOT_SAVE_COUNT),
     return result, exist_titles_limit
 
 
 def get_web_data(request_raw, break_names=None):
-    global _NEW_NEW_COUNT
+    global NEW_NEW_COUNT
     if break_names is None:
         with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt')) as f:
             break_names = pickle.load(f)
@@ -120,84 +109,30 @@ def get_web_data(request_raw, break_names=None):
             return {}, break_names
         print "New_Find_%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
-            text = tag.a.h1.text.strip().split()
+            text = tag.text.strip().split()
             if text:
-                name = ' || '.join(text)
+                name = ' || '.join(text[:-1])
                 if name in set_break_names:
                     break
                 else:
                     new_break_names.append(name)
                     is_get_new = True
-                result[name] = tag.a.attrs['href']
+                url = "http://www.zuanke8.com/" + tag.a.attrs['href']
+                url = change_url(url)
+                result[name] = url
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
     break_names = new_break_names[:50]
     if is_get_new:
-        _NEW_NEW_COUNT += len(result)
-        if _NEW_NEW_COUNT > NEW_NEW_SAVE_COUNT:
-            print "New_Saved-%s/%s|" % (_NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
-            _NEW_NEW_COUNT = 0
+        NEW_NEW_COUNT += len(result)
+        if NEW_NEW_COUNT > NEW_NEW_SAVE_COUNT:
+            print "New_Saved-%s/%s|" % (NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
+            NEW_NEW_COUNT = 0
             with open(os.path.join(CUR_DIR, 'z8_exist_new_titles.txt'), 'wb+') as f:
                 pickle.dump(break_names, f)
         else:
-            print "New_Count-%s/%s|" % (_NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
-    return result, break_names, web_data
-
-
-def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
-    global _NEW_MY_HOT_COUNT
-    assert (request_raw and not web_data) or (not request_raw and web_data)
-    if break_names is None:
-        with open(os.path.join(CUR_DIR, 'z8_exist_my_hot_titles.txt')) as f:
-            break_names = pickle.load(f)
-    if web_data is None:
-        try:
-            web_data = request_raw.requests(timeout=10)
-        except FiddlerRequestTimeOutException:
-            time.sleep(30)
-            return {}, break_names
-        except Exception as e:
-            tools.send_error_msg_by_email(
-                "[zk8]get_web_data_for_my_hot: " + traceback.format_exc())
-            time.sleep(30)
-            return {}, break_names
-    result = {}
-    is_get_new = False
-    if web_data and web_data.status_code == 200:
-        soups = BeautifulSoup(web_data.text, "lxml")
-        new_break_names = []
-        set_break_names = set(break_names or [])
-        soup_find = soups.find(id='alist')
-        if not soup_find:
-            return {}, break_names
-        print "My_Hot_Find_%s|" % len(soup_find.find_all('li')),
-        for tag in soup_find.find_all('li'):
-            text = tag.a.h1.text.strip().split()
-            if text:
-                name = ' || '.join(text)
-                replies_count = tag.a.find(class_='replies').text
-                replies_count = int(replies_count or 0)
-                if name in set_break_names or replies_count < 10:
-                    break
-                else:
-                    new_break_names.append(name)
-                    is_get_new = True
-
-                result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
-        new_break_names.extend(break_names)
-    else:
-        new_break_names = break_names
-    break_names = new_break_names[:50]
-    if is_get_new:
-        _NEW_MY_HOT_COUNT += len(result)
-        if _NEW_MY_HOT_COUNT > NEW_MY_HOT_SAVE_COUNT:
-            print "My_Hot_Saved-%s/%s|" % (_NEW_MY_HOT_COUNT, NEW_NEW_SAVE_COUNT),
-            _NEW_MY_HOT_COUNT = 0
-            with open(os.path.join(CUR_DIR, 'z8_exist_my_hot_titles.txt'), 'wb+') as f:
-                pickle.dump(break_names, f)
-        else:
-            print "My_Hot_Count-%s/%s|" % (_NEW_MY_HOT_COUNT, NEW_NEW_SAVE_COUNT),
+            print "New_Count-%s/%s|" % (NEW_NEW_COUNT, NEW_NEW_SAVE_COUNT),
     return result, break_names
 
 
@@ -245,8 +180,7 @@ def custom_send_push_hot(title, url):
 if __name__ == '__main__':
     # init()
     break_names = None
-    my_hot_break_names = None
-    hot_break_names = None
+    exist_titles = None
     important_key_messages = {'wj', 'bug', 'fx', u'10000家', u'斐讯', u"有水", u"水了",
                               u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
                               u'首发', 'ruan', u'软件', u'速来', u'快去', u'手慢无',
@@ -259,19 +193,17 @@ if __name__ == '__main__':
                     u'1元', u'9.9', u'9块9', u'9元', u'超级返', u'线报', u'高返',
                     u'高反', u'有货', u'活动', u'白菜', u'免单', u'到手', u'大妈',
                     u'美滋滋', u'果', u'菓', u'整理', u'一抖'}
-    # exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
-    #                         u'推荐办', u'油锅', u'代下', u'带下', u'三网',
-    #                         u'助力', u'点赞', u'秒审', u'代刷', u'售'}
-    exclude_key_messages = set()
+    exclude_key_messages = {u'赚神', u'求', u'有没有', u'吗', u'呢', u'么', u'收', u'返现',
+                            u'推荐办', u'油锅', u'代下', u'带下', u'三网',
+                            u'助力', u'点赞', u'秒审', u'代刷', u'售'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
     email_title = '[ZK8] Many Titles Need To Send By E-mail'
     email_msg_tmp = u"【{}】 - {}\r\n\r\n"
     while True:
-        result, break_names, web_data = get_web_data(new_list_request_raw, break_names)
-        for title, uri in result.iteritems():
-            url = change_url(uri)
+        result, break_names = get_web_data(new_list_request_raw, break_names)
+        for title, url in result.iteritems():
             if_title = change_title(title)
             for i_k in important_key_messages:
                 if i_k in if_title:
@@ -287,34 +219,26 @@ if __name__ == '__main__':
                         else:
                             custom_send_push(title, url)
                             print "Send_New|",
-                            time.sleep(0.5)
+                            time.sleep(1)
                         break
-        result, my_hot_break_names = get_web_data_for_my_hot(
-            break_names=my_hot_break_names, web_data=web_data)
-        for title, uri in result.iteritems():
-            url = change_url(uri)
-            custom_send_push('[M-HOT]' + title, url)
-            print "Send_Important_New|",
         print "Refresh|%s|" % datetime.datetime.now()
-        time.sleep(random.randint(2, 5))
+        time.sleep(8)
 
         count += 1
         if count == 10:
-            result, hot_break_names = get_web_hot_data(hot_list_request_raw,
-                                                       hot_break_names)
+            result, exist_titles = get_web_hot_data(hot_list_request_raw, exist_titles)
             count = 1
             if len(result) > 5:
                 email_msg = ""
-                for title, uri in result.iteritems():
-                    url = change_url(uri)
+                for title, url in result.iteritems():
                     email_msg += email_msg_tmp.format(title, url)
                 tools.send_email(email_title, email_msg)
                 print "Send_All_Hot-%s|" % len(result),
                 continue
-            for title, uri in result.iteritems():
-                url = change_url(uri)
+            for title, url in result.iteritems():
                 custom_send_push_hot(title, url)
                 print "Send_Hot|",
-                time.sleep(0.5)
+                time.sleep(1)
+            time.sleep(8)
             print "Refresh_Hot|%s|" % datetime.datetime.now()
         sys.stdout.flush()

@@ -5,8 +5,10 @@ import random
 import re
 import time
 
+import sys
 from bs4 import BeautifulSoup
 
+sys.path.extend(['/data/my_tools_env/my_tools/'])
 from utils.buying_times import PanicBuyingTimes
 from utils.fiddler_session import RawToPython
 
