@@ -205,10 +205,10 @@ class RawToPython(object):
         except requests.Timeout as e:
             error_msg = "{time}: fd: requests get error: {url}: {e}".format(
                 time=datetime.datetime.now(), url=req_param["url"], e=e)
-            logging.error(error_msg)
+            logging.exception(error_msg)
             raise FiddlerRequestTimeOutException(error_msg)
         except Exception as e:
             error_msg = "{time}: fd: requests get error: {url}: {e}".format(
                 time=datetime.datetime.now(), url=req_param["url"], e=e)
-            logging.error(error_msg)
+            logging.exception(error_msg)
             raise FiddlerRequestException(error_msg)
