@@ -283,7 +283,7 @@ if __name__ == '__main__':
         result, my_hot_break_names = get_web_data_for_my_hot(
             break_names=my_hot_break_names, web_data=web_data)
         for title, uri in result.iteritems():
-            custom_send_push('[M-HOT]' + title, change_url(uri))
+            custom_send_push('[MHot]' + title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(random.randint(2, 5))
