@@ -101,11 +101,11 @@ def get_web_data(request_raw, break_names=None):
         web_data = request_raw.requests(timeout=10)
     except FiddlerRequestTimeOutException:
         time.sleep(30)
-        return {}, break_names
+        return {}, break_names, None
     except Exception as e:
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
-        return {}, break_names
+        return {}, break_names, None
     result = {}
     is_get_new = False
     if web_data and web_data.status_code == 200:
