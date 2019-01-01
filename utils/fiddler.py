@@ -173,12 +173,12 @@ class RawToPython(object):
             except requests.Timeout as e:
                 error_msg = "{time}: fd: requests get error: {url}: {e}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e)
-                logging.error(error_msg)
+                logging.exception(error_msg)
                 raise FiddlerRequestTimeOutException(error_msg)
             except Exception as e:
                 error_msg = "{time}: fd: requests get error: {url}: {e}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e)
-                logging.error(error_msg)
+                logging.exception(error_msg)
                 raise FiddlerRequestException(error_msg)
         elif self.method == "POST":
             try:
@@ -188,13 +188,13 @@ class RawToPython(object):
                 error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e,
                     detail=traceback.format_exc())
-                logging.error(error_msg)
+                logging.exception(error_msg)
                 raise FiddlerRequestTimeOutException(error_msg)
             except Exception as e:
                 error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
                     time=datetime.datetime.now(), url=req_param["url"], e=e,
                     detail=traceback.format_exc())
-                logging.error(error_msg)
+                logging.exception(error_msg)
                 raise FiddlerRequestException(error_msg)
         else:
             raise FiddlerRequestException('{time}:No Find Method'.format(
