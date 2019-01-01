@@ -44,6 +44,7 @@ def change_url(uri):
         for n in need_str:
             if other.startswith(n):
                 need_others.append(other)
+    need_others.append('mobile=no')
     return 'http://www.zuanke8.com/' + uri_main + '?' + '&'.join(need_others)
 
 
