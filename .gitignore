@@ -4,3 +4,4 @@ QR.png
 *.xml
 my_tools.iml
 *.pyc
+/many_tools/zk8/*.txt
