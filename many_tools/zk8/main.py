@@ -180,8 +180,7 @@ def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
                     if replies_count >= 10:
                         new_break_names.append(name)
                         is_get_new = True
-
-                result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
+                        result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
