@@ -28,12 +28,10 @@ _NEW_NEW_COUNT = 0
 _NEW_MY_HOT_COUNT = 0
 
 
-
 def test_print(*args, **kwargs):
     print args, kwargs
 
-
-tools.send_push = test_print
+# tools.send_push = test_print
 
 
 def change_url(uri):
