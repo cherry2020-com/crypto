@@ -290,7 +290,7 @@ if __name__ == '__main__':
         for title, uri in result.iteritems():
             url = change_url(uri)
             custom_send_push('[M-HOT]' + title, url)
-            print "Send_Important_New|",
+            print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(random.randint(2, 5))
 
