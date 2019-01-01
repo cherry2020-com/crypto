@@ -121,9 +121,8 @@ def get_web_data(request_raw, break_names=None):
                 name = ' || '.join(text)
                 if name in set_break_names:
                     break
-                else:
-                    new_break_names.append(name)
-                    is_get_new = True
+                new_break_names.append(name)
+                is_get_new = True
                 result[name] = tag.a.attrs['href']
         new_break_names.extend(break_names)
     else:
@@ -173,14 +172,14 @@ def get_web_data_for_my_hot(request_raw=None, break_names=None, web_data=None):
             if text:
                 name = ' || '.join(text)
                 if name in set_break_names:
-                    break
-                else:
-                    replies_count = tag.a.find(class_='replies').text
-                    replies_count = int(replies_count or 0)
-                    if replies_count >= 10:
-                        new_break_names.append(name)
-                        is_get_new = True
-                        result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
+                    continue
+                replies_count = tag.a.find(class_='replies').text
+                replies_count = int(replies_count or 0)
+                if replies_count < 10:
+                    continue
+                new_break_names.append(name)
+                is_get_new = True
+                result[u'({}){}'.format(replies_count, name)] = tag.a.attrs['href']
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
