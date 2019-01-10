@@ -60,6 +60,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         time.sleep(30)
         return {}, exist_titles
     except Exception as e:
+        print 'Exception: get_web_hot_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
         return {}, exist_titles
@@ -106,6 +107,7 @@ def get_web_data(request_raw, break_names=None):
         time.sleep(30)
         return {}, break_names, None
     except Exception as e:
+        print 'Exception: get_web_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
         return {}, break_names, None
@@ -117,7 +119,7 @@ def get_web_data(request_raw, break_names=None):
         set_break_names = set(break_names or [])
         soup_find = soups.find(id='alist')
         if not soup_find:
-            return {}, break_names
+            return {}, break_names, None
         print "New_Find_%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.a.h1.text.strip().split()
@@ -153,10 +155,11 @@ def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
         try:
             web_data = request_raw.requests(timeout=10)
         except FiddlerRequestTimeOutException:
+            print 'FiddlerRequestTimeOutException: get_web_data_for_my_hot'
             time.sleep(30)
             return {}, break_names
         except Exception as e:
-            print 'FiddlerRequestTimeOutException: get_web_data_for_my_hot'
+            print 'Exception: get_web_data_for_my_hot'
             tools.send_error_msg_by_email(
                 "[zk8]get_web_data_for_my_hot: " + traceback.format_exc())
             time.sleep(30)
