@@ -244,6 +244,14 @@ def custom_send_push_hot(title, url):
         'ZK8-Hot')
 
 
+def custom_send_push_my_hot(title, url):
+    tools.send_push(
+        u'[ZK8][MHot]' + title, url,
+        's-6d534ba3-fab8-43ad-96ae-cc8569ba',
+        'g-6122ea77-dfc4-44f0-8fd5-c00d05d7',
+        'ZK8-MHot')
+
+
 if __name__ == '__main__':
     # init()
     break_names = None
@@ -290,7 +298,7 @@ if __name__ == '__main__':
         result, my_hot_break_names = get_web_data_for_my_hot(
             new_list_request_raw, my_hot_break_names, web_data)
         for title, uri in result.iteritems():
-            custom_send_push('[MHot]' + title, change_url(uri))
+            custom_send_push_my_hot(title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(random.randint(2, 5))
