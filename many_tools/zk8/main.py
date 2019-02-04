@@ -122,7 +122,7 @@ def get_web_data(request_raw, break_names=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, break_names, None
-        print "New_Find_%s|" % len(soup_find.find_all('li')),
+        print "New_Web_Find_%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.a.h1.text.strip().split()
             if text:
@@ -132,6 +132,7 @@ def get_web_data(request_raw, break_names=None):
                 new_break_names.append(name)
                 is_get_new = True
                 result[name] = tag.a.attrs['href']
+        print "New_Real_Find_%s|" % len(result),
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
