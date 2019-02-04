@@ -18,6 +18,8 @@ from utils.fiddler_session import RawToPython, FiddlerRequestTimeOutException
 
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
+IS_KEYWORD_FILTER = False
 NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 1
 NEW_MY_HOT_SAVE_COUNT = 5
@@ -277,24 +279,31 @@ if __name__ == '__main__':
     email_msg_tmp = u"【{}】 - {}\r\n\r\n"
     while True:
         result, break_names, web_data = get_web_data(new_list_request_raw, break_names)
-        for title, uri in result.iteritems():
-            if_title = change_title(title)
-            for i_k in important_key_messages:
-                if i_k in if_title:
-                    custom_send_push('[.]' + title, change_url(uri))
-                    print "Send_Important_New|",
-                    break
-            else:
-                for k in key_messages:
-                    if k in if_title:
-                        for ek in exclude_key_messages:
-                            if ek in if_title:
-                                break
-                        else:
-                            custom_send_push(title, change_url(uri))
-                            print "Send_New|",
-                            time.sleep(0.5)
+        if IS_KEYWORD_FILTER:
+            for title, uri in result.iteritems():
+                if_title = change_title(title)
+                for i_k in important_key_messages:
+                    if i_k in if_title:
+                        custom_send_push('[.]' + title, change_url(uri))
+                        print "Send_Important_New|",
+                        time.sleep(0.5)
                         break
+                else:
+                    for k in key_messages:
+                        if k in if_title:
+                            for ek in exclude_key_messages:
+                                if ek in if_title:
+                                    break
+                            else:
+                                custom_send_push(title, change_url(uri))
+                                print "Send_New|",
+                                time.sleep(0.5)
+                            break
+        else:
+            for title, uri in result.iteritems():
+                custom_send_push(title, change_url(uri))
+                print "Send_Everything|",
+                time.sleep(0.5)
         result, my_hot_break_names = get_web_data_for_my_hot(
             new_list_request_raw, my_hot_break_names, web_data)
         for title, uri in result.iteritems():
