@@ -75,7 +75,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         soup_find = soups.find(id='alist')
         if not soup_find:
             return {}, exist_titles
-        print "Hot_Find-%s|" % len(soup_find.find_all('li')),
+        print "Hot_Web_Find-%s|" % len(soup_find.find_all('li')),
         for tag in soup_find.find_all('li'):
             text = tag.text.strip().split()
             if text:
@@ -84,6 +84,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     result[name] = tag.a.attrs['href']
                     is_get_new = True
                     new_titles.append(name)
+        print "Hot_Real_Find-%s|" % len(result),
     exist_titles_limit = (new_titles + exist_titles)[:1000]
     if is_get_new:
         _NEW_HOT_COUNT += len(result)
