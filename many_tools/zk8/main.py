@@ -19,7 +19,7 @@ from utils.fiddler_session import RawToPython, FiddlerRequestTimeOutException
 CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-IS_KEYWORD_FILTER = False
+IS_KEYWORD_FILTER = True
 NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 1
 NEW_MY_HOT_SAVE_COUNT = 5
@@ -265,7 +265,7 @@ if __name__ == '__main__':
                               u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
                               u'首发', 'ruan', u'软件', u'速来', u'快去', u'手慢无',
                               u'神券', u'神卷', u'无门槛', u'毛', u'速度', u'速领', u'速撸',
-                              u'好用'}
+                              u'好用', u'中了', u'转赠', u'货号'}
     key_messages = {u'神', u'券', u'卷', u'抢', u'立减',
                     u'防身', u'性价比', u'便宜', u'秒杀',
                     u'秒到', u'可以了', u'有货', u'防身',
