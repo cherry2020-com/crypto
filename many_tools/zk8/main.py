@@ -84,9 +84,11 @@ def get_web_hot_data(request_raw, exist_titles=None):
         # assert len(soup_find) == 3
         hour_hots_keys = {0: '[6H]', 1: '[24H]', 2: '[48H]'}
         hour_hots_count = {}
+        real_hour_hots_count = {}
         for index, hour_hots in enumerate(soup_find):
             index_key = hour_hots_keys.get(index, '[xH]')
             hour_hots_count[index_key] = 0
+            real_hour_hots_count[index_key] = 0
             all_hour_hots = list(hour_hots.findAll('td')) + list(hour_hots.findAll('th'))
             for hour_hot in all_hour_hots:
                 if not hour_hot.a:
@@ -95,17 +97,20 @@ def get_web_hot_data(request_raw, exist_titles=None):
                 text = hour_hot.text.strip().split()
                 if text:
                     name = ' || '.join(text)
+                    name = index_key + name
                     if name not in exist_titles_set:
-                        name = index_key + name
                         result[name] = hour_hot.a.attrs['href']
                         is_get_new = True
                         new_titles.append(name)
+                        real_hour_hots_count[index_key] += 1
 
         print "Hot_Web_Find-6h_%s-24h_%s-48h_%s-xh_%s|" % (
             hour_hots_count['[6H]'], hour_hots_count['[24H]'], hour_hots_count['[48H]'],
             hour_hots_count.get('[xH]', 0)),
-        print "Hot_Real_Find-%s|" % len(result),
-    exist_titles_limit = (new_titles + exist_titles)[:2000]
+        print "Hot_Real_Find-6h_%s-24h_%s-48h_%s-xh_%s|" % (
+            real_hour_hots_count['[6H]'], real_hour_hots_count['[24H]'],
+            real_hour_hots_count['[48H]'], real_hour_hots_count.get('[xH]', 0)),
+    exist_titles_limit = (new_titles + exist_titles)[:1000]
     if is_get_new:
         _NEW_HOT_COUNT += len(result)
         if _NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
@@ -332,9 +337,9 @@ if __name__ == '__main__':
             custom_send_push_my_hot(title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
-        time.sleep(random.randint(2, 5))
+        time.sleep(random.randint(3, 5))
 
-        count += 0
+        count += 1
         if count == WAIT_HOT_COUNT:
             result, hot_break_names = get_web_hot_data(hot_list_request_raw,
                                                        hot_break_names)
