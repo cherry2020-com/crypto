@@ -267,7 +267,7 @@ def custom_send_push(title, url):
 
 def custom_send_push_hot(title, url):
     tools.send_push(
-        u'[ZK8][Hot]' + title, url,
+        u'[ZK8]' + title, url,
         's-0d7dbf26-0156-4bc2-a7eb-bbb53bc5',
         'g-7465ca67-140a-4f78-8f38-5226f84b',
         'ZK8-Hot')
