@@ -4,7 +4,6 @@ import random
 import sys
 import os
 import time
-
 import pickle
 import traceback
 
@@ -24,6 +23,7 @@ NEW_NEW_SAVE_COUNT = 10
 NEW_HOT_SAVE_COUNT = 1
 NEW_MY_HOT_SAVE_COUNT = 5
 NEW_MY_HOT_SEND_COMMENT_COUNT = 10
+WAIT_HOT_COUNT = 6
 
 
 _NEW_HOT_COUNT = 0
@@ -38,6 +38,10 @@ def test_print(*args, **kwargs):
 
 
 def change_url(uri):
+    if '?' not in uri:
+        if uri.startswith('http'):
+            return uri
+        return'http://www.zuanke8.com/' + uri
     need_str = ['mod=', 'tid=']
     uri_main, uri_others = uri.split('?')
     uri_others = uri_others.split('&')
@@ -47,6 +51,8 @@ def change_url(uri):
             if other.startswith(n):
                 need_others.append(other)
     need_others.append('mobile=no')
+    if uri.startswith('http'):
+        return uri_main + '?' + '&'.join(need_others)
     return 'http://www.zuanke8.com/' + uri_main + '?' + '&'.join(need_others)
 
 
@@ -72,20 +78,34 @@ def get_web_hot_data(request_raw, exist_titles=None):
     is_get_new = False
     if web_data and web_data.status_code == 200:
         soups = BeautifulSoup(web_data.text, "lxml")
-        soup_find = soups.find(id='alist')
+        soup_find = soups.findAll(class_='dt valt')
         if not soup_find:
             return {}, exist_titles
-        print "Hot_Web_Find-%s|" % len(soup_find.find_all('li')),
-        for tag in soup_find.find_all('li'):
-            text = tag.text.strip().split()
-            if text:
-                name = ' || '.join(text)
-                if name not in exist_titles_set:
-                    result[name] = tag.a.attrs['href']
-                    is_get_new = True
-                    new_titles.append(name)
+        # assert len(soup_find) == 3
+        hour_hots_keys = {0: '[6H]', 1: '[24H]', 2: '[48H]'}
+        hour_hots_count = {}
+        for index, hour_hots in enumerate(soup_find):
+            index_key = hour_hots_keys.get(index, '[xH]')
+            hour_hots_count[index_key] = 0
+            all_hour_hots = list(hour_hots.findAll('td')) + list(hour_hots.findAll('th'))
+            for hour_hot in all_hour_hots:
+                if not hour_hot.a:
+                    continue
+                hour_hots_count[index_key] += 1
+                text = hour_hot.text.strip().split()
+                if text:
+                    name = ' || '.join(text)
+                    if name not in exist_titles_set:
+                        name = index_key + name
+                        result[name] = hour_hot.a.attrs['href']
+                        is_get_new = True
+                        new_titles.append(name)
+
+        print "Hot_Web_Find-6h_%s-24h_%s-48h_%s-xh_%s|" % (
+            hour_hots_count['[6H]'], hour_hots_count['[24H]'], hour_hots_count['[48H]'],
+            hour_hots_count.get('[xH]', 0)),
         print "Hot_Real_Find-%s|" % len(result),
-    exist_titles_limit = (new_titles + exist_titles)[:1000]
+    exist_titles_limit = (new_titles + exist_titles)[:2000]
     if is_get_new:
         _NEW_HOT_COUNT += len(result)
         if _NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
@@ -314,11 +334,11 @@ if __name__ == '__main__':
         print "Refresh|%s|" % datetime.datetime.now()
         time.sleep(random.randint(2, 5))
 
-        count += 1
-        if count == 10:
+        count += 0
+        if count == WAIT_HOT_COUNT:
             result, hot_break_names = get_web_hot_data(hot_list_request_raw,
                                                        hot_break_names)
-            count = 1
+            count = 0
             if len(result) > 5:
                 email_msg = ""
                 for title, uri in result.iteritems():
