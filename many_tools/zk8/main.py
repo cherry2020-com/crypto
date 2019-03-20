@@ -24,6 +24,7 @@ NEW_HOT_SAVE_COUNT = 1
 NEW_MY_HOT_SAVE_COUNT = 5
 NEW_MY_HOT_SEND_COMMENT_COUNT = 10
 WAIT_HOT_COUNT = 6
+MANY_HOT_TO_SEND_WITH_EMAIL_COUNT = 10
 
 
 _NEW_HOT_COUNT = 0
@@ -344,7 +345,7 @@ if __name__ == '__main__':
             result, hot_break_names = get_web_hot_data(hot_list_request_raw,
                                                        hot_break_names)
             count = 0
-            if len(result) > 5:
+            if len(result) > MANY_HOT_TO_SEND_WITH_EMAIL_COUNT:
                 email_msg = ""
                 for title, uri in result.iteritems():
                     email_msg += email_msg_tmp.format(title, change_url(uri))
