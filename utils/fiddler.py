@@ -46,6 +46,7 @@ class RawToPython(object):
         self.method = None
         self.url = None
         self.headers = None
+        self.headers_small = None
         self.req_data = None
         self.req_json = None
         self.req_param = None
@@ -71,15 +72,15 @@ class RawToPython(object):
         self.url = line_split[1]
         if not self.url.startswith("http"):
             if self.__is_https is None:
-                if self.headers.get("Referer"):
-                    http_host = self.headers.get("Referer").split(":", 1)[0]
-                elif self.headers.get("Origin"):
-                    http_host = self.headers.get("Origin").split(':', 1)[0]
+                if self.headers_small.get("referer"):
+                    http_host = self.headers_small["referer"].split(":", 1)[0]
+                elif self.headers_small.get("origin"):
+                    http_host = self.headers["origin"].split(':', 1)[0]
                 else:
                     http_host = "https"
             else:
                 http_host = "https" if self.__is_https else "http"
-            http_host += "://" + self.headers["Host"]
+            http_host += "://" + self.headers_small["host"]
             self.url = http_host + self.url
         self.url_parse = urlparse.urlparse(self.url)
 
@@ -91,6 +92,7 @@ class RawToPython(object):
                 break
             line_split = line.split(":", 1)
             line_split = [each.strip() for each in line_split]
+            self.headers_small[line_split[0].lower()] = line_split[1]
             ready_to_dict.append(line_split)
         self.headers = OrderedDict(ready_to_dict)
 
@@ -149,7 +151,10 @@ class RawToPython(object):
 
     def __reset_req_param(self, req_param):
         if self.url != req_param['url']:
-            req_param['headers']['HOST'] = urlparse.urlsplit(req_param['url']).netloc
+            if 'HOST' in req_param['headers']:
+                req_param['headers']['HOST'] = urlparse.urlsplit(req_param['url']).netloc
+            else:
+                req_param['headers']['host'] = urlparse.urlsplit(req_param['url']).netloc
 
     def requests(self, is_test=False, auto_parm=True, **kwargs):
         """
