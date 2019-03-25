@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
 import random
+import re
 import sys
 import os
 import time
@@ -38,11 +39,15 @@ def test_print(*args, **kwargs):
 # tools.send_push = test_print
 
 
+# 'http://www.zuanke8.com/forum.php?mod=viewthread&tid=5916448&extra=page%3D1&page=1&mobile=no'
+# 'http://www.zuanke8.com/thread-5916448-1-1.html'
+
+
 def change_url(uri):
     if '?' not in uri:
-        if uri.startswith('http'):
-            return uri
-        return'http://www.zuanke8.com/' + uri
+        tid = re.findall(r'-(\d+?)-1-1\.html', uri)[0]
+        return 'http://www.zuanke8.com/forum.php?mod=viewthread&tid={}' \
+               '&extra=page%3D1&page=1&mobile=no'.format(tid)
     need_str = ['mod=', 'tid=']
     uri_main, uri_others = uri.split('?')
     uri_others = uri_others.split('&')
