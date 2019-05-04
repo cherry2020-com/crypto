@@ -86,6 +86,7 @@ class RawToPython(object):
 
     def __to_headers(self):
         ready_to_dict = []
+        self.headers_small = {}
         for line in self.__lines[1:]:
             line = line.strip()
             if not line:

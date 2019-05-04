@@ -30,20 +30,25 @@ class XunDaiLi(object):
             return False
         return True
 
+    def _add_proxy(self):
+        while True:
+            web_json = self._get()
+            error_code, error_msg = self._resolve_error(web_json)
+            if error_msg:
+                print error_msg
+            if error_code in ['10036', '10038', '10055']:
+                time.sleep(1)
+            elif error_code == '10032':
+                raise Exception('Not Enough Proxy')
+            else:
+                self._resolve_proxies(web_json)
+                break
+
     def get_proxy(self):
-        if self.proxies.empty():
-            while True:
-                web_json = self._get()
-                error_code, error_msg = self._resolve_error(web_json)
-                if error_msg:
-                    print error_msg
-                if error_code in ['10036', '10038', '10055']:
-                    time.sleep(1)
-                elif error_code == '10032':
-                    raise Exception('Not Enough Proxy')
-                else:
-                    self._resolve_proxies(web_json)
-                    break
+        while self.proxies.empty():
+            print u'[%s]请求前休息 1秒' % self._base_name
+            time.sleep(1)
+            self._add_proxy()
         return self.proxies.get(block=False)
 
     def _get(self):
@@ -76,7 +81,7 @@ class XunDaiLi(object):
         all_proxies = []
         for proxy in proxies:
             p_url = 'http://' + proxy['ip'] + ':' + proxy['port']
-            print u'[%s]【新】%s' % (self._base_name, p_url)
+            print u'[%s]【获取新代理服务】%s' % (self._base_name, p_url)
             requests_stru = {'http': p_url, 'https': p_url}
             if self._structure == 'requests':
                 each = requests_stru
