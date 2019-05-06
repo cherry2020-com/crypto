@@ -1,0 +1,7 @@
+GET /coprsearch/cosearch?coupon_batch=205760850&coupon_aggregation=yes&neverpop=yes&datatype=1&callback=jdSearchResultBkCbA&page=1&pagesize=10&ext_attr=no&brand_col=no&price_col=no&color_col=no&size_col=no&ext_attr_sort=no&multi_suppliers=yes&rtapi=no&coupon_kind=1&coupon_shopid=0&showShop=1&area_ids=1,72,2819 HTTP/1.1
+Host: wqsou.jd.com
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Linux; Android 5.0; SM-G900P Build/LRX21T) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Mobile Safari/537.36
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9

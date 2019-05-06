@@ -40,10 +40,11 @@ class FiddlerError(Exception):
 
 
 class RawToPython(object):
-    def __init__(self, file_name=None, file_raw=None, is_https=None):
+    def __init__(self, file_name=None, file_raw=None, is_https=None, is_session=False):
         if not (file_name or file_raw):
             raise FiddlerError("must had file_name or file_data")
         self.method = None
+        self.__url_host = None
         self.url = None
         self.headers = None
         self.headers_small = None
@@ -81,6 +82,7 @@ class RawToPython(object):
             else:
                 http_host = "https" if self.__is_https else "http"
             http_host += "://" + self.headers_small["host"]
+            self.__url_host = http_host
             self.url = http_host + self.url
         self.url_parse = urlparse.urlparse(self.url)
 
@@ -157,16 +159,30 @@ class RawToPython(object):
             else:
                 req_param['headers']['host'] = urlparse.urlsplit(req_param['url']).netloc
 
-    def requests(self, is_test=False, auto_parm=True, **kwargs):
+    def __requests_reset_url(self, req_param, reset_url):
+        if not reset_url:
+            return
+        if reset_url.startswith('http'):
+            req_param["url"] = reset_url
+        else:
+            if reset_url.startswith('/'):
+                req_param["url"] = self.__url_host + reset_url
+            else:
+                req_param["url"] = self.__url_host + '/' + reset_url
+        return req_param
+
+    def requests(self, reset_url=None, is_test=False, auto_parm=True, **kwargs):
         """
         url=None, data=None, json=None, headers=None, timeout=None
         """
+        # TODO 请求超时可以重试 n次
         if auto_parm:
             self.set_param()
         req_param = self.req_param
         req_param.update(kwargs)
         if 'timeout' not in req_param:
             req_param['timeout'] = 30
+        self.__requests_reset_url(req_param, reset_url)
         self.__reset_req_param(req_param)
         if is_test:
             url_list = req_param["url"].split("/", 3)
@@ -205,3 +221,6 @@ class RawToPython(object):
         else:
             raise FiddlerRequestException('{time}:No Find Method'.format(
                     time=datetime.datetime.now()))
+
+    def new_requests(self, reset_url=None, is_test=False, auto_parm=True, **kwargs):
+        pass
