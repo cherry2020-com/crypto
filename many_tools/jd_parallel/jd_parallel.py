@@ -12,13 +12,15 @@ import urlparse
 import re
 import collections
 
+import sys
+
 from utils import fiddler
 
 
 GOOD_NAME_LIMIT = 50
 
-DEBUG = False
-DEBUG_PAGE_COUNT = None
+DEBUG = True
+DEBUG_PAGE_COUNT = 2
 DEBUG_GOOD_IDS = ['100001674895', '100002258866', '100002258890']
 DEBUG_GOOD_IDS = []
 
@@ -54,10 +56,11 @@ class JDParallel(object):
             fd.set_param(url_param={'page': page})
             fd_data = fd.requests()
             fd_text = fd_data.text.strip()
-            start_str = u'jdSearchResultBkCbA('
-            if fd_text.startswith(start_str):
+            start_str = u'({'
+            index = fd_text.find(start_str)
+            if index != -1:
                 fd_text = self._get_sample_string(fd_text)
-                fd_text = fd_text[len(start_str):-1]
+                fd_text = u'{' + fd_text[index + len(start_str): -1]
                 fd_json = json.loads(fd_text)
                 web_all_goods.extend(fd_json['data']['searchm']['Paragraph'])
                 good_count = fd_json['data']['searchm']['Head']['Summary']['ResultCount']
@@ -205,5 +208,6 @@ class JDParallel(object):
 
 
 if __name__ == '__main__':
-    url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=205760850&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=1.0000&coupon_s=仅可购买家用医疗品类指定商品&coupon_d=undefined'
+    url = sys.argv[1]
+    # url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=205740682&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=138.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
     JDParallel(url).process()

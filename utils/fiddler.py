@@ -40,7 +40,8 @@ class FiddlerError(Exception):
 
 
 class RawToPython(object):
-    def __init__(self, file_name=None, file_raw=None, is_https=None, is_session=False):
+    def __init__(self, file_name=None, file_raw=None, is_https=None, is_session=False,
+                 try_real_simulation=False):
         if not (file_name or file_raw):
             raise FiddlerError("must had file_name or file_data")
         self.method = None
@@ -52,6 +53,7 @@ class RawToPython(object):
         self.req_json = None
         self.req_param = None
         self.url_parse = None
+        self.try_real_simulation = try_real_simulation
         self.__file = file_name
         self.__raw = file_raw
         self.__lines = None
@@ -123,11 +125,19 @@ class RawToPython(object):
             raise FiddlerError("param must be dict")
         base_url = self.url_parse.scheme + "://" + self.url_parse.netloc + \
                    self.url_parse.path
-        url_param = dict([(k, v[0]) for k, v in urlparse.parse_qs(
-            self.url_parse.query).items()])
+        if not self.try_real_simulation:
+            url_param = dict([(k, v[0]) for k, v in urlparse.parse_qs(
+                self.url_parse.query).items()])
+        else:
+            url_param = OrderedDict(
+                [x.split('=') for x in self.url_parse.query.split('&')])
         url_param.update(param)
         logging.debug("fd: set_url_param: " + str(param))
-        self.url = base_url + '?' + urllib.urlencode(url_param)
+        if not self.try_real_simulation:
+            self.url = base_url + '?' + urllib.urlencode(url_param)
+        else:
+            self.url = base_url + '?' + '&'.join(
+                ['='.join([str(k), str(v)]) for k, v in url_param.items()])
         self.url_parse = urlparse.urlparse(self.url)
 
     def set_param(self, url_param=None, req_param=None):
