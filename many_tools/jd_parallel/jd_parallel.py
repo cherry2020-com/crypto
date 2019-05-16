@@ -4,15 +4,14 @@
 # TODO gift 去掉title中已存在的
 # TODO gitf 往后放
 # TODO 进度
-
+import sys
+sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 import json
 import urlparse
 
 import re
 import collections
-
-import sys
 
 from utils import fiddler
 
@@ -29,8 +28,6 @@ class JDParallel(object):
 
     def __init__(self, search_url, name_keyword=None, discount_keyword=None):
         self.search_url = search_url
-        self.name_keyword = name_keyword
-        self.discount_keyword = discount_keyword
         self.zh_pattern = re.compile(u'[\u4e00-\u9fa5]+')
 
     def _get_coupon_batch(self):
@@ -105,11 +102,14 @@ class JDParallel(object):
                     v_end = v[v_end_index+len(end_flag):]
                     v_start_json = json.loads(v[:v_end_index])
                     v_start = ''
-                    for each in v_start_json:
-                        v_start += u'【{1}】x {0}\n'.format(
-                            each.get('nm', ''), each.get('num', ''))
+                    if isinstance(v_start_json, float):
+                        v_start = str(v_start_json)
                     else:
-                        v_start = v_start.strip()
+                        for each in v_start_json:
+                            v_start += u'【{1}】x {0}\n'.format(
+                                each.get('nm', ''), each.get('num', ''))
+                        else:
+                            v_start = v_start.strip()
                     return 'gift', u'{}|{}'.format(v_end, v_start)
             # for k, v in each_info.items():
             #     if self._contain_zh(v):
@@ -208,6 +208,7 @@ class JDParallel(object):
 
 
 if __name__ == '__main__':
-    url = sys.argv[1]
-    # url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=205740682&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=138.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
+    # url = sys.argv[1]
+    url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=205740682&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=138.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
+
     JDParallel(url).process()
