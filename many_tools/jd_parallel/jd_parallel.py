@@ -27,7 +27,7 @@ sys.setdefaultencoding('utf8')
 
 GOOD_NAME_LIMIT = 1000
 
-DEBUG = True
+DEBUG = False
 DEBUG_PAGE_COUNT = 2
 DEBUG_GOOD_IDS = ['100001674895', '100002258866', '100002258890']
 DEBUG_GOOD_IDS = []
@@ -204,7 +204,7 @@ class JDParallel(object):
                     id=info['good']['id'], name=info['good']['name'][:GOOD_NAME_LIMIT],
                     url=info['url'], gifts=(u'╞' + gifts) if gifts else '')
                 part2 += tmp_part2.strip() + '\n'
-                markdown += u"### [{good_name}]({good_url})\n".format(
+                markdown += u"#### [{good_name}]({good_url})\n".format(
                     good_name=info['good']['name'][:GOOD_NAME_LIMIT],
                     good_url=info['url'])
                 for gift_name in markdown_gifts:
@@ -243,7 +243,7 @@ class JDParallel(object):
         local_path = os.path.join(CURRENT_DIR, html_name)
         with open(local_path, 'wb+') as f:
             f.write(html % ret)
-        print u'--> 开始上传文件，请稍等！'
+        print u'[-] 开始上传文件，请稍等！'
         url = niu_7_bucket.upload_attachment(os.path.join('jd', html_name), local_path)
         return url
 
@@ -256,10 +256,15 @@ class JDParallel(object):
             all_goods = self._get_format_goods(web_all_goods)
         discounts_map, all_discounts = self._get_all_discounts(all_goods)
         markdown = self._format_print(discounts_map, all_discounts)
-        print self.make_html(markdown)
+        return self.make_html(markdown)
 
 
 if __name__ == '__main__':
-    # url = sys.argv[1]
-    url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=228500478&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=618.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E9%98%BF%E7%8E%9B%E5%B0%BC%E6%99%BA%E8%83%BD%E6%89%8B%E8%A1%A8%E8%87%AA%E8%90%A5%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
-    JDParallel(url).process()
+    if len(sys.argv) > 1:
+        url = sys.argv[1]
+    else:
+        url = """
+        https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.5&showShop=1&coupon_batch=110216519&coupon_kind=3&coupon_shopid=29859&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=199.0000&coupon_s=%E9%99%90%E8%B4%AD%5B%E4%B8%89%E5%8F%AA%E6%9D%BE%E9%BC%A0%E6%97%97%E8%88%B0%E5%BA%97%5D%E5%BA%97%E9%93%BA%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined
+        """.strip()
+    url = JDParallel(url).process()
+    print u'--> 点击该链接查看：', url
