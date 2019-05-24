@@ -243,6 +243,7 @@ class JDParallel(object):
         local_path = os.path.join(CURRENT_DIR, html_name)
         with open(local_path, 'wb+') as f:
             f.write(html % ret)
+        print u'--> 开始上传文件，请稍等！'
         url = niu_7_bucket.upload_attachment(os.path.join('jd', html_name), local_path)
         return url
 
