@@ -4,7 +4,14 @@
 # TODO gift 去掉title中已存在的
 # TODO gitf 往后放
 # TODO 进度
+
+import datetime
+import markdown
+import os
 import sys
+
+from utils.niu_7 import niu_7_bucket
+
 sys.path.extend(['/data/my_tools_env/my_tools/'])
 
 import json
@@ -15,13 +22,18 @@ import collections
 
 from utils import fiddler
 
+reload(sys)
+sys.setdefaultencoding('utf8')
 
-GOOD_NAME_LIMIT = 50
+GOOD_NAME_LIMIT = 1000
 
 DEBUG = True
 DEBUG_PAGE_COUNT = 2
 DEBUG_GOOD_IDS = ['100001674895', '100002258866', '100002258890']
 DEBUG_GOOD_IDS = []
+
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class JDParallel(object):
@@ -169,6 +181,7 @@ class JDParallel(object):
 
     def _format_print(self, discounts_map, all_discounts):
         output_string = ''
+        markdown = u""
         for id, infos in discounts_map.items():
             discount_type = all_discounts[id]['type']
             debug1 = ''
@@ -176,17 +189,29 @@ class JDParallel(object):
                 debug1 = u'[#]Discount Type: {}\n'.format(discount_type)
             part1 = u"╔{0} {1} {0}╗\n".format(
                 u'═'*10, all_discounts[id]['name'][:GOOD_NAME_LIMIT])
+            markdown += u"## {}\n".format(all_discounts[id]['name'][:GOOD_NAME_LIMIT])
             part2 = ''
             for info in infos:
                 if discount_type == 'gift':
                     gifts = u'\n╞'.join(x['name'][:GOOD_NAME_LIMIT] for x in info['gifts']
                                         if x['name'] != all_discounts[id]['name'])
+                    markdown_gifts = [x['name'][:GOOD_NAME_LIMIT] for x in info['gifts']
+                                      if x['name'] != all_discounts[id]['name']]
                 else:
                     gifts = u'\n╞'.join(x['name'] for x in info['gifts'])
+                    markdown_gifts = [x['name'] for x in info['gifts']]
                 tmp_part2 = u'-->{id}-{name}\n   {url}\n   {gifts}'.format(
                     id=info['good']['id'], name=info['good']['name'][:GOOD_NAME_LIMIT],
                     url=info['url'], gifts=(u'╞' + gifts) if gifts else '')
                 part2 += tmp_part2.strip() + '\n'
+                markdown += u"### [{good_name}]({good_url})\n".format(
+                    good_name=info['good']['name'][:GOOD_NAME_LIMIT],
+                    good_url=info['url'])
+                for gift_name in markdown_gifts:
+                    markdown += u'- {gift_name}\n'.format(gift_name=gift_name)
+                markdown += u'![{good_name}](https://img11.360buyimg.com/mobilecms/s200x200_{jpg_uri} "{good_name}")\n'.format(
+                    good_name=info['good']['name'][:GOOD_NAME_LIMIT],
+                    jpg_uri=info['good']['pic'])
             part3 = u"╚{0}═{1}═{0}╝\n".format(
                 u'═'*10, u'═'*len(all_discounts[id]['name'][:GOOD_NAME_LIMIT]))
             main_string = debug1 + part1 + part2 + part3
@@ -195,6 +220,31 @@ class JDParallel(object):
             else:
                 output_string = main_string + output_string
         print output_string
+        return markdown
+
+    def make_html(self, markdown_str):
+        exts = ['markdown.extensions.extra', 'markdown.extensions.codehilite',
+                'markdown.extensions.tables', 'markdown.extensions.toc']
+
+        html = '''
+        <html lang="zh-cn">
+        <head>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+        <link href="http://www.smallsite.cn/default.css" rel="stylesheet">
+        </head>
+        <body>
+        %s
+        </body>
+        </html>
+        '''
+
+        ret = markdown.markdown(markdown_str, extensions=exts)
+        html_name = datetime.datetime.now().strftime('%Y-%m-%d_%H:%M:%S') + '.html'
+        local_path = os.path.join(CURRENT_DIR, html_name)
+        with open(local_path, 'wb+') as f:
+            f.write(html % ret)
+        url = niu_7_bucket.upload_attachment(os.path.join('jd', html_name), local_path)
+        return url
 
     def process(self):
         coupon_batch = self._get_coupon_batch()
@@ -204,11 +254,11 @@ class JDParallel(object):
             web_all_goods = self._get_web_goods(coupon_batch)
             all_goods = self._get_format_goods(web_all_goods)
         discounts_map, all_discounts = self._get_all_discounts(all_goods)
-        self._format_print(discounts_map, all_discounts)
+        markdown = self._format_print(discounts_map, all_discounts)
+        print self.make_html(markdown)
 
 
 if __name__ == '__main__':
     # url = sys.argv[1]
-    url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=205740682&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=138.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E4%B8%AA%E4%BA%BA%E6%8A%A4%E7%90%86%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
-
+    url = 'https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.2&showShop=1&coupon_batch=228500478&coupon_kind=1&coupon_shopid=0&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=618.0000&coupon_s=%E4%BB%85%E5%8F%AF%E8%B4%AD%E4%B9%B0%E9%98%BF%E7%8E%9B%E5%B0%BC%E6%99%BA%E8%83%BD%E6%89%8B%E8%A1%A8%E8%87%AA%E8%90%A5%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined'
     JDParallel(url).process()

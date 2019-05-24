@@ -1,0 +1,12 @@
+GET https://go.heytea.com/api/user/closest/shop?id=175&location=116.45906066894531%2C39.949180603027344 HTTP/1.1
+Host: go.heytea.com
+Content-Type: application/json
+Client: 1
+Accept: application/prs.heytea.v1+json
+Accept-Encoding: br, gzip, deflate
+Connection: keep-alive
+Region: 1
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.3(0x17000321) NetType/4G Language/zh_CN
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vZ28uaGV5dGVhLmNvbS9hcGkvYXV0aG9yaXphdGlvbnMiLCJpYXQiOjE1NTgwNzc0MjEsImV4cCI6MTU1ODA4MTAyMSwibmJmIjoxNTU4MDc3NDIxLCJqdGkiOiJjcGZZWE1iMk5Hb0szQVdzIiwic3ViIjo1MjYzODg5LCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3Iiwic291cmNlIjoiYXBpIn0.L71JfJKDNEsB5JpC8HrYMiqroTMyKzSHRcTBmw2SUdw
+Referer: https://servicewechat.com/wx696a42df4f2456d3/169/page-frame.html
+Accept-Language: zh-cn
