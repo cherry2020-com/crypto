@@ -91,6 +91,9 @@ def get_web_hot_data(request_raw, exist_titles=None):
         hour_hots_keys = {0: '[6H]', 1: '[24H]', 2: '[48H]'}
         hour_hots_count = {}
         real_hour_hots_count = {}
+        if len(soup_find) < 3:
+            print "Hot_Web_Find-ERROR-[len(soup_find) < 3]"
+            return {}, exist_titles
         for index, hour_hots in enumerate(soup_find):
             index_key = hour_hots_keys.get(index, '[xH]')
             hour_hots_count[index_key] = 0
