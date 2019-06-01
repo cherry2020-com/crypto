@@ -41,7 +41,7 @@ class FiddlerError(Exception):
 
 class RawToPython(object):
     def __init__(self, file_name=None, file_raw=None, is_https=None, is_session=False,
-                 try_real_simulation=False):
+                 try_real_simulation=False, retry_count=3):
         if not (file_name or file_raw):
             raise FiddlerError("must had file_name or file_data")
         self.method = None
@@ -53,6 +53,7 @@ class RawToPython(object):
         self.req_json = None
         self.req_param = None
         self.url_parse = None
+        self.retry_count = retry_count
         self.try_real_simulation = try_real_simulation
         self.__file = file_name
         self.__raw = file_raw
@@ -199,35 +200,47 @@ class RawToPython(object):
             url_list[2] = "127.0.0.1"
             req_param["url"] = "/".join(url_list)
         if self.method == "GET":
-            try:
-                web_data = requests.get(verify=False, **req_param)
-                return web_data
-            except requests.Timeout as e:
-                error_msg = "{time}: fd: requests get error: {url}: {e}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e)
-                logging.exception(error_msg)
-                raise FiddlerRequestTimeOutException(error_msg)
-            except Exception as e:
-                error_msg = "{time}: fd: requests get error: {url}: {e}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e)
-                logging.exception(error_msg)
-                raise FiddlerRequestException(error_msg)
+            tmp_retry_count = 0
+            while True:
+                try:
+                    web_data = requests.get(verify=False, **req_param)
+                    return web_data
+                except requests.Timeout as e:
+                    error_msg = "{time}: fd: requests get error: {url}: {e}".format(
+                        time=datetime.datetime.now(), url=req_param["url"], e=e)
+                    logging.exception(error_msg)
+                    tmp_retry_count += 1
+                    if tmp_retry_count >= self.retry_count:
+                        raise FiddlerRequestTimeOutException(error_msg)
+                except Exception as e:
+                    error_msg = "{time}: fd: requests get error: {url}: {e}".format(
+                        time=datetime.datetime.now(), url=req_param["url"], e=e)
+                    logging.exception(error_msg)
+                    tmp_retry_count += 1
+                    if tmp_retry_count >= self.retry_count:
+                        raise FiddlerRequestException(error_msg)
         elif self.method == "POST":
-            try:
-                web_data = requests.post(verify=False, **req_param)
-                return web_data
-            except requests.Timeout as e:
-                error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e,
-                    detail=traceback.format_exc())
-                logging.exception(error_msg)
-                raise FiddlerRequestTimeOutException(error_msg)
-            except Exception as e:
-                error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
-                    time=datetime.datetime.now(), url=req_param["url"], e=e,
-                    detail=traceback.format_exc())
-                logging.exception(error_msg)
-                raise FiddlerRequestException(error_msg)
+            while True:
+                tmp_retry_count = 0
+                try:
+                    web_data = requests.post(verify=False, **req_param)
+                    return web_data
+                except requests.Timeout as e:
+                    error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
+                        time=datetime.datetime.now(), url=req_param["url"], e=e,
+                        detail=traceback.format_exc())
+                    logging.exception(error_msg)
+                    tmp_retry_count += 1
+                    if tmp_retry_count >= self.retry_count:
+                        raise FiddlerRequestTimeOutException(error_msg)
+                except Exception as e:
+                    error_msg = "{time}: fd: requests post error: {url}: {e}\n\n{detail}".format(
+                        time=datetime.datetime.now(), url=req_param["url"], e=e,
+                        detail=traceback.format_exc())
+                    logging.exception(error_msg)
+                    tmp_retry_count += 1
+                    if tmp_retry_count >= self.retry_count:
+                        raise FiddlerRequestException(error_msg)
         else:
             raise FiddlerRequestException('{time}:No Find Method'.format(
                     time=datetime.datetime.now()))

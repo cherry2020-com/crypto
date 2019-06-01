@@ -56,7 +56,7 @@ class JDParallel(object):
 
     def _get_web_goods(self, coupon_batch):
         web_all_goods = []
-        fd = fiddler.RawToPython('./heads/goods_list.txt')
+        fd = fiddler.RawToPython(os.path.join(CURRENT_DIR, 'heads', 'goods_list.txt'))
         fd.set_param(url_param={"coupon_batch": coupon_batch})
         page = 1
         while True:
@@ -157,7 +157,7 @@ class JDParallel(object):
                 raise Exception('Get Error Discount.')
 
         url_temp = '/product/{good_id}.html'
-        fd_obj = fiddler.RawToPython('./heads/good_detail.txt')
+        fd_obj = fiddler.RawToPython(os.path.join(CURRENT_DIR, 'heads', 'good_detail.txt'))
         discounts_map = collections.defaultdict(list)
         all_discounts = {}
         goods_total_count = len(all_goods)
