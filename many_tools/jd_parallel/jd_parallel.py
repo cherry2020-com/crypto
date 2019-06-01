@@ -9,18 +9,16 @@ import datetime
 import markdown
 import os
 import sys
-
-from utils.niu_7 import niu_7_bucket
-
-sys.path.extend(['/data/my_tools_env/my_tools/'])
-
 import json
 import urlparse
 
 import re
 import collections
 
+sys.path.extend(['/data/my_tools_env/my_tools/'])
+
 from utils import fiddler
+from utils.niu_7 import niu_7_bucket
 
 reload(sys)
 sys.setdefaultencoding('utf8')
