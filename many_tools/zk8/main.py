@@ -346,7 +346,7 @@ if __name__ == '__main__':
             custom_send_push_my_hot(title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
-        time.sleep(random.randint(3, 5))
+        time.sleep(random.randint(60, 120))
 
         count += 1
         if count == WAIT_HOT_COUNT:
