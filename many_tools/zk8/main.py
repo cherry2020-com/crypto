@@ -42,7 +42,7 @@ _NEW_MY_HOT_COUNT = 0
 def test_print(*args, **kwargs):
     print args, kwargs
 
-tools.send_push = test_print
+# tools.send_push = test_print
 
 
 # 'http://www.zuanke8.com/forum.php?mod=viewthread&tid=5916448&extra=page%3D1&page=1&mobile=no'
