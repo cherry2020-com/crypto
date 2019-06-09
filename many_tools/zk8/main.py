@@ -27,7 +27,7 @@ CUR_DIR = os.path.dirname(os.path.abspath(__file__))
 
 IS_KEYWORD_FILTER = True
 NEW_NEW_SAVE_COUNT = 10
-NEW_HOT_SAVE_COUNT = 1
+NEW_HOT_SAVE_COUNT = 3
 NEW_MY_HOT_SAVE_COUNT = 5
 NEW_MY_HOT_SEND_COMMENT_COUNT = 5
 WAIT_HOT_COUNT = 6
@@ -352,7 +352,7 @@ if __name__ == '__main__':
             custom_send_push_my_hot(title, change_url(uri))
             print "Send_My_Hot|",
         print "Refresh|%s|" % datetime.datetime.now()
-        time.sleep(random.randint(60, 120))
+        time.sleep(random.randint(5, 8))
 
         count += 1
         if count == WAIT_HOT_COUNT:
