@@ -11,7 +11,7 @@ import traceback
 import datetime
 from bs4 import BeautifulSoup
 """
-13511001100 - 2580456W
+w13511001100 - 2580456W
 zk_15578877887 - vXMJsWd2v9gq63Sk - 母亲的名字：XoMZFHu89U5sLMwa
 zk_15578807880 - o8AV8S88w9nFup8j - 母亲的名字：0Z19wAedW5DlV4oY
 zk_15578807881 - o8AV8S88w9nFup8j - 母亲的名字：0Z19wAedW5DlV4oY
@@ -42,7 +42,7 @@ _NEW_MY_HOT_COUNT = 0
 def test_print(*args, **kwargs):
     print args, kwargs
 
-# tools.send_push = test_print
+tools.send_push = test_print
 
 
 # 'http://www.zuanke8.com/forum.php?mod=viewthread&tid=5916448&extra=page%3D1&page=1&mobile=no'
