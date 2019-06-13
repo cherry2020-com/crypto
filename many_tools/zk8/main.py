@@ -298,13 +298,15 @@ def custom_send_push_my_hot(title, url):
 
 if __name__ == '__main__':
     # init()
-    enable_new = False
+    enable_new = True
     if len(sys.argv) >= 2:
-        enable_new = True
+        if sys.argv[1] == 'hot':
+            enable_new = False
     print '--> ENABLE_NEW = {}'.format(enable_new)
     time_sleep = 5
     if len(sys.argv) >= 3:
         time_sleep = int(sys.argv[2])
+    print '--> TIME_SLEEP = {}'.format(time_sleep)
     break_names = None
     my_hot_break_names = None
     hot_break_names = None
