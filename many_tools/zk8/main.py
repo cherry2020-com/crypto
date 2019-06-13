@@ -298,9 +298,6 @@ def custom_send_push_my_hot(title, url):
 
 if __name__ == '__main__':
     # init()
-    enable_new = False
-    if len(sys.argv) >= 2:
-        enable_new = True
     break_names = None
     my_hot_break_names = None
     hot_break_names = None
@@ -323,40 +320,38 @@ if __name__ == '__main__':
     email_title = '[ZK8] Many Titles Need To Send By E-mail'
     email_msg_tmp = u"【{}】 - {}\r\n\r\n"
     while True:
-        if enable_new:
-            result, break_names, web_data = get_web_data(new_list_request_raw,
-                                                         break_names)
-            if IS_KEYWORD_FILTER:
-                for title, uri in result.iteritems():
-                    if_title = change_title(title)
-                    for i_k in important_key_messages:
-                        if i_k in if_title:
-                            custom_send_push('[.]' + title, change_url(uri))
-                            print "Send_Important_New|",
-                            time.sleep(0.5)
-                            break
-                    else:
-                        for k in key_messages:
-                            if k in if_title:
-                                for ek in exclude_key_messages:
-                                    if ek in if_title:
-                                        break
-                                else:
-                                    custom_send_push(title, change_url(uri))
-                                    print "Send_New|",
-                                    time.sleep(0.5)
-                                break
-            else:
-                for title, uri in result.iteritems():
-                    custom_send_push(title, change_url(uri))
-                    print "Send_Everything|",
-                    time.sleep(0.5)
-            result, my_hot_break_names = get_web_data_for_my_hot(
-                new_list_request_raw, my_hot_break_names, web_data)
+        result, break_names, web_data = get_web_data(new_list_request_raw, break_names)
+        if IS_KEYWORD_FILTER:
             for title, uri in result.iteritems():
-                custom_send_push_my_hot(title, change_url(uri))
-                print "Send_My_Hot|",
-            print "Refresh|%s|" % datetime.datetime.now()
+                if_title = change_title(title)
+                for i_k in important_key_messages:
+                    if i_k in if_title:
+                        custom_send_push('[.]' + title, change_url(uri))
+                        print "Send_Important_New|",
+                        time.sleep(0.5)
+                        break
+                else:
+                    for k in key_messages:
+                        if k in if_title:
+                            for ek in exclude_key_messages:
+                                if ek in if_title:
+                                    break
+                            else:
+                                custom_send_push(title, change_url(uri))
+                                print "Send_New|",
+                                time.sleep(0.5)
+                            break
+        else:
+            for title, uri in result.iteritems():
+                custom_send_push(title, change_url(uri))
+                print "Send_Everything|",
+                time.sleep(0.5)
+        result, my_hot_break_names = get_web_data_for_my_hot(
+            new_list_request_raw, my_hot_break_names, web_data)
+        for title, uri in result.iteritems():
+            custom_send_push_my_hot(title, change_url(uri))
+            print "Send_My_Hot|",
+        print "Refresh|%s|" % datetime.datetime.now()
 
         time.sleep(random.randint(5, 8))
 
