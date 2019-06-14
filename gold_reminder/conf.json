@@ -1,7 +1,7 @@
 {
   "set_high_low_float_func": 0.2,
-  "set_upper_func": 300.0,
-  "set_down_func": 200.0,
+  "set_upper_func": 500.0,
+  "set_down_func": 100.0,
   "set_float_func": 0.5,
   "silver_set_high_low_float_func": 0.01,
   "silver_set_upper_func": 10.0,
