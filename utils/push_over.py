@@ -27,7 +27,13 @@ class Pushover(object):
         init(api_token, sound)
         self.client = Client(user_key)
 
-    def _set_token_key(self):
+    def _reset_token_key(self):
+        if self.token_key[-1].isdigit():
+            _fix = int(self.token_key[-1]) + 1
+            self.token_key = self.token_key[:-1] + str(_fix)
+        else:
+            _fix = 2
+            self.token_key = self.token_key + str(_fix)
         if self.token_key not in ALL_TOKENS_MAP:
             self.token_key = 'over_7500'
 
@@ -46,13 +52,7 @@ class Pushover(object):
         """
         result = self.client.send_message(message, **kwargs)
         if result is None:
-            if self.token_key[-1].isdigit():
-                _fix = int(self.token_key[-1]) + 1
-                self.token_key = self.token_key[:-1] + str(_fix)
-            else:
-                _fix = 2
-                self.token_key = self.token_key + str(_fix)
-            self._set_token_key()
+            self._reset_token_key()
             init(self.token_key, self.sound)
 
 
