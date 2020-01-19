@@ -1,4 +1,6 @@
-requests==2.22.0
-beautifulsoup4==4.7.1
-html5lib==1.0.1
-qiniu==7.2.4
+requests
+beautifulsoup4
+html5lib
+qiniu
+python-pushover
+lxml
