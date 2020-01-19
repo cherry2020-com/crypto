@@ -328,7 +328,7 @@ if __name__ == '__main__':
                     if_title = change_title(title)
                     for i_k in important_key_messages:
                         if i_k in if_title:
-                            custom_send_push('[.]' + title, change_url(uri))
+                            custom_send_push('[x]' + title, change_url(uri))
                             print "Send_Important_New|",
                             time.sleep(0.5)
                             break
