@@ -7,8 +7,13 @@ from pushover import Client, init
 
 ALL_TOKENS_MAP = {
     "zk8_new": 'ad7tmvzzxum4hmuauomjtqrg93mryx',
+    "zk8_new2": 'a5ddc4pwuk5w9fsxbqfzft2ibmk6ed',
+    "zk8_new3": 'aqyp1m72x1uen9z69uebzcpotng9rj',
     "zk8_hot": 'afkqikbmthu98ne67rpj394o3a1xr1',
+    "zk8_hot2": 'awtyw265rkcp7prdr5dkz8c61mjsfg',
     "zk8_mhot": 'awzxns7rq6hqrijvbea8sbpk37uzr3',
+    "zk8_mhot2": 'a1p2v4duuf4va2unhec8twqbdqdwa2',
+    "zk8_mhot3": 'ak2nn7b31xpxh1f5hqrbvvgavtran4',
     "over_7500": 'aabr7ni8r9h9q2dtwj97sy9fty7a1h',
 }
 
@@ -16,9 +21,15 @@ ALL_TOKENS_MAP = {
 class Pushover(object):
     def __init__(self, token_key, sound=False):
         user_key = "ugnmvh5cte5hbsecwb1q9fktqt7uw6"
+        self.sound = sound
+        self.token_key = token_key
         api_token = ALL_TOKENS_MAP[token_key]
         init(api_token, sound)
         self.client = Client(user_key)
+
+    def _set_token_key(self):
+        if self.token_key not in ALL_TOKENS_MAP:
+            self.token_key = 'over_7500'
 
     def send(self, message, **kwargs):
         """
@@ -33,7 +44,16 @@ class Pushover(object):
         sound- 设备客户端支持的一种声音名称，以覆盖用户的默认声音选择
         timestamp -您要显示给用户的消息日期和时间的Unix时间戳，而不是我们的API收到消息的时间
         """
-        return self.client.send_message(message, **kwargs)
+        result = self.client.send_message(message, **kwargs)
+        if result is None:
+            if self.token_key[-1].isdigit():
+                _fix = int(self.token_key[-1]) + 1
+                self.token_key = self.token_key[:-1] + str(_fix)
+            else:
+                _fix = 2
+                self.token_key = self.token_key + str(_fix)
+            self._set_token_key()
+            init(self.token_key, self.sound)
 
 
 if __name__ == '__main__':
