@@ -29,6 +29,8 @@ class Pushover(object):
         self.client = Client(user_key)
 
     def _reset_token_key(self):
+        if self.token_key == 'over_7500':
+            raise Exception('Error for over_7500, Please add new app for pushover!')
         if self.token_key[-1].isdigit():
             _fix = int(self.token_key[-1]) + 1
             self.token_key = self.token_key[:-1] + str(_fix)
