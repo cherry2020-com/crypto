@@ -53,10 +53,15 @@ class Pushover(object):
         sound- 设备客户端支持的一种声音名称，以覆盖用户的默认声音选择
         timestamp -您要显示给用户的消息日期和时间的Unix时间戳，而不是我们的API收到消息的时间
         """
-        result = self.client.send_message(message, **kwargs)
-        if result is None:
-            self._reset_token_key()
-            init(self.token_key, self.sound)
+        result = None
+        try:
+            result = self.client.send_message(message, **kwargs)
+            if result.answer['status'] != 1:
+                self._reset_token_key()
+                init(self.token_key, self.sound)
+        except Exception as e:
+            print str(e)
+        return result
 
 
 if __name__ == '__main__':
