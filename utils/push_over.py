@@ -11,6 +11,7 @@ ALL_TOKENS_MAP = {
     "zk8_new3": 'aqyp1m72x1uen9z69uebzcpotng9rj',
     "zk8_hot": 'afkqikbmthu98ne67rpj394o3a1xr1',
     "zk8_hot2": 'awtyw265rkcp7prdr5dkz8c61mjsfg',
+    "zk8_hot3": 'auuxhbsw5fz8wgrt2izexwwvp7cncb',
     "zk8_mhot": 'awzxns7rq6hqrijvbea8sbpk37uzr3',
     "zk8_mhot2": 'a1p2v4duuf4va2unhec8twqbdqdwa2',
     "zk8_mhot3": 'ak2nn7b31xpxh1f5hqrbvvgavtran4',
