@@ -41,6 +41,8 @@ _NEW_HOT_COUNT = 0
 _NEW_NEW_COUNT = 0
 _NEW_MY_HOT_COUNT = 0
 
+_GLOBAL_PUSHOVERS = {}
+
 
 def test_print(*args, **kwargs):
     print args, kwargs
@@ -276,15 +278,24 @@ def init():
 
 
 def custom_send_push(title, url):
-    Pushover('zk8_new').send(title, url=url, url_title=u'>> 详情链接 <<')
+    _key = 'zk8_new'
+    if _key not in _GLOBAL_PUSHOVERS:
+        _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
 def custom_send_push_hot(title, url):
-    Pushover('zk8_hot').send(title, url=url, url_title=u'>> 详情链接 <<')
+    _key = 'zk8_hot'
+    if _key not in _GLOBAL_PUSHOVERS:
+        _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
 def custom_send_push_my_hot(title, url):
-    Pushover('zk8_mhot').send(title, url=url, url_title=u'>> 详情链接 <<')
+    _key = 'zk8_mhot'
+    if _key not in _GLOBAL_PUSHOVERS:
+        _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
 if __name__ == '__main__':
