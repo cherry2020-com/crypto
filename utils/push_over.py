@@ -56,13 +56,17 @@ class Pushover(object):
         result = None
         try:
             result = self.client.send_message(message, **kwargs)
-            if result.answer['status'] != 1:
-                self._reset_token_key()
-                init(self.token_key, self.sound)
+            # if result.answer['status'] != 1:
+            #     self._reset_token_key()
+            #     init(self.token_key, self.sound)
         except Exception as e:
-            print str(e)
+            if "application has exceeded current limit of 7500 messages" in str(e):
+                self._reset_token_key()
+                api_token = ALL_TOKENS_MAP[self.token_key]
+                init(api_token, self.sound)
+            self.send(message, **kwargs)
         return result
 
 
 if __name__ == '__main__':
-    Pushover('over_7500').send('hello word', url='https://pushover.net/api')
+    Pushover('zk8_mhot').send('hello word', url='https://pushover.net/api')
