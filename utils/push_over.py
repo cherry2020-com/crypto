@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+import datetime
 from pushover import Client, init
 
 # doc: https://pushover.net/api
@@ -27,8 +28,17 @@ class Pushover(object):
         api_token = ALL_TOKENS_MAP[token_key]
         init(api_token, sound)
         self.client = Client(user_key)
+        self.date = datetime.date.today()
 
-    def _reset_token_key(self):
+    def _restart_token(self):
+        today = datetime.date.today()
+        if today > self.date:
+            if self.date.month != today.month and self.token_key[-1].isdigit():
+                self.token_key = self.token_key[:-1]
+                init(ALL_TOKENS_MAP[self.token_key], self.sound)
+            self.date = today
+
+    def _reset_next_token(self):
         if self.token_key == 'over_7500':
             raise Exception('Error for over_7500, Please add new app for pushover!')
         if self.token_key[-1].isdigit():
@@ -39,6 +49,7 @@ class Pushover(object):
             self.token_key = self.token_key + str(_fix)
         if self.token_key not in ALL_TOKENS_MAP:
             self.token_key = 'over_7500'
+        init(ALL_TOKENS_MAP[self.token_key], self.sound)
 
     def send(self, message, **kwargs):
         """
@@ -55,15 +66,14 @@ class Pushover(object):
         """
         result = None
         try:
+            self._restart_token()
             result = self.client.send_message(message, **kwargs)
             # if result.answer['status'] != 1:
             #     self._reset_token_key()
             #     init(self.token_key, self.sound)
         except Exception as e:
             if "application has exceeded current limit of 7500 messages" in str(e):
-                self._reset_token_key()
-                api_token = ALL_TOKENS_MAP[self.token_key]
-                init(api_token, self.sound)
+                self._reset_next_token()
             self.send(message, **kwargs)
         return result
 
