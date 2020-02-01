@@ -73,7 +73,7 @@ class Pushover(object):
             #     self._reset_token_key()
             #     init(self.token_key, self.sound)
         except Exception as e:
-            e = str(e)
+            e = str(e).strip()
             print ''
             print '--> push_over.py: ', self.token_key
             print '--> push_over.py: ', e
