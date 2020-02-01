@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import datetime
+import time
 from pushover import Client, init
 
 # doc: https://pushover.net/api
@@ -78,6 +79,8 @@ class Pushover(object):
             print '--> push_over.py: ', e
             if "application has exceeded current limit of 7500 messages" in e:
                 self._reset_next_token()
+            else:
+                time.sleep(1)
             self.send(message, **kwargs)
         return result
 
