@@ -34,7 +34,8 @@ class Pushover(object):
     def _restart_token(self):
         today = datetime.date.today()
         if today > self.date:
-            if self.date.month != today.month and self.token_key[-1].isdigit():
+            if (self.date.month != today.month and today.day >= 3
+                    and self.token_key[-1].isdigit()):
                 self.token_key = self.token_key[:-1]
                 init(ALL_TOKENS_MAP[self.token_key], self.sound)
             self.date = today

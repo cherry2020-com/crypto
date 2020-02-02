@@ -340,8 +340,8 @@ if __name__ == '__main__':
                     for i_k in important_key_messages:
                         if i_k in if_title:
                             custom_send_push('[x]' + title, change_url(uri))
-                            print "Send_Important_New|",
-                            time.sleep(0.5)
+                            print ">>Send_Important_New|",
+                            time.sleep(1)
                             break
                     else:
                         for k in key_messages:
@@ -351,19 +351,19 @@ if __name__ == '__main__':
                                         break
                                 else:
                                     custom_send_push(title, change_url(uri))
-                                    print "Send_New|",
-                                    time.sleep(0.5)
+                                    print ">>Send_New|",
+                                    time.sleep(1)
                                 break
             else:
                 for title, uri in result.iteritems():
                     custom_send_push(title, change_url(uri))
-                    print "Send_Everything|",
-                    time.sleep(0.5)
+                    print ">>Send_Everything|",
+                    time.sleep(1)
             result, my_hot_break_names = get_web_data_for_my_hot(
                 new_list_request_raw, my_hot_break_names, web_data)
             for title, uri in result.iteritems():
                 custom_send_push_my_hot(title, change_url(uri))
-                print "Send_My_Hot|",
+                print ">>Send_My_Hot|",
             print "Refresh|%s|" % datetime.datetime.now()
 
         time.sleep(random.randint(time_sleep, time_sleep+3))
@@ -378,11 +378,11 @@ if __name__ == '__main__':
                 for title, uri in result.iteritems():
                     email_msg += email_msg_tmp.format(title, change_url(uri))
                 tools.send_email(email_title, email_msg)
-                print "Send_All_Hot-%s|" % len(result),
+                print ">>Send_All_Hot-%s|" % len(result),
                 continue
             for title, uri in result.iteritems():
                 custom_send_push_hot(title, change_url(uri))
-                print "Send_Hot|",
-                time.sleep(0.5)
+                print ">>Send_Hot|",
+                time.sleep(1)
             print "Refresh_Hot|%s|" % datetime.datetime.now()
         sys.stdout.flush()
