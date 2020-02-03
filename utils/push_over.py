@@ -19,6 +19,7 @@ ALL_TOKENS_MAP = {
     "zk8_mhot3": 'ak2nn7b31xpxh1f5hqrbvvgavtran4',
     "over_7500": 'aabr7ni8r9h9q2dtwj97sy9fty7a1h',
 }
+_ENTER_COUNT = 0
 
 
 class Pushover(object):
@@ -32,6 +33,7 @@ class Pushover(object):
         self.date = datetime.date.today()
 
     def _restart_token(self):
+        init(ALL_TOKENS_MAP[self.token_key], self.sound)
         today = datetime.date.today()
         if today > self.date:
             if (self.date.month != today.month and today.day >= 3
@@ -66,6 +68,7 @@ class Pushover(object):
         sound- 设备客户端支持的一种声音名称，以覆盖用户的默认声音选择
         timestamp -您要显示给用户的消息日期和时间的Unix时间戳，而不是我们的API收到消息的时间
         """
+        global _ENTER_COUNT
         result = None
         try:
             self._restart_token()
@@ -82,7 +85,12 @@ class Pushover(object):
                 self._reset_next_token()
             else:
                 time.sleep(1)
-            self.send(message, **kwargs)
+            if _ENTER_COUNT >= 100:
+                print '--> push_over.py: _ENTER_COUNT>=100'
+            else:
+                _ENTER_COUNT += 1
+                self.send(message, **kwargs)
+        _ENTER_COUNT = 0
         return result
 
 
