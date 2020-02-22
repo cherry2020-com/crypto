@@ -7,15 +7,20 @@ import sys
 class BuyBuyBuy(object):
     def __init__(self, input_str, input_count_str=None):
         self.input_str = input_str
-        self.input_count_str = input_count_str
-        self.input_count = self.get_input_count(input_count_str)
+        input_count_str = input_count_str or ''
+        self.input_count_str = input_count_str.strip()
+        self.input_count, self.use_input_unit = self.get_input_count(input_count_str)
         self.my_name = u'李翀'
 
     def get_input_count(self, input_count_str):
         input_count = self.get_row_order_number(input_count_str)
         if not input_count:
             input_count = None
-        return input_count
+        use_input_unit = None
+        if not self.input_count_str.isdigit():
+            use_input_unit = self.input_count_str
+            input_count = None
+        return input_count, use_input_unit
 
     def get_clean_rows(self):
         input_str = self.input_str.strip()
@@ -86,6 +91,8 @@ class BuyBuyBuy(object):
         if self.input_count:
             result += u' {input_count}{unit}'.format(input_count=self.input_count,
                                                      unit=unit)
+        if self.use_input_unit:
+            result += u' {}'.format(self.use_input_unit)
         return result
 
     def to_unicode(self, src):
@@ -212,6 +219,7 @@ if __name__ == '__main__':
     _input_count = sys.argv[1]
     try:
         _input_string = _input_string.decode('utf-8')
+        _input_count = _input_count.decode('utf-8')
         print BuyBuyBuy(_input_string, _input_count).start()
     except Exception as e:
         print str(e)
