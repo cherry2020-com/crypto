@@ -10,7 +10,7 @@ from pushover import Client, init
 ALL_TOKENS_MAP = {
     "zk8_new": 'ad7tmvzzxum4hmuauomjtqrg93mryx',
     "zk8_new2": 'a5ddc4pwuk5w9fsxbqfzft2ibmk6ed',
-    "zk8_new3": 'aqyp1m72x1uen9z69uebzcpotng9rj',
+    "zk8_mhot4": 'aqyp1m72x1uen9z69uebzcpotng9rj',
     "zk8_hot": 'afkqikbmthu98ne67rpj394o3a1xr1',
     "zk8_hot2": 'awtyw265rkcp7prdr5dkz8c61mjsfg',
     "zk8_hot3": 'auuxhbsw5fz8wgrt2izexwwvp7cncb',
@@ -19,7 +19,6 @@ ALL_TOKENS_MAP = {
     "zk8_mhot3": 'ak2nn7b31xpxh1f5hqrbvvgavtran4',
     "over_7500": 'aabr7ni8r9h9q2dtwj97sy9fty7a1h',
 }
-_ENTER_COUNT = 0
 
 
 class Pushover(object):
@@ -68,14 +67,10 @@ class Pushover(object):
         sound- 设备客户端支持的一种声音名称，以覆盖用户的默认声音选择
         timestamp -您要显示给用户的消息日期和时间的Unix时间戳，而不是我们的API收到消息的时间
         """
-        global _ENTER_COUNT
         result = None
+        self._restart_token()
         try:
-            self._restart_token()
             result = self.client.send_message(message, **kwargs)
-            # if result.answer['status'] != 1:
-            #     self._reset_token_key()
-            #     init(self.token_key, self.sound)
         except Exception as e:
             e = str(e).strip()
             print ''
@@ -85,12 +80,7 @@ class Pushover(object):
                 self._reset_next_token()
             else:
                 time.sleep(1)
-            if _ENTER_COUNT >= 100:
-                print '--> push_over.py: _ENTER_COUNT>=100'
-            else:
-                _ENTER_COUNT += 1
-                self.send(message, **kwargs)
-        _ENTER_COUNT = 0
+            self.client.send_message(message, **kwargs)
         return result
 
 
