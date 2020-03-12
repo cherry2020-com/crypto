@@ -76,11 +76,14 @@ class Pushover(object):
             print ''
             print '--> push_over.py: ', self.token_key
             print '--> push_over.py: ', e
-            if "application has exceeded current limit of 7500 messages" in e:
+            if "7500" in e:
                 self._reset_next_token()
             else:
                 time.sleep(1)
-            self.client.send_message(message, **kwargs)
+            try:
+                self.client.send_message(message, **kwargs)
+            except Exception as e:
+                print '--> Finish: push_over.py: ', e
         return result
 
 
