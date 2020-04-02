@@ -63,6 +63,7 @@ class Pushover(object):
         except FunctionTimedOut as e:
             print '--> Send Timeout: {}s: {}'.format(self.send_timeout, str(e))
         else:
+            print 'Send_Success |',
             return result
 
     def _send(self, message, **kwargs):

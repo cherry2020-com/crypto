@@ -4,3 +4,4 @@ html5lib
 qiniu
 python-pushover
 lxml
+func-timeout
