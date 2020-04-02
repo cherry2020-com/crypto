@@ -2,6 +2,8 @@
 # -*- coding: UTF-8 -*-
 import datetime
 import time
+from func_timeout import func_timeout, FunctionTimedOut, func_set_timeout
+
 from pushover import Client, init
 
 # doc: https://pushover.net/api
@@ -22,7 +24,7 @@ ALL_TOKENS_MAP = {
 
 
 class Pushover(object):
-    def __init__(self, token_key, sound=False):
+    def __init__(self, token_key, sound=False, send_timeout=5):
         user_key = "ugnmvh5cte5hbsecwb1q9fktqt7uw6"
         self.sound = sound
         self.token_key = token_key
@@ -30,6 +32,7 @@ class Pushover(object):
         init(api_token, sound)
         self.client = Client(user_key)
         self.date = datetime.date.today()
+        self.send_timeout = send_timeout
 
     def _restart_token(self):
         init(ALL_TOKENS_MAP[self.token_key], self.sound)
@@ -55,6 +58,14 @@ class Pushover(object):
         init(ALL_TOKENS_MAP[self.token_key], self.sound)
 
     def send(self, message, **kwargs):
+        try:
+            result = func_set_timeout(self.send_timeout)(self._send)(message, **kwargs)
+        except FunctionTimedOut as e:
+            print '--> Send Timeout: {}s: {}'.format(self.send_timeout, str(e))
+        else:
+            return result
+
+    def _send(self, message, **kwargs):
         """
         message （必填）-您的留言
         可能包括一些可选参数：
