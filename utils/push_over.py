@@ -12,7 +12,7 @@ from pushover import Client, init
 ALL_TOKENS_MAP = {
     "zk8_new": 'ad7tmvzzxum4hmuauomjtqrg93mryx',
     "zk8_new2": 'a5ddc4pwuk5w9fsxbqfzft2ibmk6ed',
-    "zk8_mhot4": 'aqyp1m72x1uen9z69uebzcpotng9rj',
+    "zk8_hot4": 'aqyp1m72x1uen9z69uebzcpotng9rj',
     "zk8_hot": 'afkqikbmthu98ne67rpj394o3a1xr1',
     "zk8_hot2": 'awtyw265rkcp7prdr5dkz8c61mjsfg',
     "zk8_hot3": 'auuxhbsw5fz8wgrt2izexwwvp7cncb',

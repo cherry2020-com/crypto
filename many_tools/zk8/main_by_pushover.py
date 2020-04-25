@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# - * - encoding: UTF-8 - * -
+# -*- coding: UTF-8 -*-
 import random
 import re
 import sys
