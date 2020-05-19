@@ -16,6 +16,7 @@ import datetime
 
 import requests
 import urllib3
+from func_timeout import func_set_timeout
 from requests.cookies import cookiejar_from_dict
 from requests.structures import CaseInsensitiveDict
 
@@ -182,6 +183,7 @@ class RawToPython(object):
             else:
                 req_param["url"] = self.__url_host + '/' + reset_url
 
+    @func_set_timeout(10)
     def requests(self, reset_url=None, is_test=False, auto_parm=True, **kwargs):
         """
         url=None, data=None, json=None, headers=None, timeout=None
@@ -191,7 +193,7 @@ class RawToPython(object):
         req_param = self.req_param
         req_param.update(kwargs)
         if 'timeout' not in req_param:
-            req_param['timeout'] = 30
+            req_param['timeout'] = 10
         self.__requests_reset_url(req_param, reset_url)
         self.__reset_req_param(req_param)
         if is_test:

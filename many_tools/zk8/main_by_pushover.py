@@ -8,6 +8,8 @@ import pickle
 import traceback
 
 import datetime
+
+import func_timeout
 from bs4 import BeautifulSoup
 
 
@@ -81,8 +83,12 @@ def get_web_hot_data(request_raw, exist_titles=None):
         web_data = request_raw.requests(timeout=10)
     except FiddlerRequestTimeOutException:
         print 'FiddlerRequestTimeOutException: get_web_hot_data'
-        time.sleep(30)
+        time.sleep(10)
         return {}, exist_titles
+    except func_timeout.exceptions.FunctionTimedOut:
+        print 'func_timeout.exceptions.FunctionTimedOut: get_web_hot_data'
+        time.sleep(10)
+        return {}, break_names
     except Exception as e:
         print 'Exception: get_web_hot_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
@@ -151,12 +157,12 @@ def get_web_data(request_raw, break_names=None):
         web_data = request_raw.requests(timeout=10)
     except FiddlerRequestTimeOutException:
         print 'FiddlerRequestTimeOutException: get_web_data'
-        time.sleep(30)
+        time.sleep(10)
         return {}, break_names, None
     except Exception as e:
         print 'Exception: get_web_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
-        time.sleep(30)
+        time.sleep(10)
         return {}, break_names, None
     result = {}
     is_get_new = False
@@ -204,6 +210,10 @@ def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
             web_data = request_raw.requests(timeout=10)
         except FiddlerRequestTimeOutException:
             print 'FiddlerRequestTimeOutException: get_web_data_for_my_hot'
+            time.sleep(30)
+            return {}, break_names
+        except func_timeout.exceptions.FunctionTimedOut:
+            print 'func_timeout.exceptions.FunctionTimedOut: get_web_data_for_my_hot'
             time.sleep(30)
             return {}, break_names
         except Exception as e:
