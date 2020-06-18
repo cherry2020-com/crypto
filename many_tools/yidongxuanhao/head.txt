@@ -1,0 +1,14 @@
+POST /coc/reservoir/phone/select HTTP/1.1
+Accept: application/json, text/plain, */*
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-cn
+Connection: keep-alive
+Content-Length: 114
+Content-Type: application/json
+Cookie: WT_FPC=id=26522192d9db71135ee1591539443218:lv=1591779867924:ss=1591779848563
+Host: dev.coc.10086.cn
+Origin: https://dev.coc.10086.cn
+Referer: https://dev.coc.10086.cn/coc/web/coc2020/information/InformationJH?channelId=C10000033483&sellerId=&sellerMobile=&ex_field=&productId=100000000176&dispatch=y&productList=%255B%257B%2522id%2522%253A%2522100000000176%2522%252C%2522name%2522%253A%2522%25E8%258A%25B1%25E5%258D%25A1%25E5%25AE%259D%25E8%2597%258F%25E7%2589%258819%25E5%2585%2583%25E6%25A1%25A3%2522%257D%252C%257B%2522id%2522%253A%2522100000000180%2522%252C%2522name%2522%253A%2522%25E8%258A%25B1%25E5%258D%25A1%25E5%25AE%259D%25E8%2597%258F%25E7%2589%258839%25E5%2585%2583%25E6%25A1%25A3%2522%257D%255D&homePage=https%253A%252F%252Fdev.coc.10086.cn%252Fcoc%252Fweb%252Fcoc2020%252Fcontractsposter_jq_newSpring%252F%2523%252F%253FpageId%253D1265541250314469376%2526channelId%253DC10000033483&pageId=1265541250314469376
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1
+
+{"provinceCode":"240","cityCode":"411","touchCode":"C10000033483","certificateNo":"","numberKeyword":"","size":10}

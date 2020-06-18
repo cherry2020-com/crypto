@@ -6,7 +6,7 @@ from collections import Counter
 def chongfu(numbers, need_count):
     for x in numbers:
         for hao, shu in Counter(x[1:]).items():
-            if shu >= need_count and hao != '4':
+            if shu >= need_count:
                 print "{}->{}".format(hao, x)
 
 
@@ -25,8 +25,16 @@ def lianxuchongfu(numbers, need_count=3):
                 print x
 
 
+def baohan(numbers, baohan):
+    for x in numbers:
+        if baohan in x:
+            print '{}-->{}'.format(baohan, x)
+
+
 if __name__ == '__main__':
-    with open('./output/xuanhao.txt') as f:
+    with open('./xuanhao.txt') as f:
         fd = f.read()
     haomas = fd.split('\n')
-    chongfu(haomas, 4)
+    # chongfu(haomas, 5)
+    # lianxuchongfu(haomas, 4)
+    baohan(haomas, '0218')

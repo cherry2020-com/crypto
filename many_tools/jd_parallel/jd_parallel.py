@@ -44,7 +44,7 @@ class JDParallel(object):
         url_parse = urlparse.urlparse(self.search_url)
         url_param = dict([(k, v[0]) for k, v in urlparse.parse_qs(
             url_parse.query).items()])
-        return url_param['coupon_batch']
+        return url_param['couponbatch']
 
     def _get_sample_string(self, string):
         string = string.replace(' ', '').replace('\n', '').replace('\r', '')
@@ -262,7 +262,7 @@ if __name__ == '__main__':
         url = sys.argv[1]
     else:
         url = """
-        https://wqsou.jd.com/coprsearch/cosearch?ptag=37070.3.5&showShop=1&coupon_batch=110216519&coupon_kind=3&coupon_shopid=29859&coupon_aggregation=yes&coupon_p=undefined&coupon_v=undefined&coupon_t=199.0000&coupon_s=%E9%99%90%E8%B4%AD%5B%E4%B8%89%E5%8F%AA%E6%9D%BE%E9%BC%A0%E6%97%97%E8%88%B0%E5%BA%97%5D%E5%BA%97%E9%93%BA%E9%83%A8%E5%88%86%E5%95%86%E5%93%81&coupon_d=undefined
+        https://so.m.jd.com/list/couponSearch.action?ptag=&couponbatch=710096258&coupon_shopid=0&jxsid=15919268501598428994
         """.strip()
     url = JDParallel(url).process()
     print u'--> 点击该链接查看：', url
