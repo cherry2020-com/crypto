@@ -2,8 +2,11 @@
 # -*- coding: UTF-8 -*-
 import pprint
 
+import datetime
 from bs4 import BeautifulSoup
 
+
+line_year = 2018
 
 with open('./Employee Time Off_ Home _ Salesforce - Unlimited Edition.html') as f:
     web_data = f.read()
@@ -28,49 +31,47 @@ for _index, _item in enumerate(all_items):
         valid_items.append(_item)
 print u'-->\r\n' + all_templ
 print u'--> 共请假{}次，其中年假{}次'.format(len(all_items), len(valid_items))
-line_year = 2019
-print u'--> 2019年以下按10天计算， {}年（含）以后按15天计算'.format(line_year)
+print u'--> {0}年以下按10天计算， {0}年（含）以后按15天计算'.format(line_year)
 jia_map = {}
-jia_map_up_6 = {}
-jia_map_down_6 = {}
 for _item in all_items:
     start_date = _item['Start Date']
     year = int(start_date.split('/')[-1])
-    year_6 = year
     jia_map.setdefault(year, 0.0)
     jia_map[year] += float(_item['Calculated Days Off'])
-    month = int(start_date.split('/')[1])
-    if 1 <= month <= 6:
-        jia_map_up_6.setdefault(year, 0.0)
-        jia_map_up_6[year] += float(_item['Calculated Days Off'])
-    else:
-        jia_map_down_6.setdefault(year, 0.0)
-        jia_map_down_6[year] += float(_item['Calculated Days Off'])
 print u'--> 统计(整年):', jia_map
-print u'--> 统计(上半年):', jia_map_up_6
-print u'--> 统计(下半年):', jia_map_down_6
 
 
 start_year = min(jia_map.keys())
 end_year = max(jia_map.keys())
-result = {}
-_all_days = 10 if start_year < line_year else 15
-_used_days = jia_map.get(start_year, 0) + jia_map_up_6.get(start_year+1, 0)
-next_days = 0
-if _used_days > _all_days:
-    next_days = _used_days - _all_days
-    _used_days = _all_days
-result[start_year] = {'used': _used_days, 'lave': _all_days-_used_days,
-                      'next': next_days}
-for _year in range(start_year + 1, end_year + 1):
-    _all_days = 10 if _year < line_year else 15
-    _used_days = (jia_map_down_6.get(_year, 0) + jia_map_up_6.get(_year+1, 0)
-                  + next_days)
-    next_days = 0
-    if _used_days > _all_days:
-        next_days = _used_days - _all_days
-        _used_days = _all_days
-    result[_year] = {'used': _used_days, 'lave': _all_days - _used_days,
-                     'next': next_days}
-pp = pprint.PrettyPrinter(indent=4)
-pp.pprint(result)
+all_jia_map = {}
+for _year in range(start_year, end_year + 1):
+    all_jia_map[_year] = float(10 if _year < line_year else 15)
+
+all_items.reverse()
+for _item in all_items:
+    if _item['Type'] != 'Vacation (except for France)':
+        continue
+    start_date = _item['Start Date']
+    month, _, year = [int(x) for x in start_date.split('/')]
+    _used = float(_item['Calculated Days Off'])
+    new_year = year
+    if 1 <= month <= 6:
+        new_year -= 1
+        if new_year not in all_jia_map:
+            new_year = year
+    all_jia_map[new_year] -= _used
+    if all_jia_map[new_year] < 0:
+        next_days = all_jia_map[new_year]
+        all_jia_map[new_year] = 0
+        new_year += 1
+        all_jia_map[new_year] += next_days
+        assert all_jia_map[new_year] >= 0
+
+pp = pprint.PrettyPrinter(indent=1)
+pp.pprint(all_jia_map)
+today = datetime.date.today()
+if today.month <= 6:
+    print u'-->截止{}年6月，你还有{}天的年假'.format(
+        today.year, all_jia_map[today.year-1])
+print u'-->截止{}年6月，你还有{}天的年假'.format(
+        today.year + 1, all_jia_map[today.year])
