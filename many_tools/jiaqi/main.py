@@ -48,11 +48,12 @@ for _item in all_items:
 print u'--> 统计(整年):', jia_map
 print u'--> 统计(上半年):', jia_map_up_6
 print u'--> 统计(下半年):', jia_map_down_6
+line_year = 2019
 
 start_year = min(jia_map.keys())
 end_year = max(jia_map.keys())
 result = {}
-_all_days = 10 if start_year < 2019 else 15
+_all_days = 10 if start_year < line_year else 15
 _used_days = jia_map.get(start_year, 0) + jia_map_up_6.get(start_year+1, 0)
 next_days = 0
 if _used_days > _all_days:
@@ -61,7 +62,7 @@ if _used_days > _all_days:
 result[start_year] = {'used': _used_days, 'lave': _all_days-_used_days,
                       'next': next_days}
 for _year in range(start_year + 1, end_year + 1):
-    _all_days = 10 if _year < 2019 else 15
+    _all_days = 10 if _year < line_year else 15
     _used_days = (jia_map_down_6.get(_year, 0) + jia_map_up_6.get(_year+1, 0)
                   + next_days)
     next_days = 0
