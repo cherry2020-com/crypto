@@ -28,7 +28,8 @@ for _index, _item in enumerate(all_items):
         valid_items.append(_item)
 print u'-->\r\n' + all_templ
 print u'--> 共请假{}次，其中年假{}次'.format(len(all_items), len(valid_items))
-print u'--> 2019年以下按10天计算， 2019年（含）以后按15天计算'
+line_year = 2019
+print u'--> 2019年以下按10天计算， {}年（含）以后按15天计算'.format(line_year)
 jia_map = {}
 jia_map_up_6 = {}
 jia_map_down_6 = {}
@@ -48,7 +49,7 @@ for _item in all_items:
 print u'--> 统计(整年):', jia_map
 print u'--> 统计(上半年):', jia_map_up_6
 print u'--> 统计(下半年):', jia_map_down_6
-line_year = 2019
+
 
 start_year = min(jia_map.keys())
 end_year = max(jia_map.keys())
