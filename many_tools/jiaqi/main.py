@@ -48,8 +48,9 @@ for _year in range(start_year, end_year + 1):
     all_jia_map[_year] = float(10 if _year < line_year else 15)
 
 all_items.reverse()
-for _item in all_items:
+for _index, _item in enumerate(all_items):
     if _item['Type'] != 'Vacation (except for France)':
+        print u'{}: 其他类型假期，不参与年假计算({})'.format(_index, _item['Type'])
         continue
     start_date = _item['Start Date']
     month, _, year = [int(x) for x in start_date.split('/')]
@@ -63,9 +64,17 @@ for _item in all_items:
     if all_jia_map[new_year] < 0:
         next_days = all_jia_map[new_year]
         all_jia_map[new_year] = 0
+        print u'{}: {}年{}月请假{}天，使用{}年{}天年假，该年度剩余{}天年假 |>'.format(
+            _index, year, month, _used, new_year, _used + next_days, all_jia_map[new_year])
         new_year += 1
         all_jia_map[new_year] += next_days
+        print u'{}: {}年{}月请假{}天，使用{}年{}天年假，该年度剩余{}天年假 |<'.format(
+            _index, year, month, _used, new_year, -next_days, all_jia_map[new_year])
+
         assert all_jia_map[new_year] >= 0
+    else:
+        print u'{}: {}年{}月请假{}天，使用{}年{}天年假，该年度剩余{}天年假'.format(
+            _index, year, month, _used, new_year, _used, all_jia_map[new_year])
 
 pp = pprint.PrettyPrinter(indent=1)
 pp.pprint(all_jia_map)
