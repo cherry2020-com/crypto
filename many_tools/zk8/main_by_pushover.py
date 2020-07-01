@@ -325,16 +325,15 @@ if __name__ == '__main__':
                               u"大水", u"洪水", u"水到", u'好价', u'漏洞', u'黄金', u'洞',
                               u'首发', 'ruan', u'软件', u'速来', u'快去', u'手慢无',
                               u'神券', u'神卷', u'无门槛', u'毛', u'速度', u'速领', u'速撸',
-                              u'好用', u'中了', u'转赠', u'货号'}
-    key_messages = {u'神', u'券', u'卷', u'抢', u'立减',
+                              u'好用', u'中了', u'转赠', u'货号', u'来不及', u'又有'}
+    key_messages = {u'神', u'券', u'卷', u'抢', u'立减', u'快', u'速',
                     u'防身', u'性价比', u'便宜', u'秒杀',
                     u'秒到', u'可以了', u'有货', u'防身',
-                    u'利器', u'又有', u'来了', u'又1', u'免费', u'0元', u'震惊',
+                    u'利器', u'来了', u'又1', u'免费', u'0元', u'震惊',
                     u'1元', u'9.9', u'9块9', u'9元', u'超级返', u'线报', u'有货',
                     u'活动', u'白菜', u'免单', u'到手', u'大妈',
                     u'美滋滋', u'果', u'菓', u'锅', u'整理', u'一抖'}
-    # exclude_key_messages = {u'求', u'有没有', u'吗', u'呢', u'么'}
-    exclude_key_messages = {}
+    exclude_key_messages = {u'求', u'有没有', u'吗', u'呢', u'么'}
     new_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_new_list_head.txt'))
     hot_list_request_raw = RawToPython(os.path.join(CUR_DIR, 'z8_hot_list_head.txt'))
     count = 1
