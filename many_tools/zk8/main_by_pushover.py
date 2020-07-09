@@ -89,7 +89,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         print 'func_timeout.exceptions.FunctionTimedOut: get_web_hot_data'
         time.sleep(10)
         return {}, break_names
-    except BaseException as e:
+    except (Exception, BaseException) as e:
         print 'Exception: get_web_hot_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(30)
@@ -159,7 +159,7 @@ def get_web_data(request_raw, break_names=None):
         print 'FiddlerRequestTimeOutException: get_web_data'
         time.sleep(10)
         return {}, break_names, None
-    except BaseException as e:
+    except (Exception, BaseException) as e:
         print 'Exception: get_web_data'
         tools.send_error_msg_by_email("[zk8]get_web_data: " + traceback.format_exc())
         time.sleep(10)
@@ -216,7 +216,7 @@ def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
             print 'func_timeout.exceptions.FunctionTimedOut: get_web_data_for_my_hot'
             time.sleep(30)
             return {}, break_names
-        except BaseException as e:
+        except (Exception, BaseException) as e:
             print 'Exception: get_web_data_for_my_hot'
             tools.send_error_msg_by_email(
                 "[zk8]get_web_data_for_my_hot: " + traceback.format_exc())
