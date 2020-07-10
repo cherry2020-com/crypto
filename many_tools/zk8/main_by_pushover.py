@@ -287,6 +287,7 @@ def init():
 
 
 def custom_send_push(title, url):
+    global _GLOBAL_PUSHOVERS
     _key = 'zk8_new'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
@@ -294,6 +295,7 @@ def custom_send_push(title, url):
 
 
 def custom_send_push_hot(title, url):
+    global _GLOBAL_PUSHOVERS
     _key = 'zk8_hot'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
@@ -301,6 +303,7 @@ def custom_send_push_hot(title, url):
 
 
 def custom_send_push_my_hot(title, url):
+    global _GLOBAL_PUSHOVERS
     _key = 'zk8_mhot'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
