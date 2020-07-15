@@ -11,20 +11,21 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=3, after_seconds=5,
-                 false_sleep_second_randint_param=None, true_sleep_second=None,
-                 debug_info=True):
+    def __init__(self, date_times, before_seconds=2, after_seconds=3,
+                 false_sleep_second_randint=None, true_sleep_second=None,
+                 debug=True):
         self.before_seconds = before_seconds
         self.after_seconds = after_seconds
-        self.debug_info = debug_info
-        self.false_sleep_second_randint_param = false_sleep_second_randint_param or (0, 0)
-        self.true_sleep_second = true_sleep_second
+        self.debug = debug
+        self.false_sleep_second_randint = false_sleep_second_randint or (0, 0)
+        self.true_sleep_second = true_sleep_second or 0
         self.date_times_queue = Queue.Queue()
         if isinstance(date_times, str):
             date_times = [date_times]
         date_times = self._make_correct_date_times(date_times)
         date_times = self.make_date_times(date_times)
         self._remove_expired_times(date_times)
+        self._cache_data = {'start_print_false_count': 0}
         try:
             self.this_time = self.date_times_queue.get(block=False)
         except Queue.Empty:
@@ -68,44 +69,50 @@ class PanicBuyingTimes(object):
     def is_start(self):
         _is_start = self._start()
         if _is_start:
-            if self.true_sleep_second:
-                if self.debug_info:
-                    print "IS_START: True | Sleep Time: {}s".format(self.true_sleep_second)
-                time.sleep(self.true_sleep_second)
+            if self.debug:
+                print "IS_START: True",
+                if self.true_sleep_second:
+                    time.sleep(self.true_sleep_second)
+                    print " | Sleep Time: {}s".format(self.true_sleep_second),
+                print ''
         else:
-            sleep_time = random.randint(*self.false_sleep_second_randint_param)
-            if self.debug_info:
+            sleep_time = random.randint(*self.false_sleep_second_randint)
+            if self.debug:
                 print "IS_START: False | Sleep Time: {}s".format(sleep_time)
             for _ in xrange(sleep_time * 10):
                 time.sleep(0.1)
-                _is_start = self._start(debug_info=False)
+                _is_start = self._start()
                 if _is_start:
                     return True
 
-    def _start(self, debug_info=None):
-        debug_info = debug_info if debug_info is not None else self.debug_info
+    def _start(self):
+        debug = self.debug
         now = datetime.datetime.now()
         start_time, end_time = self.this_time
         if start_time <= now <= end_time:
-            if debug_info:
+            if debug:
                 print "IS_START: True | [{}] == [{}]".format(
-                    start_time, now.strftime("%Y-%m-%d %H:%M:%S"))
+                    start_time, now.strftime("%Y-%m-%d %H:%M:%S:%f"))
             return True
         if now >= end_time:
             try:
                 self.this_time = self.date_times_queue.get(block=False)
             except Queue.Empty:
                 raise PanicBuyingTimesException('Error: Had not times to wait !')
-        if debug_info:
-            print "IS_START: False | [{}] == [{}]".format(
-                start_time, now.strftime("%Y-%m-%d %H:%M:%S"))
+        if debug:
+            if self._cache_data['start_print_false_count'] > 20:
+                print "IS_START: False | [{}] == [{}]".format(
+                    start_time, now.strftime("%Y-%m-%d %H:%M:%S:%f"))
+                self._cache_data['start_print_false_count'] = 0
+            else:
+                self._cache_data['start_print_false_count'] += 1
         return False
 
 
 if __name__ == '__main__':
-    a = PanicBuyingTimes(['22:47:00', '2018-07-15 09:52:00',
-                          '22:55:00', '2018-08-15 22:28:00'],
-                         false_sleep_second_randint_param=(60, 70), true_sleep_second=0.01)
+    a = PanicBuyingTimes(['10:40:00', '2020-07-15 10:06:00'],
+                         false_sleep_second_randint=(60, 70),
+                         true_sleep_second=0.01)
     while True:
         now = datetime.datetime.now()
         if a.is_start:
