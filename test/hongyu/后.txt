@@ -1,0 +1,42 @@
+server{
+	server_name vfile.grtn.cn;
+	listen *:80;
+	resolver 127.0.0.1;
+	set $cc_host $http_cc_host;
+	set $cache_key '$http_host$request_uri';
+	set $cache_stored -;
+	set $ignore_reload 0;
+	set $expire_body 0;
+	set $cache_http_code "200 203 300 410";
+	set $storage_api_port 770;
+	set $use_stale 0;
+	set $collapsed_forwarding 1;
+	set $redirect_location 0;
+	allow_range on;
+	set $cc_upstream_addr -;
+	if ($http_user_agent ~* "ChinaCache") {
+		set $default_valid_second 86400;
+		set $cache_allow 1;
+		set $cc_cacheable 1;
+	}
+	set $default_valid_second 86400;
+	set $cache_allow 1;
+	set $cc_cacheable 1;
+	location /{
+		set $cache_status "TCP_MISS";
+		add_header CC_CACHE $cache_status;
+		content_by_lua_file 'conf/lua/hpc_proxy.lua';
+		access_by_lua_file 'conf/lua/access_phase/access_phase_hook.lua';
+		log_by_lua_file 'conf/lua/log_phase/log_phase_hook.lua';
+	}
+	location  ~* /.* {
+		set $cache_allow 1;
+		set $cc_cacheable 1;
+		set $default_valid_second 2592000;
+		set $cache_status "TCP_MISS";
+		add_header CC_CACHE $cache_status;
+		content_by_lua_file 'conf/lua/hpc_proxy.lua';
+		access_by_lua_file 'conf/lua/access_phase/access_phase_hook.lua';
+		log_by_lua_file 'conf/lua/log_phase/log_phase_hook.lua';
+	}
+}

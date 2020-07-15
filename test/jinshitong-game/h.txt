@@ -1,0 +1,10 @@
+GET /mobile/activity/worldcup/game/rank HTTP/1.1
+Host: www.avicks.com
+Origin: https://www.avicks.com
+cookie: Hm_lpvt_04816e2b4a363e51fc3d81f1dcdeaf84=1531666275; Hm_lvt_04816e2b4a363e51fc3d81f1dcdeaf84=1531665175,1531665194,1531666182,1531666275; PHPSESSID=jj218mcljceepb2fu167dfaoi1; source=eyJpdiI6ImVxSGlwcjJtQ3hIRE1aY1hFbzBpWnc9PSIsInZhbHVlIjoiRTlob1AyR0ZRcHNmZ3lDMklxNGZpdz09IiwibWFjIjoiNDMxYWRjYzYxNWUwZjI1NmU2ZDg5OGNkM2JkMDI0NmY3N2VkYWVjYzIyMDQ0OGRkMmZiNGNmOTdmNTFjMzlmMiJ9; user_info=eyJpdiI6InhiNFFEV3Yrd3E1NkRJczdVM3pBZlE9PSIsInZhbHVlIjoiNFd0T09EREh6SlZRemtUTHpKR3J5S2srMTVlNm1WRE9ROUJTajl5bnM5cllaUFY3ZSswK1ExOER4bHM5TXFMRHc2c1ZGR2d2WU1FNGN5a2d1d0djdFwvWDg4MFhMXC9zU0h6WXE2M2hHR25kZz0iLCJtYWMiOiIxYmMwODFjYjdkYzkyNmIyZmIxYzI3NjFjZDdjOTM5ZTJiYjRiODAwMzQ0ZTk2MWVjNDljYWRiNmQzOWJjY2U5In0%3D
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+accept-encoding: br, gzip, deflate
+user-agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15F79
+accept-language: zh-cn
+referer: https://www.avicks.com/mobile/activity/worldcup/game?source=app&is_syn=1&a_=629185&b_=T1c6ea7cd4f1ba62bd974a1e8ff5f22c3
+

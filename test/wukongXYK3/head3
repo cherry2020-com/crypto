@@ -1,0 +1,14 @@
+POST /api/promotion/self/helpCutBill
+Host: card.9fbank.com
+Content-Length: 51
+Accept: application/json, text/plain, */*
+Origin: https://card.9fbank.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.101 Safari/537.36 QQBrowser/4.3.4986.400
+Channel: H5
+Authorization: eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxNTE4MzY3MDQ3OCIsInVzZXJJZCI6IjEwNjQ4MTUyMTU3MDIwMDM3MTMiLCJleHAiOjE1NzQyNDI3MDV9.RTvvI_EAhM1xJyPas7RBoaLtiO70J6zA8J-LRWNd13OuXkOMm4z6p4IjfXFSs47_DgbGtOa2ODV2wTsbNB3MRPyT9S5Yn3eoh9_MdDj9pEHVDzIUc-MFxE91SnTCtQmYrxKFDTBsTEmii_vQS5O-qoInef3ieLHYA1AtSnxUyGw
+Content-Type: application/json
+Referer: https://card.9fbank.com/app/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.8
+
+{"actDetailId":"1065204972604948481","openId":null}

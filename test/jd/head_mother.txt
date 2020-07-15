@@ -1,0 +1,9 @@
+GET /client.action?functionId=newBabelAwardCollection&body={%22activityId%22:%223NB6VBGKErXfgmVVnaMsn5VH4xaV%22,%22scene%22:%223%22,%22actKey%22:%229B4561A9225AC08CD7D17676432A37FD09D6B0914AAA50C0F34500F19B32C62E98544343844C11779C92057E6B0E6F58_babel%22}&screen=750*1334&client=wh5&clientVersion=1.0.0 HTTP/1.1
+Host: api.m.jd.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0) Gecko/20100101 Firefox/78.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Cookie: wxa_level=1; retina=1; cid=9; wqmnx1=MDEyNjM3MXRoam13Y2M9Jmh0NjM1bChvdCAwdiAyMW84c2EyM1dDKSFS; webp=1; autoOpenApp_downCloseDate_auto=1594826753143_21600000; visitkey=36047228318457857; shshshfp=273005a04caff3e3baa8d119edee6760; shshshfpa=b0c8c340-1fa2-767b-5e9b-29b234a76887-1594826763; shshshsID=3d0f060660139c3b6becff712bb28097_2_1594826797933; 3AB9D23F7A4B3C9B=WRW62B5Q5HDUZM6GLLNNDSDCJABGX4ESJ44KI4KP5U7LWA7UJVOWTS34GSEZZC3GZU2ETXWNWPX32LSSU7OITDY2TE; shshshfpb=tqax817RUfSbVtlThHC0eWw%3D%3D; jcap_dvzw_fp=71be2214aa0dc1287a6585749e4d4117$800907739874; TrackerID=we6edb3aeWfblFT07Y7ci2oILRE-jNXN33hcwwLEjrMn5hsttWrCfxB1Xdor3qHPCIikffPp9LOUbMTCddiCGbmAhBO_EMaZYkDl9bRch7knrv5j4Oce0QcEFhwhL7kLl3WM_NmMsoPShTuLsDmgPA; pt_key=AAJfDyAnADB8ti-u51g8XwoP4LWrPrlQ4QjR3Uz4J9oaVxSKrTHgm3hptLNxTgYV6qo7fP7PGQo; pt_pin=jd_509a0d3636279; pt_token=hwlwmzhs; pwdt_id=jd_509a0d3636279; whwswswws=; __wga=1594826797592.1594826797592.1594826797592.1594826797592.1.1; PPRD_P=; __jdv=122270672%7Cdirect%7C-%7Cnone%7C-%7C1594826797595; sc_width=320
+Upgrade-Insecure-Requests: 1

@@ -1,0 +1,8 @@
+*** (2) HOLDS THE LOCK(S):                                                                                                                            |
+RECORD LOCKS space id 73616 page no 3 n bits 88 index `PRIMARY` of table `share`.`positions` trx id 6346814 lock_mode X locks rec but not gap         |
+Record lock, heap no 19 PHYSICAL RECORD: n_fields 6; compact format; info bits 0
+
+
+
+*** (2) WAITING FOR THIS LOCK TO BE GRANTED:                                                                                                          |
+RECORD LOCKS space id 73616 page no 3 n bits 88 index `PRIMARY` of table `share`.`positions` trx id 6346814 lock_mode X locks rec but not gap waiting

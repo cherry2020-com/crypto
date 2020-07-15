@@ -1,0 +1,15 @@
+POST /servlet/AsynGetDataServlet HTTP/1.1
+Host: mybank.icbc.com.cn
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+Accept-Language: zh-cn
+Accept-Encoding: br, gzip, deflate
+Origin: https://mybank.icbc.com.cn
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1 Safari/605.1.15
+Connection: keep-alive
+Referer: https://mybank.icbc.com.cn/icbc/newperbank/perbank3/gold/subframe_acgoldlist_left.jsp?prodcode=
+Cookie: isP3bank=1; isEn_US=0; isPri=; first_tip=0; firstZoneNo=%E5%8C%97%E4%BA%AC_0200; ICBC_BETA_VER1=BETA; guide_logon=Wed,24 Jul 2019 04:54:16 GMT; mainAreaCode=0200; guide_nologon=Wed,24 Jul 2019 04:52:37 GMT; BIGipServerFEBANKP_gerenwangyinwaiwang_pool=202277130.20480.0000; ar_stat_uv=79306498566947177452|9999
+Content-Length: 93
+Content-Type: application/x-www-form-urlencoded
+
+Area_code=0200&trademode=1&proIdsIn=130060000043%7C130060000045%7C130060000044%7C130060000046&isFirstTime=0&tranCode=A00462
