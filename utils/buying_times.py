@@ -11,7 +11,7 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=2, after_seconds=3,
+    def __init__(self, date_times, before_seconds=2, after_seconds=2,
                  false_sleep_second_randint=None, true_sleep_second=None,
                  debug=True):
         self.before_seconds = before_seconds

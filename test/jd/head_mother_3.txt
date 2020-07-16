@@ -1,4 +1,4 @@
-GET /client.action?functionId=newBabelAwardCollection&body={%22activityId%22:%223NB6VBGKErXfgmVVnaMsn5VH4xaV%22,%22scene%22:%223%22,%22actKey%22:%229B4561A9225AC08CD7D17676432A37FD09D6B0914AAA50C0F34500F19B32C62E98544343844C11779C92057E6B0E6F58_babel%22}&screen=750*1334&client=wh5&clientVersion=1.0.0 HTTP/1.1
+GET /client.action?functionId=newBabelAwardCollection&body={%22activityId%22:%22UW5uLPuAKbTKHmHbiViTVny1coM%22,%22scene%22:3,%22actKey%22:%2286F87B2BFB6A587607ACF9A18B30F1FDCA1483B02FD20FC7EEE208433AA83C07F8D0B51FC1D2DF27529EFDA667EFD977_babel%22}&client=wh5 HTTP/1.1
 Host: api.m.jd.com
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0) Gecko/20100101 Firefox/78.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
