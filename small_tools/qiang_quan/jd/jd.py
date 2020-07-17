@@ -10,7 +10,8 @@ import uuid
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
 
-print('\033[1;33;44mThis is a test !\033[0m')
+imp_templ = u'\033[1;33;44m{}\033[0m'
+
 if __name__ == '__main__':
     file_path = sys.argv[1]
     date_times = "2020-07-17 00:00:00"
@@ -24,11 +25,10 @@ if __name__ == '__main__':
         try:
             if buying_time.is_start:
                 req.requests(timeout=(None, 0.001))
-                time.sleep(0.3)
             else:
                 try:
                     web_data = req.requests(timeout=5)
-                    print web_data.json()['subCodeMsg']
+                    print imp_templ.format(web_data.json()['subCodeMsg'])
                 except FiddlerRequestException:
                     pass
         except PanicBuyingTimesException as e:

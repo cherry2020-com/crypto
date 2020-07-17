@@ -10,7 +10,16 @@ import uuid
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
 
-print('\033[1;33;44mThis is a test !\033[0m')
+
+def request_jd(req_jd):
+    try:
+        print '-->:', threading.current_thread().name
+        web_data = req_jd.requests(timeout=2)
+        print web_data.json()['subCodeMsg']
+    except FiddlerRequestException:
+        pass
+
+
 if __name__ == '__main__':
     file_path = sys.argv[1]
     date_times = "2020-07-17 00:00:00"
@@ -20,10 +29,13 @@ if __name__ == '__main__':
     req = RawToPython(file_path)
     count = 0
     heart_count = 1
+    threadings = []
     while True:
         try:
             if buying_time.is_start:
-                req.requests(timeout=(None, 0.001))
+                t = threading.Thread(target=request_jd, name=uuid.uuid4(), args=(req, ))
+                t.start()
+                threadings.append(t)
                 time.sleep(0.3)
             else:
                 try:
@@ -32,7 +44,10 @@ if __name__ == '__main__':
                 except FiddlerRequestException:
                     pass
         except PanicBuyingTimesException as e:
-            print '-->ERROR:PanicBuyingTimesException:', e
+            print e
             break
         except Exception as e:
-            print '-->ERROR:Exception:', e
+            print e
+        finally:
+            for t in threadings:
+                t.join(timeout=2)
