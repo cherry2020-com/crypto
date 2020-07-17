@@ -1,34 +1,38 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
 import random
+import threading
 import time
 
 import sys
+import uuid
 
-from utils.buying_times import PanicBuyingTimes
+from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
 
-file_path = sys.argv[1]
-req = RawToPython(file_path)
-buying_time = PanicBuyingTimes(["2018-11-27 10:00:00"])
-count = 0
-heart_count = 1
-while True:
-    if buying_time.start(debug=True, other_info='{}/{}#'.format(count + 1, heart_count)):
+
+if __name__ == '__main__':
+    file_path = sys.argv[1]
+    date_times = "2020-07-17 00:00:00"
+    date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
+    buying_time = PanicBuyingTimes(date_times, false_sleep_second_randint=(30, 60),
+                                   debug=True)
+    req = RawToPython(file_path)
+    count = 0
+    heart_count = 1
+    while True:
         try:
-            web_data = req.requests(timeout=(None, 0.001))
-            # web_data = req.requests(timeout=(None, None))
-            print web_data.json()['subCodeMsg']
-        except FiddlerRequestException:
-            pass
-    else:
-        count += 1
-        if count == heart_count:
-            heart_count = random.randint(300, 600)
-            count = 0
-            try:
-                web_data = req.requests(timeout=10)
-                print web_data.json()['subCodeMsg']
-            except FiddlerRequestException:
-                pass
-        time.sleep(1)
+            if buying_time.is_start:
+                req.requests(timeout=(None, 0.001))
+                time.sleep(0.3)
+            else:
+                try:
+                    web_data = req.requests(timeout=5)
+                    print web_data.json()['subCodeMsg']
+                except FiddlerRequestException:
+                    pass
+        except PanicBuyingTimesException as e:
+            print '-->ERROR:PanicBuyingTimesException:', e
+            break
+        except Exception as e:
+            print '-->ERROR:Exception:', e
