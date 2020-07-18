@@ -7,8 +7,9 @@ import time
 import sys
 import uuid
 
+from small_tools.qiang_quan.jd.tools import get_time_diff
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
-from utils.fiddler import RawToPython, FiddlerRequestException
+from utils.fiddler_session import RawToPython, FiddlerRequestException
 
 
 def request_jd(req_jd):
@@ -22,10 +23,12 @@ def request_jd(req_jd):
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-17 00:00:00"
+    date_times = "2020-07-19 00:00:00"
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
+    time_diff_ms = get_time_diff()
+    print '-->time_diff_ms', time_diff_ms
     buying_time = PanicBuyingTimes(date_times, false_sleep_second_randint=(30, 60),
-                                   debug=True)
+                                   debug=True, time_diff_ms=time_diff_ms)
     req = RawToPython(file_path)
     count = 0
     heart_count = 1
@@ -48,6 +51,5 @@ if __name__ == '__main__':
             break
         except Exception as e:
             print e
-        finally:
-            for t in threadings:
-                t.join(timeout=2)
+    for t in threadings:
+        t.join(timeout=2)

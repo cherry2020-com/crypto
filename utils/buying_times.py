@@ -11,11 +11,14 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=2, after_seconds=2,
+    def __init__(self, date_times, before_seconds=1, after_seconds=2,
                  false_sleep_second_randint=None, true_sleep_second=None,
-                 debug=True):
-        self.before_seconds = before_seconds
-        self.after_seconds = after_seconds
+                 debug=True, time_diff_ms=None):
+        self.before_seconds = int(before_seconds)
+        self.before_milliseconds = int(before_seconds * 1000 % 1000)
+        self.after_seconds = int(after_seconds)
+        self.after_milliseconds = int(after_seconds * 1000 % 1000)
+        self.time_diff_ms = time_diff_ms or 0
         self.debug = debug
         self.false_sleep_second_randint = false_sleep_second_randint or (0, 0)
         self.true_sleep_second = true_sleep_second or 0
@@ -57,9 +60,21 @@ class PanicBuyingTimes(object):
         for date_time in date_times:
             start_date_time = date_time - datetime.timedelta(
                 seconds=self.before_seconds)
+            milliseconds = self.time_diff_ms + self.before_milliseconds
+            if milliseconds > 0:
+                start_date_time += datetime.timedelta(milliseconds=self.time_diff_ms)
+            else:
+                time_diff_ms = -self.time_diff_ms
+                start_date_time -= datetime.timedelta(milliseconds=time_diff_ms)
             if date_time > now:
                 end_date_time = date_time + datetime.timedelta(
-                    seconds=self.after_seconds)
+                    seconds=self.after_seconds, milliseconds=self.time_diff_ms)
+                milliseconds = self.time_diff_ms + self.after_milliseconds
+                if milliseconds > 0:
+                    end_date_time += datetime.timedelta(milliseconds=self.time_diff_ms)
+                else:
+                    time_diff_ms = -self.time_diff_ms
+                    end_date_time -= datetime.timedelta(milliseconds=time_diff_ms)
                 new_date_times.append([start_date_time, end_date_time])
         date_times = sorted(new_date_times, key=lambda x: x[0])
         for date_time in date_times:

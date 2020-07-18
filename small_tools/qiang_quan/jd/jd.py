@@ -1,30 +1,29 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
-import random
-import threading
-import time
-
 import sys
-import uuid
 
+from small_tools.qiang_quan.jd.tools import get_time_diff
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
-from utils.fiddler import RawToPython, FiddlerRequestException
+from utils.fiddler_session import RawToPython, FiddlerRequestException
 
 imp_templ = u'\033[1;33;44m{}\033[0m'
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-17 00:00:00"
+    date_times = "2020-07-19 00:00:00"
+    time_diff_ms = get_time_diff()
+    print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
-    buying_time = PanicBuyingTimes(date_times, false_sleep_second_randint=(30, 60),
-                                   debug=True)
+    buying_time = PanicBuyingTimes(date_times, before_seconds=0.5,
+                                   false_sleep_second_randint=(30, 60),
+                                   debug=True, time_diff_ms=time_diff_ms)
     req = RawToPython(file_path)
     count = 0
     heart_count = 1
     while True:
         try:
             if buying_time.is_start:
-                req.requests(timeout=(None, 0.001))
+                req.requests(timeout=(0.001, 0.001))
             else:
                 try:
                     web_data = req.requests(timeout=5)
