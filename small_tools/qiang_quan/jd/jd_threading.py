@@ -30,7 +30,8 @@ if __name__ == '__main__':
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
-    buying_time = PanicBuyingTimes(date_times, before_seconds=2,
+    buying_time = PanicBuyingTimes(date_times, before_seconds=0.01,
+                                   after_seconds=1,
                                    false_sleep_second_randint=(60, 120),
                                    debug=True, time_diff_ms=time_diff_ms)
     req = RawToPython(file_path)

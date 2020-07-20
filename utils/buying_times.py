@@ -11,7 +11,7 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=2, after_seconds=2,
+    def __init__(self, date_times, before_seconds=1, after_seconds=1,
                  false_sleep_second_randint=None, true_sleep_second=None,
                  debug=True, time_diff_ms=None):
         self.before_seconds = int(before_seconds)
@@ -95,8 +95,8 @@ class PanicBuyingTimes(object):
             sleep_time = random.randint(*self.false_sleep_second_randint)
             if self.debug:
                 print "IS_START: False | Sleep Time: {}s".format(sleep_time)
-            for _ in xrange(sleep_time * 10):
-                time.sleep(0.1)
+            for _ in xrange(sleep_time * 1000):
+                time.sleep(0.001)
                 _is_start = self._start()
                 if _is_start:
                     return True
@@ -117,7 +117,7 @@ class PanicBuyingTimes(object):
             except Queue.Empty:
                 raise PanicBuyingTimesException('Error: Had not times to wait !')
         if debug:
-            if self._cache_data['start_print_false_count'] > 20:
+            if self._cache_data['start_print_false_count'] > 2000:
                 print "IS_START: False | [{}] == [{}]".format(
                     start_time, now.strftime("%Y-%m-%d %H:%M:%S:%f"))
                 self._cache_data['start_print_false_count'] = 0
