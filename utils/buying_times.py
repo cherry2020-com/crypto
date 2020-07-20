@@ -11,7 +11,7 @@ class PanicBuyingTimesException(Exception):
 
 
 class PanicBuyingTimes(object):
-    def __init__(self, date_times, before_seconds=1, after_seconds=2,
+    def __init__(self, date_times, before_seconds=2, after_seconds=2,
                  false_sleep_second_randint=None, true_sleep_second=None,
                  debug=True, time_diff_ms=None):
         self.before_seconds = int(before_seconds)
@@ -90,6 +90,7 @@ class PanicBuyingTimes(object):
                     time.sleep(self.true_sleep_second)
                     print " | Sleep Time: {}s".format(self.true_sleep_second),
                 print ''
+            return True
         else:
             sleep_time = random.randint(*self.false_sleep_second_randint)
             if self.debug:
@@ -99,6 +100,7 @@ class PanicBuyingTimes(object):
                 _is_start = self._start()
                 if _is_start:
                     return True
+            return False
 
     def _start(self):
         debug = self.debug

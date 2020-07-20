@@ -12,22 +12,26 @@ from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler_session import RawToPython, FiddlerRequestException
 
 
+IMP_TEMPL = u'\033[1;33;44m{}\033[0m'
+
+
 def request_jd(req_jd):
     try:
         print '-->:', threading.current_thread().name
-        web_data = req_jd.requests(timeout=2)
-        print web_data.json()['subCodeMsg']
+        web_data = req_jd.requests(timeout=1)
+        print IMP_TEMPL.format(web_data.json()['subCodeMsg'])
     except FiddlerRequestException:
         pass
 
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-19 00:00:00"
+    date_times = "2020-07-20 00:00:00"
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
-    buying_time = PanicBuyingTimes(date_times, false_sleep_second_randint=(30, 60),
+    buying_time = PanicBuyingTimes(date_times, before_seconds=2,
+                                   false_sleep_second_randint=(60, 120),
                                    debug=True, time_diff_ms=time_diff_ms)
     req = RawToPython(file_path)
     count = 0
@@ -39,17 +43,16 @@ if __name__ == '__main__':
                 t = threading.Thread(target=request_jd, name=uuid.uuid4(), args=(req, ))
                 t.start()
                 threadings.append(t)
-                time.sleep(0.3)
             else:
                 try:
                     web_data = req.requests(timeout=5)
-                    print web_data.json()['subCodeMsg']
+                    print IMP_TEMPL.format(web_data.json()['subCodeMsg'])
                 except FiddlerRequestException:
                     pass
         except PanicBuyingTimesException as e:
-            print e
+            print '-->ERROR:PanicBuyingTimesException:', e
             break
         except Exception as e:
-            print e
+            print '-->ERROR:Exception:', e
     for t in threadings:
         t.join(timeout=2)

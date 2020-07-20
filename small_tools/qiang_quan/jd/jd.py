@@ -10,12 +10,12 @@ imp_templ = u'\033[1;33;44m{}\033[0m'
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-19 00:00:00"
+    date_times = "2020-07-20 00:00:00"
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
-    buying_time = PanicBuyingTimes(date_times, before_seconds=0.5,
-                                   false_sleep_second_randint=(30, 60),
+    buying_time = PanicBuyingTimes(date_times, before_seconds=2,
+                                   false_sleep_second_randint=(60, 120),
                                    debug=True, time_diff_ms=time_diff_ms)
     req = RawToPython(file_path)
     count = 0
@@ -23,7 +23,8 @@ if __name__ == '__main__':
     while True:
         try:
             if buying_time.is_start:
-                req.requests(timeout=(0.001, 0.001))
+                web_data = req.requests(timeout=(0.001, 0.001))
+                print imp_templ.format(web_data.json()['subCodeMsg'])
             else:
                 try:
                     web_data = req.requests(timeout=5)
