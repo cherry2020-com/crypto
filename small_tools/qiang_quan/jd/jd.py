@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # - * - encoding: UTF-8 - * -
 import sys
+from datetime import datetime
 
 from small_tools.qiang_quan.jd.tools import get_time_diff
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
@@ -10,7 +11,7 @@ imp_templ = u'\033[1;33;44m{}\033[0m'
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-20 00:00:00"
+    date_times = "2020-07-21 23:26:00"
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
@@ -24,7 +25,8 @@ if __name__ == '__main__':
     while True:
         try:
             if buying_time.is_start:
-                web_data = req.requests(timeout=(0.001, 0.001))
+                print '--> START !!!', datetime.now()
+                web_data = req.requests(timeout=(None, 0.001))
                 print imp_templ.format(web_data.json()['subCodeMsg'])
             else:
                 try:

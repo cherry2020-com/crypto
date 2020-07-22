@@ -12,7 +12,7 @@ from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler_session import RawToPython, FiddlerRequestException
 
 
-IMP_TEMPL = u'\033[1;33;44m{}\033[0m'
+IMP_TEMPL = u'T\033[1;33;44m{}\033[0m'
 
 
 def request_jd(req_jd):
@@ -26,11 +26,11 @@ def request_jd(req_jd):
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-20 00:00:00"
+    date_times = "2020-07-22 00:00:00"
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
-    buying_time = PanicBuyingTimes(date_times, before_seconds=0.01,
+    buying_time = PanicBuyingTimes(date_times, before_seconds=0.1,
                                    after_seconds=1,
                                    false_sleep_second_randint=(60, 120),
                                    debug=True, time_diff_ms=time_diff_ms)

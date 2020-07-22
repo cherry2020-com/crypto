@@ -60,21 +60,21 @@ class PanicBuyingTimes(object):
         for date_time in date_times:
             start_date_time = date_time - datetime.timedelta(
                 seconds=self.before_seconds)
-            milliseconds = self.time_diff_ms + self.before_milliseconds
+            milliseconds = self.time_diff_ms - self.before_milliseconds
             if milliseconds > 0:
-                start_date_time += datetime.timedelta(milliseconds=self.time_diff_ms)
+                start_date_time += datetime.timedelta(milliseconds=milliseconds)
             else:
-                time_diff_ms = -self.time_diff_ms
-                start_date_time -= datetime.timedelta(milliseconds=time_diff_ms)
+                milliseconds = -milliseconds
+                start_date_time -= datetime.timedelta(milliseconds=milliseconds)
             if date_time > now:
                 end_date_time = date_time + datetime.timedelta(
                     seconds=self.after_seconds, milliseconds=self.time_diff_ms)
-                milliseconds = self.time_diff_ms + self.after_milliseconds
+                milliseconds = self.time_diff_ms - self.after_milliseconds
                 if milliseconds > 0:
-                    end_date_time += datetime.timedelta(milliseconds=self.time_diff_ms)
+                    end_date_time += datetime.timedelta(milliseconds=milliseconds)
                 else:
-                    time_diff_ms = -self.time_diff_ms
-                    end_date_time -= datetime.timedelta(milliseconds=time_diff_ms)
+                    milliseconds = -milliseconds
+                    end_date_time -= datetime.timedelta(milliseconds=milliseconds)
                 new_date_times.append([start_date_time, end_date_time])
         date_times = sorted(new_date_times, key=lambda x: x[0])
         for date_time in date_times:
