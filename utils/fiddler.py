@@ -41,7 +41,7 @@ class FiddlerError(Exception):
 
 class RawToPython(object):
     def __init__(self, file_name=None, file_raw=None, is_https=None, is_session=False,
-                 try_real_simulation=False, retry_count=3):
+                 try_real_simulation=False, retry_count=0):
         if not (file_name or file_raw):
             raise FiddlerError("must had file_name or file_data")
         self.method = None
