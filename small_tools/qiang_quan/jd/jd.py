@@ -11,7 +11,7 @@ imp_templ = u'\033[1;33;44m{}\033[0m'
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-07-22 14:17:00"
+    date_times = "2020-07-22 14:39:30"
     time_diff_ms = get_time_diff()
     print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times

@@ -1,6 +1,6 @@
 GET /client.action?functionId=newBabelAwardCollection&body={%22activityId%22:%223NB6VBGKErXfgmVVnaMsn5VH4xaV%22,%22scene%22:%223%22,%22actKey%22:%229B4561A9225AC08CD7D17676432A37FD09D6B0914AAA50C0F34500F19B32C62E98544343844C11779C92057E6B0E6F58_babel%22}&screen=750*1334&client=wh5&clientVersion=1.0.0 HTTP/1.1
 Host: api.m.jd.com
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0) Gecko/20100101 Firefox/78.0
+User-Agent: WeChat/7.0.14.32 CFNetwork/1126 Darwin/19.5.0
 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
 Accept-Encoding: gzip, deflate
