@@ -7,9 +7,14 @@ from bs4 import BeautifulSoup
 
 from utils.fiddler import RawToPython
 
-PLANNED_START_CITY_NAME = 'ALBION PARK'
-UNPLANNED_START_CITY_NAME = 'CASTLEREAGH'
-START_ID = 3
+PLANNED_START_CITY_NAME = 'COOLANGATTA'
+UNPLANNED_START_CITY_NAME = 'RICHMOND'
+START_ID = 39
+
+
+def write_file(sql):
+    with open('./sql.sql', 'ab') as fw:
+        fw.write(sql)
 
 
 def get_all_citys():
@@ -66,8 +71,9 @@ def get_plan_info(city_name):
                     interruptions=last_update_on_str,
                     type='planned')
                 print sql1
+                write_file(sql1)
                 for each in all_details:
-                    sql1 = get_insert_sql2(
+                    sql2 = get_insert_sql2(
                         post_code=each['Postcode'],
                         city=each['Suburb'],
                         street=each['Street'],
@@ -78,7 +84,8 @@ def get_plan_info(city_name):
                         cause='', status='', estimated_restoration_time='',
                         number_of_customers_affected='',
                     )
-                    print sql1
+                    print sql2
+                    write_file(sql2)
                 print '--', '-' * 50
             print '-- > detail:', all_details
 
@@ -126,8 +133,9 @@ def get_unplan_info(city_name):
                     interruptions=total_customers_affected_str,
                     type='unplanned')
                 print sql1
+                write_file(sql1)
                 for each in all_details:
-                    sql1 = get_insert_sql2(
+                    sql2 = get_insert_sql2(
                         post_code=each['Post Code'],
                         city=each['Suburb'],
                         street=each['Street'],
@@ -137,7 +145,8 @@ def get_unplan_info(city_name):
                         estimated_restoration_time=each['Estimated Restoration Time'],
                         number_of_customers_affected=each['Number of Customers Affected'],
                     )
-                    print sql1
+                    print sql2
+                    write_file(sql2)
                 print '--', '-' * 50
             print '-- > detail:', all_details
 
@@ -163,13 +172,13 @@ VALUES
 
 if __name__ == '__main__':
     all_citys = get_all_citys()
-    # planned_citys = all_citys
-    # if PLANNED_START_CITY_NAME:
-    #     planned_citys = all_citys[all_citys.index(PLANNED_START_CITY_NAME):]
-    # for planned_city_name in planned_citys:
-    #     get_plan_info(planned_city_name)
-    unplanned_citys = all_citys
-    if UNPLANNED_START_CITY_NAME:
-        unplanned_citys = all_citys[all_citys.index(UNPLANNED_START_CITY_NAME):]
-    for unplanned_city_name in unplanned_citys:
-        get_unplan_info(unplanned_city_name)
+    planned_citys = all_citys
+    if PLANNED_START_CITY_NAME:
+        planned_citys = all_citys[all_citys.index(PLANNED_START_CITY_NAME):]
+    for planned_city_name in planned_citys:
+        get_plan_info(planned_city_name)
+    # unplanned_citys = all_citys
+    # if UNPLANNED_START_CITY_NAME:
+    #     unplanned_citys = all_citys[all_citys.index(UNPLANNED_START_CITY_NAME):]
+    # for unplanned_city_name in unplanned_citys:
+    #     get_unplan_info(unplanned_city_name)
