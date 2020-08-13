@@ -177,8 +177,8 @@ if __name__ == '__main__':
         planned_citys = all_citys[all_citys.index(PLANNED_START_CITY_NAME):]
     for planned_city_name in planned_citys:
         get_plan_info(planned_city_name)
-    # unplanned_citys = all_citys
-    # if UNPLANNED_START_CITY_NAME:
-    #     unplanned_citys = all_citys[all_citys.index(UNPLANNED_START_CITY_NAME):]
-    # for unplanned_city_name in unplanned_citys:
-    #     get_unplan_info(unplanned_city_name)
+    unplanned_citys = all_citys
+    if UNPLANNED_START_CITY_NAME:
+        unplanned_citys = all_citys[all_citys.index(UNPLANNED_START_CITY_NAME):]
+    for unplanned_city_name in unplanned_citys:
+        get_unplan_info(unplanned_city_name)
