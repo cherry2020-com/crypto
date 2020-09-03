@@ -5,6 +5,7 @@
 def a():
     print '12345'
 
+
 class Alic:
     _class = '_class'
     
