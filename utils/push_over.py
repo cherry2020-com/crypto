@@ -10,16 +10,16 @@ from pushover import Client, init
 
 
 ALL_TOKENS_MAP = {
-    "zk8_new": 'ad7tmvzzxum4hmuauomjtqrg93mryx',
+    "zk8_new": 'aq8pdtatv3gk4hjfq1tc6ks4rhuzud',
     "zk8_new2": 'a8arxyjygik51cgzz4myboafyw5aac',
     "zk8_new3": 'af26qgja7v5nm3gshzg8jmwxkot5xq',
 
-    "zk8_hot": 'afkqikbmthu98ne67rpj394o3a1xr1',
-    "zk8_hot2": 'awtyw265rkcp7prdr5dkz8c61mjsfg',
-    "zk8_hot3": 'auuxhbsw5fz8wgrt2izexwwvp7cncb',
+    "zk8_hot": 'a6ymvkmi6db6dcnww9gqp6tq4snk6b',
+    "zk8_hot2": 'a1r1smirpp7fdjubfsnw7h3ps9w3rf',
+    "zk8_hot3": 'anucb1s14i692evig2eie2yfvdjr11',
     "zk8_hot4": 'ac4huzc6fw5w37iaz21q7k3uu3jcq2',
 
-    "zk8_mhot": 'ama6pctd8y6v7t3tupkufvmmd38aik',
+    "zk8_mhot": 'aezfvg26mmibhekvpygnrkro444g64',
     "zk8_mhot2": 'ay65qj4ihrhbseb3vmhiph18ug1hx3',
 
     "over_7500": 'a24wpa2v928oiadguksmfxkee5mo4c',
