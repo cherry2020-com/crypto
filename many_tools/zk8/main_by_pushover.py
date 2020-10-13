@@ -135,7 +135,7 @@ def get_web_hot_data(request_raw, exist_titles=None):
         print "Hot_Real_Find-6h_%s-24h_%s-48h_%s-xh_%s|" % (
             real_hour_hots_count['[6H]'], real_hour_hots_count['[24H]'],
             real_hour_hots_count['[48H]'], real_hour_hots_count.get('[xH]', 0)),
-    exist_titles_limit = (new_titles + exist_titles)[:2000]
+    exist_titles_limit = (new_titles + exist_titles)[:1000]
     if is_get_new:
         _NEW_HOT_COUNT += len(result)
         if _NEW_HOT_COUNT > NEW_HOT_SAVE_COUNT:
@@ -248,7 +248,7 @@ def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
         new_break_names.extend(break_names)
     else:
         new_break_names = break_names
-    break_names = new_break_names[:50]
+    break_names = new_break_names[:100]
     if is_get_new:
         _NEW_MY_HOT_COUNT += len(result)
         if _NEW_MY_HOT_COUNT > NEW_MY_HOT_SAVE_COUNT:

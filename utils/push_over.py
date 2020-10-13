@@ -85,6 +85,7 @@ class Pushover(object):
         result = None
         self._restart_token()
         try:
+            message = u'{} - opc'.format(message)
             result = self.client.send_message(message, **kwargs)
         except Exception as e:
             e = str(e).strip()
