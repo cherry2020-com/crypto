@@ -126,9 +126,11 @@ def get_web_hot_data(request_raw, exist_titles=None):
                     name = ' || '.join(text)
                     name = index_key + name
                     if name not in exist_titles_set:
-                        result[name] = hour_hot.a.attrs['href']
+                        uri = hour_hot.a.attrs['href']
+                        result[name] = uri
                         is_get_new = True
-                        new_titles.append(name)
+                        # new_titles.append(name)
+                        new_titles.append(uri)
                         real_hour_hots_count[index_key] += 1
 
         print "Hot_Web_Find-6h_%s-24h_%s-48h_%s-xh_%s|" % (
@@ -182,9 +184,11 @@ def get_web_data(request_raw, break_names=None):
                 name = ' || '.join(text)
                 if name in set_break_names:
                     break
-                new_break_names.append(name)
+                # new_break_names.append(name)
+                uri = tag.a.attrs['href']
+                new_break_names.append(uri)
                 is_get_new = True
-                result[name] = tag.a.attrs['href']
+                result[name] = uri
         print "New_Real_Find_%s|" % len(result),
         new_break_names.extend(break_names)
     else:
@@ -243,9 +247,11 @@ def get_web_data_for_my_hot(request_raw, break_names=None, web_data=None):
                 replies_count = int(replies_count or 0)
                 if replies_count < NEW_MY_HOT_SEND_COMMENT_COUNT:
                     continue
-                new_break_names.append(name)
+                uri = tag.a.attrs['href']
+                # new_break_names.append(name)
+                new_break_names.append(uri)
                 is_get_new = True
-                result[name] = tag.a.attrs['href']
+                result[name] = uri
         print "My_Hot_Real_Find_%s|" % len(result),
         new_break_names.extend(break_names)
     else:
