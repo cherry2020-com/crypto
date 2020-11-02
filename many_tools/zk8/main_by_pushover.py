@@ -44,6 +44,8 @@ _NEW_MY_HOT_COUNT = 0
 
 _GLOBAL_PUSHOVERS = {}
 
+_GLOBAL_SEND_COUNT = 0
+
 
 def test_print(*args, **kwargs):
     print args, kwargs
@@ -287,26 +289,32 @@ def init():
 
 
 def custom_send_push(title, url):
-    global _GLOBAL_PUSHOVERS
+    global _GLOBAL_PUSHOVERS, _GLOBAL_SEND_COUNT
     _key = 'zk8_new'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_SEND_COUNT += 1
+    title = u"{}/{}".format(title, _GLOBAL_SEND_COUNT)
     _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
 def custom_send_push_hot(title, url):
-    global _GLOBAL_PUSHOVERS
+    global _GLOBAL_PUSHOVERS, _GLOBAL_SEND_COUNT
     _key = 'zk8_hot'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_SEND_COUNT += 1
+    title = u"{}/{}".format(title, _GLOBAL_SEND_COUNT)
     _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
 def custom_send_push_my_hot(title, url):
-    global _GLOBAL_PUSHOVERS
+    global _GLOBAL_PUSHOVERS, _GLOBAL_SEND_COUNT
     _key = 'zk8_mhot'
     if _key not in _GLOBAL_PUSHOVERS:
         _GLOBAL_PUSHOVERS[_key] = Pushover(_key)
+    _GLOBAL_SEND_COUNT += 1
+    title = u"{}/{}".format(title, _GLOBAL_SEND_COUNT)
     _GLOBAL_PUSHOVERS[_key].send(title, url=url, url_title=u'>> 详情链接 <<')
 
 
