@@ -8,13 +8,14 @@ from bs4 import BeautifulSoup
 
 line_year = 2018
 
-with open('./Employee Time Off_ Home _ Salesforce - Unlimited Edition.html') as f:
+with open('./Employee.htm') as f:
     web_data = f.read()
 soups = BeautifulSoup(web_data, "lxml")
 _all_items = soups.findAll(class_='dataRow')
 _all_titles = soups.findAll(class_='zen-deemphasize')
 all_titles = [x.text for x in _all_titles]
 all_items = []
+all_invalid_days = 0
 
 for each in _all_items:
     all_items.append(dict(zip(all_titles, [x.text for x in each])))
@@ -60,6 +61,13 @@ for _index, _item in enumerate(all_items):
         new_year -= 1
         if new_year not in all_jia_map:
             new_year = year
+        else:
+            if all_jia_map[new_year] > 5:
+                invalid_days = all_jia_map[new_year] - 5
+                print u'{}: 因跨年导致{}年{}天年假中{}天失效！！！'.format(
+                    _index, new_year, all_jia_map[new_year], invalid_days)
+                all_invalid_days += invalid_days
+                all_jia_map[new_year] = 5
     all_jia_map[new_year] -= _used
     if all_jia_map[new_year] < 0:
         next_days = all_jia_map[new_year]
@@ -80,7 +88,10 @@ pp = pprint.PrettyPrinter(indent=1)
 pp.pprint(all_jia_map)
 today = datetime.date.today()
 if today.month <= 6:
-    print u'-->截止{}年6月，你还有{}天的年假'.format(
+    print u'-->截止{}年6月末，你还有{}天的年假'.format(
         today.year, all_jia_map[today.year-1])
-print u'-->截止{}年6月，你还有{}天的年假'.format(
-        today.year + 1, all_jia_map[today.year])
+print u'-->截止目前（{}年），你还有{}天的年假，共计失效未使用{}天年假'.format(
+        today.year, all_jia_map[today.year], all_invalid_days)
+will_invalid_days = 0 if all_jia_map[today.year] <= 5 else all_jia_map[today.year]-5
+print u'-->{}年12月末将失效{}天，{}年6月末将失效{}天'.format(
+    today.year, will_invalid_days, today.year+1, all_jia_map[today.year]-will_invalid_days)

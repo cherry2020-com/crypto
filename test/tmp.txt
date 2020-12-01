@@ -1,10 +1,10 @@
-GET /cookies/set/sessioncookie/123456789 HTTP/1.1
-Host: httpbin.org
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+GET /admin/sLA/getSLA.do?priorityKey=9765496803fde6c5d4912dc97925fda0&ticketTypeKey=e2f8a37042c9c028524693a8d566279b&typeKey=a66471af1dcb70c5bccf420d962816b6 HTTP/1.1
+Host: itsd.sunac.com.cn
+Accept: */*
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36
+X-Requested-With: XMLHttpRequest
+Referer: http://itsd.sunac.com.cn/admin/index.do
 Accept-Encoding: gzip, deflate
 Accept-Language: zh-CN,zh;q=0.9
+Cookie: NITSMCOOKIECONFIGNAME=E310029C5D3939924C1FBA168E580E29; OAMAuthnCookie_itsd.sunac.com.cn:80=PHNvwp7542MKxnqN6U5g2D%2FdDFQ3WAZ1VMiFC6Wo1Xf4aVfuTebqIbyz7SInh3iaWpFTaJIHqHyLxXMjJREKEYc4OMVTrGC7zF%2Fho2lI81PNwktF4RNM2JZvzVWVO50Q6ByytCchnuIbUb2UuK3tgr8HJmvdaOVQDNOV5KnnoUeNr%2BJHrQ2GT8W46YDY5sLAq9ybJC8F4RBzvsx%2F%2BpTWoxMBFjFMC4%2BsBmoRTnbX0ontKWtCuMoPjb6%2Bcn5whoN1Tkg31bjvgiSBE5u%2BISbD3tDZ3%2BRY4QtUqGyUWmlLoiVIh8S3FWVQz72I3TqSc7%2BYRqCNNbnBJFVNwMTWNnEYoiyQNQ%2FiH6EkhTkefNWCOrmVE424rXCagvPHH9mXZlrFMUpzOQj5g4b4Tu%2Fe5wlB69ZtzQ9UmhC%2Fn%2FHEOHISiMHLhspEyrai8qUCY74im1iMTuBHXReXy7lA%2FLfHhBMc%2FwNS%2F2%2FbzRZJqdAq6Wf2qBo%3D
 Connection: keep-alive
-Cookie: citicbank=73aef7319edf1be6c0a66a0be42eef76; Path=/; JSESSIONID_BASEH5=30B79BCB2B02905E3F8751989A05ED0F; Domain=.creditcard.ecitic.com; JSESSIONID_OAUTH=30B79BCB2B02905E3F8751989A05ED0F; citicbank_cookie=!85Wcs80+uw0IIue7WDSPiZPLSyIDtEgjuuDemcXIFCIDGKRooBGuLgnpcBFEtMAzZeNBjTruzVtUY6Q; path=/;
-
