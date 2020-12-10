@@ -3,7 +3,7 @@
 import sys
 from datetime import datetime
 
-sys.path.extend(['D:\\Conding\\my_tools\\'])
+sys.path.extend(['D:/Coding/my_tools/'])
 
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
