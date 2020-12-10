@@ -3,7 +3,8 @@
 import sys
 from datetime import datetime
 
-from small_tools.qiang_quan.jd.tools import get_time_diff
+sys.path.extend(['C:\\Conding\\my_tools\\'])
+
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
 
