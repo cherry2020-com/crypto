@@ -40,3 +40,4 @@ if __name__ == '__main__':
             break
         except Exception as e:
             print '-->ERROR:Exception:', e
+        sys.stdout.flush()
