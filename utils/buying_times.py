@@ -3,6 +3,7 @@
 import Queue
 import datetime
 import random
+import sys
 import time
 
 
@@ -123,6 +124,7 @@ class PanicBuyingTimes(object):
                 self._cache_data['start_print_false_count'] = 0
             else:
                 self._cache_data['start_print_false_count'] += 1
+        sys.stdout.flush()
         return False
 
 
