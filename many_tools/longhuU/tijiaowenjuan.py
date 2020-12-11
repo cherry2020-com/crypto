@@ -18,7 +18,7 @@ if __name__ == '__main__':
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     buying_time = PanicBuyingTimes(date_times, before_seconds=2,
                                    after_seconds=2,
-                                   false_sleep_second_randint=(60, 120),
+                                   false_sleep_second_randint=(120, 240),
                                    debug=True, time_diff_ms=None)
     req = RawToPython(file_path)
     count = 0
