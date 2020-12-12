@@ -27,7 +27,7 @@ if __name__ == '__main__':
         try:
             if buying_time.is_start:
                 print '--> START !!!', datetime.now()
-                web_data = req.requests(timeout=(None, 0.1))
+                web_data = req.requests(timeout=(None, 0.5))
                 print imp_templ.format(web_data.json())
             else:
                 try:
