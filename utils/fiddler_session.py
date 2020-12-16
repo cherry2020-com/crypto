@@ -148,21 +148,21 @@ class RawToPython(object):
         self.url = base_url + '?' + urllib.urlencode(url_param)
         self.url_parse = urlparse.urlparse(self.url)
 
-    def set_param(self, url_param=None, body_param=None):
+    def set_param(self, url_param=None, req_param=None):
         if url_param is not None:
             self.__set_url_param(url_param)
         self.req_param = {"url": self.url}
         if self.body_data is not None:
-            if body_param is not None:
-                self.body_data.update(body_param)
+            if req_param is not None:
+                self.body_data.update(req_param)
             self.req_param["data"] = self.body_data
-            logging.debug("fd: set_body_param: " + str(body_param))
+            logging.debug("fd: set_req_param: " + str(req_param))
         elif self.body_json is not None:
-            if body_param is not None:
-                self.body_json.update(body_param)
+            if req_param is not None:
+                self.body_json.update(req_param)
             # self.req_param["json"] = self.body_json
             self.req_param["data"] = json.dumps(self.body_json)
-            logging.debug("fd: set_json_param: " + str(body_param))
+            logging.debug("fd: set_json_param: " + str(req_param))
 
     def set_head(self, **kwargs):
         self.session.headers.update(kwargs)
