@@ -1,0 +1,13 @@
+GET /logstores/activity_h5/track?APIVersion=0.6.0&dtEventTime=2020-12-14%2015%3A00%3A00&iProjectId=1&iSourceId=3&iUserId=23273282&vUserAgent=User-Agent%3A%20Mozilla%2F5.0%20%28iPhone%3B%20CPU%20iPhone%20OS%2014_2%20like%20Mac%20OS%20X%29%20AppleWebKit%2F605.1.15%20%28KHTML%2C%20like%20Gecko%29%20Mobile%2F15E148%2Fqd-app-4.5.8-ios%2Fqd-app-4.5.8-ios&vPageId=%E5%8F%8C12%E6%B4%BB%E5%8A%A8&vFunctionId=%E5%8F%8C12%E6%B4%BB%E5%8A%A8%E4%BC%98%E6%83%A0%E5%88%B8%E7%BB%84%E4%BB%B6%E4%BC%98%E6%83%A0%E5%88%B8%E7%82%B9%E5%87%BB&vPara=%7B%22column%22%3A%22%EF%BC%8815%E7%82%B9%EF%BC%89100%E7%8E%B0%E9%87%91%E5%88%B8%22%2C%22name%22%3A%22%22%2C%22context%22%3A%7B%22thirdpartyactivityid%22%3A1670%2C%22jtpactivityid%22%3A%22%22%7D%2C%22target%22%3A%7B%22id%22%3A%22543cacf5a1054c8f82694c278c32a8a2%22%2C%22type%22%3A%22%E4%BC%98%E6%83%A0%E5%88%B8%22%7D%2C%22vdata%22%3A%7B%22componentBelongPage%22%3A%22%E5%8F%8C12%E6%B4%BB%E5%8A%A8%22%2C%22compentBelongPageUuid%22%3A%22page-raffle%22%2C%22componentName%22%3A%22VCoupon%22%2C%22componentCustomName%22%3A%22%EF%BC%8815%E7%82%B9%EF%BC%89100%E7%8E%B0%E9%87%91%E5%88%B8%22%2C%22componentUuid%22%3A%2220201120153350898-09840305%22%2C%22componentType%22%3A%22plugin%22%2C%22vComponentPara%22%3A%7B%22VCouponPara%22%3A%7B%22type%22%3A%22sku%22%2C%22status%22%3A%222%22%2C%22imgUrl%22%3A%22https%3A%2F%2Fcp.jegotrip.com.cn%2Fpartners%2Fvplus%2Fvia-production%2Fresource%2Factivity%2F1670%2F2020-12-03%2F82c59eacbde148e1bb7e7c8b5e93db86.png%22%2C%22greyImgUrl%22%3A%22https%3A%2F%2Fcp.jegotrip.com.cn%2Fpartners%2Fvplus%2Fvia-production%2Fresource%2Factivity%2F1670%2F2020-12-03%2F7387f49eaa704ab7b5c40378ae0e7b31.png%22%2C%22sku%22%3A%22b22006cc066a4ce3977cc8dbc5f61b90%22%7D%7D%7D%7D&vUrl=https%3A%2F%2Fcp.jegotrip.com.cn%2Fpartners%2Fvplus%2Fvia-production%2Fentry%2FSmMXzeAVKuIzDSmQwefMvTKa.html%3FhtmlVersion%3D111%23%2Fraffle HTTP/1.1
+Host: app-product.cn-hongkong.log.aliyuncs.com
+Connection: keep-alive
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
+Accept: */*
+Origin: https://cp.jegotrip.com.cn
+Sec-Fetch-Site: cross-site
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://cp.jegotrip.com.cn/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+

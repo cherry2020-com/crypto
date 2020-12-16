@@ -1,0 +1,14 @@
+GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+Host: m.uhome.longhu.net
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
+x-requested-with: XMLHttpRequest
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: acw_tc=2760825516080101782592372e4a24c135f82d8ca4025ca7723f4414d6d03b; gr_user_id=54096d1d-d2ae-4142-9241-c4b5edf3c814; 9c7d1bc614c91f4e_gr_session_id=6d2c6357-f248-45f1-a376-ee0bccc9897c; grwng_uid=e375ac0e-cb5a-4942-8a19-5097a7b3fe99; 9c7d1bc614c91f4e_gr_session_id_6d2c6357-f248-45f1-a376-ee0bccc9897c=true; zgclear=true; zg_did=%7B%22did%22%3A%20%2217664e034db505-0cd324ef8ebdde-3b7c0267-445c0-17664e034dcbf4%22%7D; _dx_uzZo5y=460c71cc2c6801a67109c7bad34c8b20f197c13dff6357706fd04f759055c8676e361cfa; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUzNzY0MjA0NGEwMTc2NWYxODJjNDUzNzIxIiwiYWlkIjoiOGE2Nzg5NTM3NjQyMDQ0YTAxNzY1ZjE4MmM0NTM3MjAifQ==; P.sig=-txxa7OLO6DBEkpewmqoq1iShzs; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=6d2c6357-f248-45f1-a376-ee0bccc9897c; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a6789537642044a01765f182c453721; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608010183903%2C%22updated%22%3A%201608010447915%2C%22info%22%3A%201608010183906%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; 9c7d1bc614c91f4e_gr_cs1=8a6789537642044a01765f182c453721; T=qhr9QQeGeZ9Bp-zwREXzz8VQbbqvocMV; T.sig=MB9PlY5dzUCXcR9G3KSsOvQCdww; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608010456|1608010178
+

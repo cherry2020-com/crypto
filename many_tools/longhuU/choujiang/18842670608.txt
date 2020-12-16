@@ -1,0 +1,14 @@
+GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+Host: m.uhome.longhu.net
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
+x-requested-with: XMLHttpRequest
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: acw_tc=2760829d16080110122613542e0d45cdecbad6fa4d3e0fdbe3765ff2ff0694; gr_user_id=b1bd03ee-7443-4ccd-836a-15481527b703; 9c7d1bc614c91f4e_gr_session_id=2684219c-06cf-4237-966f-aca00de530a1; zgclear=true; zg_did=%7B%22did%22%3A%20%2217664ecde3d4d0-0af563e22a006f-163a6153-168000-17664ecde3e9ff%22%7D; grwng_uid=fc50262f-2bcd-49f5-829a-6dfe3eecf098; 9c7d1bc614c91f4e_gr_session_id_2684219c-06cf-4237-966f-aca00de530a1=true; _dx_uzZo5y=435a98126b4642ce4c16d7d8113c51815e3036ef5ec461521f4ff8254260d80c196b7da8; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjAyY2I0MGM2Nzc5IiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MDJjYjQwYzY3NzgifQ==; P.sig=si-K1VYD817-xS9edstir5TuvsU; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=2684219c-06cf-4237-966f-aca00de530a1; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a678951764208160176602cb40c6779; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608011013697%2C%22updated%22%3A%201608011046009%2C%22info%22%3A%201608011013699%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608011082|1608011012; 9c7d1bc614c91f4e_gr_cs1=8a678951764208160176602cb40c6779; T=AWbkTYLWqKtRgcw98oI61iH3cR5c8RZa; T.sig=9b4tG1ig-vPBCmS2Zp8H_jgDS5w
+
