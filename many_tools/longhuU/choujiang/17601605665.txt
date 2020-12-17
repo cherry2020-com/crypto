@@ -1,0 +1,14 @@
+GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+Host: m.uhome.longhu.net
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
+x-requested-with: XMLHttpRequest
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: gr_user_id=e0e57020-d58c-42ae-9ac0-3ab0a530af77; zgclear=true; zg_did=%7B%22did%22%3A%20%221764bc16565966-0cb5a252b1cd93-163a6153-168000-1764bc16566de9%22%7D; grwng_uid=ded16de4-7f13-4475-ae7b-91f5424c8b20; _dx_uzZo5y=70cd0ce4ae932be98117d94521893bb5d6ff978e24480794849986ce0c9ff9af1505c4af; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhYjI4ZGMwNjk3MTJiZWMwMTY5ZjA0ZmUwNDQ0ZDY1IiwiYWlkIjoiOGFiMjhkYzA2OTcxMmJlYzAxNjlmMDRmZTA0NDRkNjQifQ==; P.sig=YFoK3nQqq2vCXgE2itu_1mukyKo; 9c7d1bc614c91f4e_gr_last_sent_cs1=8ab28dc069712bec0169f04fe0444d65; MEIQIA_TRACK_ID=1iRUMVhB8FG2PybZdtKE8U7aL8m; MEIQIA_VISIT_ID=1lUeWWalpIpySimfEIei745QAil; acw_tc=2760826116081860784287731e920dda8f13a4cda8d7c63aea908da836815b; 9c7d1bc614c91f4e_gr_session_id=fa848edb-1c7c-443b-a940-8379c39a63aa; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=fa848edb-1c7c-443b-a940-8379c39a63aa; 9c7d1bc614c91f4e_gr_session_id_fa848edb-1c7c-443b-a940-8379c39a63aa=true; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608186082792%2C%22updated%22%3A%201608186082792%2C%22info%22%3A%201607588734316%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%2C%22zs%22%3A%200%2C%22sc%22%3A%200%2C%22firstScreen%22%3A%201608186082792%7D; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608186233|1608186078; 9c7d1bc614c91f4e_gr_cs1=8ab28dc069712bec0169f04fe0444d65; T=jrtX1ZG0Gzi8VSqdyWMouYLNdrZy8b8O; T.sig=qIlQBFHAGhxy1zevXhr_zlslJ6I
+
