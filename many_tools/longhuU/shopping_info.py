@@ -3,12 +3,13 @@
 
 import time
 
-from utils.fiddler import RawToPython
+from utils.fiddler_session import RawToPython
 from bs4 import BeautifulSoup
 
 url = 'https://m.uhome.longhu.net/shopping/details/{}'
 
-start_id = 1420877
+start_id = 1410380
+start_id = 1410000
 end_id = 2000000
 for _id in xrange(start_id, end_id+1):
     rtp = RawToPython('./shopping_info.txt')
@@ -18,10 +19,12 @@ for _id in xrange(start_id, end_id+1):
     except:
         try:
             rtp_web = rtp.requests(timeout=10)
-        except:
+        except Exception as e:
+            print e
             try:
                 rtp_web = rtp.requests(timeout=10)
-            except:
+            except Exception as e:
+                print e
                 continue
     rtp_json = rtp_web.json()
     if rtp_json['code'] == 500:
