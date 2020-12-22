@@ -36,7 +36,7 @@ def get_data():
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-12-17 14:00:00"
+    date_times = "2020-12-21 14:00:00"
     # time_diff_ms = get_time_diff()
     # print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         try:
             if buying_time.is_start:
                 print '--> START !!!', datetime.now()
-                web_data = req.requests(timeout=5)
+                web_data = req.requests(timeout=(None, 0.1))
                 # web_data = req.requests(timeout=0.5)
                 print imp_templ.format(web_data.json())
             else:

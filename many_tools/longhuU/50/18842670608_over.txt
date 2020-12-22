@@ -1,0 +1,18 @@
+POST /proxy-wrap/mkbg/combined/activity/prize HTTP/1.1
+Host: m.uhome.longhu.net
+Connection: keep-alive
+Content-Length: 340
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
+Content-Type: application/x-www-form-urlencoded
+Origin: https://m.uhome.longhu.net
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://m.uhome.longhu.net/polymer/1780
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: acw_tc=2760826616082718387873842e1d7bb59958a81578d648cce26c739391974e; gr_user_id=3eb8f069-b976-40a7-a9d3-57dcb19e8950; 9c7d1bc614c91f4e_gr_session_id=2623cc7e-0de5-44e8-97eb-9e7ec7fc9807; zgclear=true; zg_did=%7B%22did%22%3A%20%221767478c7a48ff-0ecef993c2a233-3b7c0267-445c0-1767478c7a58d3%22%7D; grwng_uid=cce140cf-cc66-443e-a9d4-abf5cdd085f9; 9c7d1bc614c91f4e_gr_session_id_2623cc7e-0de5-44e8-97eb-9e7ec7fc9807=true; _dx_uzZo5y=b17252b30dae9f3fa8ee57d24cd0be7c81451c53584478a4e0bfc65ec2fe9ff1a06320d2; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjAyY2I0MGM2Nzc5IiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MDJjYjQwYzY3NzgifQ==; P.sig=si-K1VYD817-xS9edstir5TuvsU; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=2623cc7e-0de5-44e8-97eb-9e7ec7fc9807; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a678951764208160176602cb40c6779; T=KJS3HtOMUE8ae5kGLER3ruAWdT4DCOkC; T.sig=uLx5cgv8GX7xYlnkZJwpRxYkxkM; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608271901|1608271838; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608271841192%2C%22updated%22%3A%201608271901295%2C%22info%22%3A%201608271841196%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; 9c7d1bc614c91f4e_gr_cs1=8a678951764208160176602cb40c6779
+
+combinedId=1780&componentId=mod_1605597790375&activityId=3398&activityPrizeId=391&memberId=8a678951764208160176602cb40c6779&memberName=18842670608&memberMobile=18842670608&projectId=23322783&projectName=%E5%A4%A7%E8%BF%9E%E5%A4%A7%E6%B9%96%E5%B1%B1%E8%AF%AD&regionId=20&regionName=%E5%A4%A7%E8%BF%9E%E5%B8%82&roomId=23322873&roomName=2-1202

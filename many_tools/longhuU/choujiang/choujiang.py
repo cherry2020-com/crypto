@@ -23,3 +23,5 @@ if __name__ == '__main__':
    print '17601605665', rtp.requests().text
    rtp = RawToPython('./18841164712.txt')
    print '18841164712', rtp.requests().text
+   rtp = RawToPython('./15369204212.txt')
+   print '15369204212', rtp.requests().text
