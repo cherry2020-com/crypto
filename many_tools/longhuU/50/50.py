@@ -36,12 +36,12 @@ def get_data():
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-12-21 14:00:00"
+    date_times = "2020-12-24 14:00:00"
     # time_diff_ms = get_time_diff()
     # print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
     buying_time = PanicBuyingTimes(date_times, before_seconds=2,
-                                   after_seconds=3,
+                                   after_seconds=2,
                                    false_sleep_second_randint=(60, 120),
                                    debug=True, time_diff_ms=None)
     req = RawToPython(file_path)

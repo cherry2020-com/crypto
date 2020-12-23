@@ -1,14 +1,14 @@
-GET /shopping/ajax/details?id=1416198&grouponId=&projectId=&_=1607590300899 HTTP/1.1
+GET /shopping/ajax/details?id=1410380&grouponId=&projectId=&_=1608627729736 HTTP/1.1
 Host: m.uhome.longhu.net
 Connection: keep-alive
 Accept: */*
-User-Agent: jdapp;android;8.4.2;8.0.0;;network/wifi;model/Mi Note 2;osVer/26;appBuild/71043;psn/|7;psq/1;uid/;adk/;ads/;pap/JA2015_311210|8.4.2|ANDROID 8.0.0;osv/8.0.0;pv/2.23;jdv/;ref/com.jingdong.app.mall.WebActivity;partner/huawei;apprpd/Home_Main;Mozilla/5.0 (Linux; Android 8.0.0; Mi Note 2 Build/OPR1.170623.032; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36
+User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
 X-Requested-With: XMLHttpRequest
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: https://m.uhome.longhu.net/shopping/details/1416198
+Referer: https://m.uhome.longhu.net/shopping/details/1410380
 Accept-Encoding: gzip, deflate, br
 Accept-Language: zh-CN,zh;q=0.9
-Cookie: acw_tc=276082a816075892025144571ed1ed70dba462c32f17bccf35c5ba36b23c1b; P=e30=; P.sig=d3oAjW40tv8M3koE2t1Cah32S5o; gr_user_id=3dfb2816-a428-4314-809c-8f14d7fac60a; 9c7d1bc614c91f4e_gr_session_id=bf36ec71-ff36-4fee-8b39-a52db8f2b6bc; grwng_uid=73b8dc22-65e7-4e81-a2e7-36047dc6491f; zgclear=true; zg_did=%7B%22did%22%3A%20%221764bc88edec58-0532776458298f-163a6153-168000-1764bc88edfb62%22%7D; 9c7d1bc614c91f4e_gr_session_id_bf36ec71-ff36-4fee-8b39-a52db8f2b6bc=true; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201607589203682%2C%22updated%22%3A%201607590156019%2C%22info%22%3A%201607589203685%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; T=l79wrmhlb12xoj1sbhrFDwIbiX2fganJ; T.sig=XY-q_3isySUgc2sdwCdiTEAfXnQ; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1607590300|1607589202
+Cookie: acw_tc=2760828d16086276869952170edb51c6572724da0b44d4c534a6dfbe4592c6; zgclear=true; zg_did=%7B%22did%22%3A%20%2217689ae93f67a6-034400888efc77-163a6153-168000-17689ae93f7b22%22%7D; gr_user_id=b1cab71c-7dba-4bbb-a92f-60653776257b; 9c7d1bc614c91f4e_gr_session_id=c090c168-85f9-4530-9cf0-d9650652dd14; grwng_uid=b0d439e3-76ad-4128-9499-d4e844f1b4ff; 9c7d1bc614c91f4e_gr_session_id_c090c168-85f9-4530-9cf0-d9650652dd14=true; P=eyJwaWQiOiIyMzMyMjc4MyJ9; P.sig=rkcCEAL9wsGDOGhtGCpFEAAuHRA; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608627688442%2C%22updated%22%3A%201608627723991%2C%22info%22%3A%201608627688444%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; T=aPHiA7rsaxFrnfcZARRI7VNuOmezBJJa; T.sig=EI_n9xKxDThsuqIqkJKiRJWonNI; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608627729|1608627687
 

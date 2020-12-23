@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 
 url = 'https://m.uhome.longhu.net/shopping/details/{}'
 
-start_id = 1410380
-start_id = 1410000
+# start_id = 1410380
+start_id = 1410379
 end_id = 2000000
 for _id in xrange(start_id, end_id+1):
     rtp = RawToPython('./shopping_info.txt')
@@ -30,6 +30,10 @@ for _id in xrange(start_id, end_id+1):
     if rtp_json['code'] == 500:
         continue
     rtp_json = rtp_json['data']['entity']
+    if rtp_json['soldOutMsg']:
+        print '.',
+        continue
+    print ''
     rtp_json['price'] = float(rtp_json['price'])
     rtp_json['originalPrice'] = float(rtp_json['originalPrice'])
     chajia = rtp_json['originalPrice'] - rtp_json['price']
