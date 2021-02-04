@@ -21,6 +21,7 @@ zk_15578807881 - o8AV8S88w9nFup8j - 母亲的名字：0Z19wAedW5DlV4oY
 zk_15578807882 - o8AV8S88w9nFup8j - 母亲的名字：0Z19wAedW5DlV4oY
 """
 sys.path.extend(['/data/my_tools_env/my_tools/'])
+sys.path.extend(['/data/coding/my_tools/'])
 
 from utils import tools
 from utils.push_over import Pushover

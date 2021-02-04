@@ -26,7 +26,7 @@ def lianxuchongfu(numbers, need_count=3):
 
 
 if __name__ == '__main__':
-    with open('./output/xuanhao.txt') as f:
+    with open('./output/xuanhao1.txt') as f:
         fd = f.read()
     haomas = fd.split('\n')
-    chongfu(haomas, 4)
+    chongfu(haomas, 5)

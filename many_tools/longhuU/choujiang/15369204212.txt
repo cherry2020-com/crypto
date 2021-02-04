@@ -1,14 +1,18 @@
-GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4,12&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+POST /proxy-wrap/mkbg/combined/activity/lotteryV2 HTTP/1.1
 Host: m.uhome.longhu.net
 Connection: keep-alive
-Accept: application/json, text/plain, */*
-User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
-x-requested-with: XMLHttpRequest
+Content-Length: 313
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: jdapp;android;8.4.2;8.0.0;;network/wifi;model/Mi Note 2;osVer/26;appBuild/71043;psn/|7;psq/1;uid/;adk/;ads/;pap/JA2015_311210|8.4.2|ANDROID 8.0.0;osv/8.0.0;pv/2.23;jdv/;ref/com.jingdong.app.mall.WebActivity;partner/huawei;apprpd/Home_Main;Mozilla/5.0 (Linux; Android 8.0.0; Mi Note 2 Build/OPR1.170623.032; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/71.0.3578.99 Mobile Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Origin: https://m.uhome.longhu.net
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Referer: https://m.uhome.longhu.net/polymer/1924
 Accept-Encoding: gzip, deflate, br
 Accept-Language: zh-CN,zh;q=0.9
-Cookie: acw_tc=2760827616086153774254613e64e120c0ad77302167b6ca06eb204f00f250; zgclear=true; zg_did=%7B%22did%22%3A%20%2217688f2c16cacb-0cb3256f494a89-3b7c0267-445c0-17688f2c16db16%22%7D; gr_user_id=d4b52cea-af6f-4d8f-b228-b1fd41ff88e0; 9c7d1bc614c91f4e_gr_session_id=3b422803-4528-456b-9f24-dff0a569bfd7; grwng_uid=55996817-3e68-411e-a7d1-2901d7f9a9d8; 9c7d1bc614c91f4e_gr_session_id_3b422803-4528-456b-9f24-dff0a569bfd7=true; _dx_uzZo5y=116b6ba8b48e311002a911d58ec8cc7bd451e3837a03c378a8a5d08b6f24a763935d4fa2; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjFjMDNkYzUxY2VkIiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MWMwM2RjNTFjZWMifQ==; P.sig=pEquf83JKbhpu0RYYpzhH_lmS4I; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=3b422803-4528-456b-9f24-dff0a569bfd7; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a67895176420816017661c03dc51ced; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608615379311%2C%22updated%22%3A%201608615425953%2C%22info%22%3A%201608615379314%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; 9c7d1bc614c91f4e_gr_cs1=8a67895176420816017661c03dc51ced; T=40deWBa8HbolNPm2NoUp4sdGz7N5BBlq; T.sig=LQdjuUT7c4GAHZE4CB37sCJK6uk; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608615544|1608615377
+Cookie: acw_tc=2760829516103343958937084ee87fdbbc11345c3dbdd4bafda9940ee033b2; T=FxdWny2-90_i1rBJfAQJSLj9lt1rJKrA; T.sig=poKbhOCbTbNgncX9ynb-dlzJYok; gr_user_id=518b945b-33b7-45de-b49d-89cb4fb5c48d; 9c7d1bc614c91f4e_gr_session_id=b12e29ae-e2ae-422d-a5e4-e7d14374ca32; zgclear=true; zg_did=%7B%22did%22%3A%20%22176ef68e4ca346-034730a4adf7a-2136097a-445c0-176ef68e4cb8d3%22%7D; grwng_uid=630a4c8f-3373-460a-8a65-ba540530fb36; 9c7d1bc614c91f4e_gr_session_id_b12e29ae-e2ae-422d-a5e4-e7d14374ca32=true; _dx_uzZo5y=20c7db8656d4b31078ba00c74f3569f06f88c741684869eb5b8157168cd42c629aeb775a; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjFjMDNkYzUxY2VkIiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MWMwM2RjNTFjZWMifQ==; P.sig=pEquf83JKbhpu0RYYpzhH_lmS4I; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=b12e29ae-e2ae-422d-a5e4-e7d14374ca32; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a67895176420816017661c03dc51ced; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1610334553|1610334395; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201610334397646%2C%22updated%22%3A%201610334554131%2C%22info%22%3A%201610334397649%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; 9c7d1bc614c91f4e_gr_cs1=8a67895176420816017661c03dc51ced
 
+combinedId=1987&componentId=mod_1611911779711&wheelId=9718654f621811ebb7c87cd30adaf108&memberName=15369204212&memberMobile=15369204212&projectName=%E5%A4%A7%E8%BF%9E%E5%A4%A7%E6%B9%96%E5%B1%B1%E8%AF%AD&regionId=20&regionName=%E5%A4%A7%E8%BF%9E%E5%B8%82&memberId=8a67895176420816017661c03dc51ced&projectId=23322783

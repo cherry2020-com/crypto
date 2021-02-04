@@ -1,14 +1,18 @@
-GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+POST /proxy-wrap/mkbg/combined/activity/lotteryV2 HTTP/1.1
 Host: m.uhome.longhu.net
 Connection: keep-alive
-Accept: application/json, text/plain, */*
+Content-Length: 329
+Accept: */*
+X-Requested-With: XMLHttpRequest
 User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
-x-requested-with: XMLHttpRequest
+Content-Type: application/x-www-form-urlencoded
+Origin: https://m.uhome.longhu.net
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Referer: https://m.uhome.longhu.net/polymer/1924
 Accept-Encoding: gzip, deflate, br
 Accept-Language: zh-CN,zh;q=0.9
-Cookie: zgclear=true; zg_did=%7B%22did%22%3A%20%221765090316eca5-0aa2605187e39d-163a6153-168000-1765090316fc28%22%7D; gr_user_id=66c52e98-7521-4a59-a032-1f34a6024b9f; grwng_uid=4e710388-1f3c-4c7d-8aba-0e916e2ae2c2; _dx_uzZo5y=544cbe3f99bad1004ad40df020e9d12aa8969ec950b87797cd4617eb59ea2e026f25f126; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTViNmVkNmRhNjEwMTZlZWZhYzMxMTAyZDc3IiwiYWlkIjoiOGE2Nzg5NWI2ZWQ2ZGE2MTAxNmVlZmFjMzExMDJkNzYifQ==; P.sig=5TO4YXNqUV8MG3qN_JUuDga81MI; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a67895b6ed6da61016eefac31102d77; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201607928934878%2C%22updated%22%3A%201607928934878%2C%22info%22%3A%201607669395828%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22m.uhome.longhu.net%22%2C%22zs%22%3A%200%2C%22sc%22%3A%200%2C%22firstScreen%22%3A%201607928934878%7D; acw_tc=2760827716080112875254663e8b8b69b87ef61e2ec732bd28165c1a943adc; T=5gYmqF-wln4tZR9cJG89_VVMInfBPWWS; T.sig=wpWIomaca8k-R6Be3JPtHxxbwFw; 9c7d1bc614c91f4e_gr_session_id=b611dfe4-8911-4b48-95f2-a60a86d398c7; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=b611dfe4-8911-4b48-95f2-a60a86d398c7; 9c7d1bc614c91f4e_gr_cs1=8a67895b6ed6da61016eefac31102d77; 9c7d1bc614c91f4e_gr_session_id_b611dfe4-8911-4b48-95f2-a60a86d398c7=true; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608011291|1608011287
+Cookie: zgclear=true; zg_did=%7B%22did%22%3A%20%221765090316eca5-0aa2605187e39d-163a6153-168000-1765090316fc28%22%7D; gr_user_id=66c52e98-7521-4a59-a032-1f34a6024b9f; grwng_uid=4e710388-1f3c-4c7d-8aba-0e916e2ae2c2; _dx_uzZo5y=544cbe3f99bad1004ad40df020e9d12aa8969ec950b87797cd4617eb59ea2e026f25f126; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTViNmVkNmRhNjEwMTZlZWZhYzMxMTAyZDc3IiwiYWlkIjoiOGE2Nzg5NWI2ZWQ2ZGE2MTAxNmVlZmFjMzExMDJkNzYifQ==; P.sig=5TO4YXNqUV8MG3qN_JUuDga81MI; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a67895b6ed6da61016eefac31102d77; acw_tc=2760829716103343047253133e17df7099783fe3ac0adb3b6f6ee5ea70333b; 9c7d1bc614c91f4e_gr_session_id=3176e9de-8e5e-4143-a655-e58c89f99c7e; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=3176e9de-8e5e-4143-a655-e58c89f99c7e; 9c7d1bc614c91f4e_gr_session_id_3176e9de-8e5e-4143-a655-e58c89f99c7e=true; T=7Sy3MGPaMCTN6zkuIPUNZah7rB6FB_2I; T.sig=_B0TfxdZIm1oLPhfW21XICJaERI; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1610334312|1610334304; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201610334305404%2C%22updated%22%3A%201610334312650%2C%22info%22%3A%201610334305407%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%2C%22zs%22%3A%200%2C%22sc%22%3A%200%2C%22firstScreen%22%3A%201610334305404%7D; 9c7d1bc614c91f4e_gr_cs1=8a67895b6ed6da61016eefac31102d77
 
+combinedId=1924&componentId=mod_1609918946084&wheelId=99cd8bd84ffd11ebb7c87cd30adaf108&memberName=%E7%8E%8B%E6%B7%91%E8%8D%A3&memberMobile=17600196974&projectName=%E5%A4%A7%E8%BF%9E%E5%A4%A7%E6%B9%96%E5%B1%B1%E8%AF%AD&regionId=20&regionName=%E5%A4%A7%E8%BF%9E%E5%B8%82&memberId=8a67895b6ed6da61016eefac31102d77&projectId=23322783

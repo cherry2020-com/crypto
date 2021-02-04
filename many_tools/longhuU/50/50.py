@@ -5,6 +5,8 @@ import re
 import sys
 from datetime import datetime
 
+from func_timeout import FunctionTimedOut
+
 sys.path.extend(['D:/Coding/my_tools/'])
 sys.path.extend(['/Users/mingleiweng/Coding/Coding/my_tools'])
 
@@ -36,7 +38,7 @@ def get_data():
 
 if __name__ == '__main__':
     file_path = sys.argv[1]
-    date_times = "2020-12-24 14:00:00"
+    date_times = "14:00:00"
     # time_diff_ms = get_time_diff()
     # print '-->time_diff_ms', time_diff_ms
     date_times = sys.argv[2] if len(sys.argv) == 3 else date_times
@@ -67,6 +69,6 @@ if __name__ == '__main__':
         except PanicBuyingTimesException as e:
             print '-->ERROR:PanicBuyingTimesException:', e
             break
-        except Exception as e:
+        except BaseException as e:
             print '-->ERROR:Exception:', e
         sys.stdout.flush()
