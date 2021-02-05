@@ -2,7 +2,7 @@
 # - * - encoding: UTF-8 - * -
 import sys
 from datetime import datetime
-
+sys.path.extend(['/data/coding/my_tools/'])
 from utils.buying_times import PanicBuyingTimes, PanicBuyingTimesException
 from utils.fiddler import RawToPython, FiddlerRequestException
 
