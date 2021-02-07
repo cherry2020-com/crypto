@@ -18,7 +18,7 @@ def rrr(file_name):
    print u'{}:{}-{}'.format(
       datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
       os.path.basename(file_name),
-      rtp.requests().text)
+      rtp.requests().text).encode('utf-8')
 
 
 if __name__ == '__main__':
