@@ -1,14 +1,18 @@
-GET /propertyNew/ajax/lotteryDraw?combinedId=1762&componentId=mod_1606282060323&memberRole=1,2,4&planJoinTimes=1&wheelId=96c110f12eed11eba979506b4bc2739a HTTP/1.1
+POST /proxy-wrap/mkbg/combined/activity/lotteryV2 HTTP/1.1
 Host: m.uhome.longhu.net
 Connection: keep-alive
-Accept: application/json, text/plain, */*
+Content-Length: 313
+Accept: */*
+X-Requested-With: XMLHttpRequest
 User-Agent: User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/qd-app-4.5.8-ios/qd-app-4.5.8-ios
-x-requested-with: XMLHttpRequest
+Content-Type: application/x-www-form-urlencoded
+Origin: https://m.uhome.longhu.net
 Sec-Fetch-Site: same-origin
 Sec-Fetch-Mode: cors
 Sec-Fetch-Dest: empty
-Referer: https://m.uhome.longhu.net/propertyNew/turntable/1762
+Referer: https://m.uhome.longhu.net/polymer/1987
 Accept-Encoding: gzip, deflate, br
 Accept-Language: zh-CN,zh;q=0.9
-Cookie: acw_tc=2760829d16080110122613542e0d45cdecbad6fa4d3e0fdbe3765ff2ff0694; gr_user_id=b1bd03ee-7443-4ccd-836a-15481527b703; 9c7d1bc614c91f4e_gr_session_id=2684219c-06cf-4237-966f-aca00de530a1; zgclear=true; zg_did=%7B%22did%22%3A%20%2217664ecde3d4d0-0af563e22a006f-163a6153-168000-17664ecde3e9ff%22%7D; grwng_uid=fc50262f-2bcd-49f5-829a-6dfe3eecf098; 9c7d1bc614c91f4e_gr_session_id_2684219c-06cf-4237-966f-aca00de530a1=true; _dx_uzZo5y=435a98126b4642ce4c16d7d8113c51815e3036ef5ec461521f4ff8254260d80c196b7da8; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjAyY2I0MGM2Nzc5IiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MDJjYjQwYzY3NzgifQ==; P.sig=si-K1VYD817-xS9edstir5TuvsU; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=2684219c-06cf-4237-966f-aca00de530a1; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a678951764208160176602cb40c6779; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201608011013697%2C%22updated%22%3A%201608011046009%2C%22info%22%3A%201608011013699%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1608011082|1608011012; 9c7d1bc614c91f4e_gr_cs1=8a678951764208160176602cb40c6779; T=AWbkTYLWqKtRgcw98oI61iH3cR5c8RZa; T.sig=9b4tG1ig-vPBCmS2Zp8H_jgDS5w
+Cookie: acw_tc=2760825816126860625653267e5f7a345bedef251a0dba6c899ae9ca77c366; zgclear=true; zg_did=%7B%22did%22%3A%20%221777b947809912-0e8916329ed2d5-3b7c0267-445c0-1777b94780aa37%22%7D; gr_user_id=a85ef8e8-e5b1-4aa6-9391-4496397b4eb2; 9c7d1bc614c91f4e_gr_session_id=06972569-2f35-4cca-8a0b-6928bba0aa34; grwng_uid=24cd4e8f-6ed3-452e-be61-d9a4a2b8848b; 9c7d1bc614c91f4e_gr_session_id_06972569-2f35-4cca-8a0b-6928bba0aa34=true; _dx_uzZo5y=d931345cdc4560b6a4ec69d1f3b2ba873f6a99621ab8470236f144ceb15abe504c240e04; P=eyJwaWQiOiIyMzMyMjc4MyIsIm1pZCI6IjhhNjc4OTUxNzY0MjA4MTYwMTc2NjAyY2I0MGM2Nzc5IiwiYWlkIjoiOGE2Nzg5NTE3NjQyMDgxNjAxNzY2MDJjYjQwYzY3NzgifQ==; P.sig=si-K1VYD817-xS9edstir5TuvsU; 9c7d1bc614c91f4e_gr_last_sent_sid_with_cs1=06972569-2f35-4cca-8a0b-6928bba0aa34; 9c7d1bc614c91f4e_gr_last_sent_cs1=8a678951764208160176602cb40c6779; T.sig=w-lUGUjjzBWLvBIVnH2HK-d9Cn4; SERVERID=d7f36bd542c67db4fa2acd0692ca89bf|1612686121|1612686062; zg_56db8b9840e74840a1d8fa7c958ac0ca=%7B%22sid%22%3A%201612686063628%2C%22updated%22%3A%201612686121710%2C%22info%22%3A%201612686063631%2C%22superProperty%22%3A%20%22%7B%5C%22%E5%BA%94%E7%94%A8%E5%90%8D%E7%A7%B0%5C%22%3A%20%5C%22U%E6%83%B3%E5%AE%B6%5C%22%7D%22%2C%22platform%22%3A%20%22%7B%7D%22%2C%22utm%22%3A%20%22%7B%7D%22%2C%22referrerDomain%22%3A%20%22%22%7D; 9c7d1bc614c91f4e_gr_cs1=8a678951764208160176602cb40c6779
 
+combinedId=1987&componentId=mod_1611911779711&wheelId=9718654f621811ebb7c87cd30adaf108&memberName=18842670608&memberMobile=18842670608&projectName=%E5%A4%A7%E8%BF%9E%E5%A4%A7%E6%B9%96%E5%B1%B1%E8%AF%AD&regionId=20&regionName=%E5%A4%A7%E8%BF%9E%E5%B8%82&memberId=8a678951764208160176602cb40c6779&projectId=23322783
