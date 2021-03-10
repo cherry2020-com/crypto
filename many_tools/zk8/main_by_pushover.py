@@ -332,7 +332,7 @@ if __name__ == '__main__':
         if sys.argv[1] == 'hot':
             enable_new = False
     print '--> ENABLE_NEW = {}'.format(enable_new)
-    time_sleep = 5
+    time_sleep = 10
     if len(sys.argv) >= 3:
         time_sleep = int(sys.argv[2][:-1])
     print '--> TIME_SLEEP = {}'.format(time_sleep)
@@ -395,7 +395,7 @@ if __name__ == '__main__':
                 print ">>Send_My_Hot|",
             print "Refresh|%s|" % datetime.datetime.now()
 
-        time.sleep(random.randint(time_sleep, time_sleep+3))
+        time.sleep(random.randint(time_sleep, time_sleep+5))
 
         count += 1
         if count == WAIT_HOT_COUNT:
