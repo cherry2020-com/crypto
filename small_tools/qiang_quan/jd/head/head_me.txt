@@ -1,10 +1,14 @@
-GET /client.action?functionId=lite_newBabelAwardCollection&body={%22activityId%22%3A%2242k7z5ujTNZ39L6JowfkreNC8xed%22%2C%22scene%22%3A%223%22%2C%22platform%22%3A%223%22%2C%22orgType%22%3A%222%22%2C%22openId%22%3A%22-1%22%2C%22pageClickKey%22%3A%22-1%22%2C%22eid%22%3A%22HICNJ2EOT2LC5HKFCSMCSYCS6I76QKZUMY5BCCXTVNCIQPLPHZDQMR5IHXTM47WOIWCP7R54VHTBAIEMWSV523R7JU%22%2C%22fp%22%3A%225cd6f89b6eac993d1c20d881a006bc59%22%2C%22shshshfp%22%3A%224cbc94a1c44af122b4c8be334177eb66%22%2C%22shshshfpa%22%3A%2283f77ae3-99ee-c0b6-3055-98970cef4321-1576576037%22%2C%22shshshfpb%22%3A%22usvPQrjff%2F5hZTG32FnCuQg%3D%3D%22%2C%22childActivityUrl%22%3A%22https%3A%2F%2Fpro.m.jd.com%2Fmall%2Factive%2F42k7z5ujTNZ39L6JowfkreNC8xed%2Findex.html%3Futm_user%3Dplusmember%26ad_od%3Dshare%26utm_source%3Dandroidapp%26utm_medium%3Dappshare%26utm_campaign%3Dt_335139774%26utm_term%3DCopyURL%22%2C%22pageClick%22%3A%22Babel_Coupon%22%2C%22actKey%22%3A%224EE79DC54E719B021D122E35B4852CA5DCF774C0E18E79BE21B0480405E57005_babel%22%2C%22mitemAddrId%22%3A%22%22%2C%22geo%22%3A{%22lng%22%3A%22%22%2C%22lat%22%3A%22%22}%2C%22addressId%22%3A%22%22%2C%22posLng%22%3A%22%22%2C%22posLat%22%3A%22%22%2C%22focus%22%3A%22%22%2C%22innerAnchor%22%3A%22%22%2C%22cv%22%3A%222.0%22}&screen=750*1334&client=wh5&clientVersion=1.0.0&sid=&uuid=1914422193&area= HTTP/1.1
-Host: api.m.jd.com
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0) Gecko/20100101 Firefox/78.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+POST /common/pointRedeem/drawGrantTypeCoupon HTTP/1.1
+Host: lzkjdz-isv.isvjcloud.com
+Accept: application/json
 Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-cn
 Connection: keep-alive
-Cookie: retina=1; cid=9; webp=1; visitkey=36112288483056090; autoOpenApp_downCloseDate_auto=1597195481431_21600000; shshshfp=fad9bd4172459f5028ad35f1c01caa82; shshshfpa=896bf069-e2c0-ed54-483d-8e645f25f445-1594825222; shshshfpb=krKeW8twzNZ2NcmwXu7%20MZg%3D%3D; jcap_dvzw_fp=71be2214aa0dc1287a6585749e4d4117$800892283803; TrackerID=42MhIUr_AfTj9gvLqhUo9ut921t77raQDOhJwBE1-WfinSEbEgS03Igm4k2fEI7ACXvQnoV63eDGQldPaUoWNo4kmaGBlE2ZpTZ6EN8PiIUqEESBgC_X3gvzIraeWLyPXnVymonQE2rW1jM64tKcXQ; pt_key=AAJfDxo0ADDLN-Z-lgnMlRFu2h8FFa444QKdKmfLbNgYW-Hq_nx6sPd_T5cdsHK5s0CNslG5Ico; pt_pin=weng645008699; pt_token=x96u2aw1; pwdt_id=weng645008699; whwswswws=; __wga=1597195487939.1597195487939.1594910498717.1594825274962.1.3; sc_width=320; wxa_level=1; wqmnx1=MDEyNjM4Ny9qeW9vMjVpIG9lUzQubzBvMmZVMlZPKSgp; jxsid=15971954876979712765; PPRD_P=; __jdv=122270672%7Cdirect%7C-%7Cnone%7C-%7C1597195487942; __jda=122270672.36112288483056090.1597195487.1597195487.1597195487.1; jxsid_s_t=1597195488003; jxsid_s_u=https%3A//home.m.jd.com/myJd/newhome.action; shshshsID=4958ea161b340232fa7931a141f26cd2_1_1597195488841
-Upgrade-Insecure-Requests: 1
-
+Content-Length: 113
+Content-Type: application/x-www-form-urlencoded
+Cookie: __jd_ref_cls=Mnpm_ComponentApplied; mba_muid=16195693207041364620271.2582.1619569663212; mba_sid=2582.17; __jda=60969652.16195693207041364620271.1619569320.1619569320.1619569320.1; __jdb=60969652.5.16195693207041364620271|1.1619569320; __jdc=60969652; __jdv=60969652|kong|t_1000089893_157_0_184__98749c6d0ce529bd|tuiguang|99e2e8bf1bc443569bb88d8abe4d48db|1619569269000; pre_seq=1; pre_session=4b56c984c1edeaab6719f1cfd5722900258c2b7a|7896; LZ_TOKEN_KEY=lztokenpage918f15f96d4c43f68d8374311ab938fd; LZ_TOKEN_VALUE=B0oH3vDY2bhHWuKbVaJ+XQ==
+Host: lzkjdz-isv.isvjcloud.com
+Origin: https://lzkjdz-isv.isvjcloud.com
+Referer: https://lzkjdz-isv.isvjcloud.com/apple/coupon/viewCouponSet
+User-Agent: jdapp;iPhone;9.5.2;14.4.2;4b56c984c1edeaab6719f1cfd5722900258c2b7a;network/wifi;ADID/4E5727A1-0A1E-4196-BC3D-444C34767123;supportApplePay/0;hasUPPay/0;hasOCPay/0;model/iPhone11,8;addressid/1056717166;supportBestPay/0;appBuild/167650;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1
+X-Requested-With: XMLHttpRequest
