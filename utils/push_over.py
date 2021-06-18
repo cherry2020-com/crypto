@@ -92,7 +92,7 @@ class Pushover(object):
             print ''
             print '--> push_over.py: ', self.token_key
             print '--> push_over.py: ', e
-            if "7500" in e:
+            if "7500" in e or "limit" in e:
                 self._reset_next_token()
             else:
                 time.sleep(1)
