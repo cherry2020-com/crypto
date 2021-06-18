@@ -58,6 +58,7 @@ class Pushover(object):
             self.token_key = self.token_key + str(_fix)
         if self.token_key not in ALL_TOKENS_MAP:
             self.token_key = 'over_7500'
+        print '--> Reset Next Token: {}'.format(self.token_key)
         init(ALL_TOKENS_MAP[self.token_key], self.sound)
 
     def send(self, message, **kwargs):
