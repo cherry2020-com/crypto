@@ -1,0 +1,14 @@
+POST /app/register/doctorDateList HTTP/1.1
+Host: app.dfj0411.cn
+Content-Type: application/x-www-form-urlencoded
+Origin: https://app.dfj0411.cn
+Accept-Encoding: gzip, deflate, br
+Cookie: app_access_token=UGlpFAlTvmwL9XWK4x2GLpjqxC8m2yyljYfCCVYaF4w
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;iOS yuge_dlfy_1.1.3
+Referer: https://app.dfj0411.cn/mobile/register/register.html?yg_showTitle=0
+Content-Length: 54
+Accept-Language: zh-cn
+
+data={"deptCode":"1016","hasCard":1,"doctorId":"1078"}

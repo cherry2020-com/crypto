@@ -5,3 +5,4 @@ qiniu
 python-pushover
 lxml
 func-timeout
+sqlalchemy < 1.4.0

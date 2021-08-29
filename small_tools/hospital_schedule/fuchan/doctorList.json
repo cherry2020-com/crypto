@@ -1,0 +1,181 @@
+POST /app/register/doctorList HTTP/1.1
+Host: app.dfj0411.cn
+Content-Type: application/x-www-form-urlencoded
+Origin: https://app.dfj0411.cn
+Accept-Encoding: gzip, deflate, br
+Cookie: app_access_token=UGlpFAlTvmwL9XWK4x2GLpjqxC8m2yyljYfCCVYaF4w
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;iOS yuge_dlfy_1.1.3
+Referer: https://app.dfj0411.cn/mobile/register/register.html?yg_showTitle=0
+Content-Length: 36
+Accept-Language: zh-cn
+
+data={"deptCode":"1016","hasCard":1}
+
+
+
+{
+	"result": {
+		"doctorList": [{
+			"doctorName": "张谦",
+			"doctorId": "1646",
+			"doctorProfession": "副主任医师",
+			"doctorSkill": "妇科常见疾病诊治",
+			"status": "0"
+		}, {
+			"doctorName": "朱芳",
+			"doctorId": "1709",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产 妊娠期糖尿病",
+			"status": "0"
+		}, {
+			"doctorName": "卜秀华",
+			"doctorId": "1012",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "董燕",
+			"doctorId": "1078",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学 产前诊断",
+			"status": "0"
+		}, {
+			"doctorName": "冯去非",
+			"doctorId": "1092",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "高危产科、多胎妊娠",
+			"status": "0"
+		}, {
+			"doctorName": "郭邑",
+			"doctorId": "1127",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "高危产科 产前诊断",
+			"status": "0"
+		}, {
+			"doctorName": "郎爽",
+			"doctorId": "1183",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "产科相关",
+			"status": "0"
+		}, {
+			"doctorName": "李玉岩",
+			"doctorId": "1224",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "产科常见疾病诊治",
+			"status": "0"
+		}, {
+			"doctorName": "吕世杰",
+			"doctorId": "1309",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学",
+			"status": "0"
+		}, {
+			"doctorName": "乔新民",
+			"doctorId": "1347",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学 高危产科",
+			"status": "0"
+		}, {
+			"doctorName": "申明淑",
+			"doctorId": "1366",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学",
+			"status": "0"
+		}, {
+			"doctorName": "孙姝",
+			"doctorId": "1414",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学",
+			"status": "0"
+		}, {
+			"doctorName": "汪霆",
+			"doctorId": "2000",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "王彦",
+			"doctorId": "1504",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学 产前诊断",
+			"status": "0"
+		}, {
+			"doctorName": "吴乃文",
+			"doctorId": "1532",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "杨鹃",
+			"doctorId": "2015",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学 高危产科",
+			"status": "0"
+		}, {
+			"doctorName": "于达",
+			"doctorId": "1602",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "妇科常见疾病诊治",
+			"status": "0"
+		}, {
+			"doctorName": "于海华",
+			"doctorId": "1897",
+			"doctorProfession": "主治医师",
+			"doctorSkill": "产前诊断 遗传咨询",
+			"status": "0"
+		}, {
+			"doctorName": "战芳",
+			"doctorId": "2111",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "围产医学 高危产科",
+			"status": "0"
+		}, {
+			"doctorName": "张锦",
+			"doctorId": "1636",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "张莉",
+			"doctorId": "1643",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "妇科常见疾病诊治",
+			"status": "0"
+		}, {
+			"doctorName": "张旭华",
+			"doctorId": "1672",
+			"doctorProfession": "主任医师",
+			"doctorSkill": "妇科常见病",
+			"status": "0"
+		}, {
+			"doctorName": "关琳琳",
+			"doctorId": "2896",
+			"doctorProfession": "医师",
+			"doctorSkill": "",
+			"status": "1"
+		}, {
+			"doctorName": "李望舒",
+			"doctorId": "2796",
+			"doctorProfession": "医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "冉梦竹",
+			"doctorId": "2894",
+			"doctorProfession": "医师",
+			"doctorSkill": "",
+			"status": "0"
+		}, {
+			"doctorName": "王春阳",
+			"doctorId": "2962",
+			"doctorProfession": "医师",
+			"doctorSkill": "",
+			"status": "1"
+		}]
+	},
+	"resultCode": "0",
+	"time": "2021-08-29 11:24:50",
+	"status": "200"
+}

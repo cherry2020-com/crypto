@@ -1,0 +1,24 @@
+{
+	"result": {
+		"cardInfo": {
+			"cardId": "01bd8aa4-c128-4dd7-8c74-4cb3f41db204",
+			"cardNo": "0010330100022401",
+			"mzh": "1815646",
+			"userName": "李翀",
+			"sex": "女",
+			"nage": "30岁",
+			"nldw": "1",
+			"credentialsNum": "230716199106120047",
+			"tel": "18841164712",
+			"cardBalance": "799",
+			"dateRegister": "2021/5/30 19:35:07",
+			"cardType": "1",
+			"conPw": "9AA48EBA07531103575DA931C06532A1",
+			"status": 1,
+			"createTime": "2021-07-04 21:51:18"
+		}
+	},
+	"resultCode": "0",
+	"time": "2021-08-29 11:20:46",
+	"status": "200"
+}

@@ -1,0 +1,248 @@
+{
+	"result": {
+		"departmentList": [{
+			"yq": "总院",
+			"xkflList": [{
+				"xkfl": "产科",
+				"deptList": [{
+					"deptName": "产科门诊",
+					"deptCode": "1016"
+				}, {
+					"deptName": "产一门诊",
+					"deptCode": "2237"
+				}, {
+					"deptName": "产二门诊",
+					"deptCode": "2232"
+				}, {
+					"deptName": "产三门诊",
+					"deptCode": "2233"
+				}, {
+					"deptName": "产四门诊",
+					"deptCode": "2234"
+				}, {
+					"deptName": "产五门诊",
+					"deptCode": "2235"
+				}, {
+					"deptName": "营养门诊",
+					"deptCode": "2162"
+				}, {
+					"deptName": "产科师生优先门诊",
+					"deptCode": "2252"
+				}]
+			}, {
+				"xkfl": "妇科",
+				"deptList": [{
+					"deptName": "妇科专家门诊",
+					"deptCode": "2170"
+				}, {
+					"deptName": "妇科门诊",
+					"deptCode": "1015"
+				}, {
+					"deptName": "妇科肿瘤专家门诊",
+					"deptCode": "2157"
+				}, {
+					"deptName": "计划生育门诊",
+					"deptCode": "2163"
+				}, {
+					"deptName": "宫颈病变门诊",
+					"deptCode": "2107"
+				}, {
+					"deptName": "妇科师生优先门诊",
+					"deptCode": "2251"
+				}]
+			}, {
+				"xkfl": "乳腺",
+				"deptList": [{
+					"deptName": "乳腺门诊",
+					"deptCode": "2012"
+				}]
+			}, {
+				"xkfl": "中医",
+				"deptList": [{
+					"deptName": "中医门诊",
+					"deptCode": "1018"
+				}]
+			}, {
+				"xkfl": "介入",
+				"deptList": [{
+					"deptName": "妇科介入门诊",
+					"deptCode": "2248"
+				}]
+			}, {
+				"xkfl": "生殖",
+				"deptList": [{
+					"deptName": "生殖不孕",
+					"deptCode": "1020"
+				}, {
+					"deptName": "生殖男科",
+					"deptCode": "2141"
+				}, {
+					"deptName": "生殖不孕专家门诊",
+					"deptCode": "2238"
+				}]
+			}, {
+				"xkfl": "皮肤",
+				"deptList": [{
+					"deptName": "皮肤性病门诊",
+					"deptCode": "2180"
+				}]
+			}, {
+				"xkfl": "超声",
+				"deptList": [{
+					"deptName": "超声专家门诊",
+					"deptCode": "2120"
+				}]
+			}, {
+				"xkfl": "遗传",
+				"deptList": [{
+					"deptName": "遗传咨询门诊",
+					"deptCode": "2179"
+				}]
+			}, {
+				"xkfl": "疼痛睡眠门诊",
+				"deptList": [{
+					"deptName": "疼痛睡眠门诊",
+					"deptCode": "2243"
+				}]
+			}, {
+				"xkfl": "药事",
+				"deptList": [{
+					"deptName": "药事服务门诊",
+					"deptCode": "2244"
+				}]
+			}, {
+				"xkfl": "口腔",
+				"deptList": [{
+					"deptName": "总院口腔门诊",
+					"deptCode": "2231"
+				}]
+			}]
+		}, {
+			"yq": "白山分部(生殖)",
+			"xkflList": [{
+				"xkfl": "生殖",
+				"deptList": [{
+					"deptName": "白山生殖不孕",
+					"deptCode": "2239"
+				}, {
+					"deptName": "白山生殖男科",
+					"deptCode": "2045"
+				}, {
+					"deptName": "白山生殖不孕专家门诊",
+					"deptCode": "2241"
+				}]
+			}, {
+				"xkfl": "妇科",
+				"deptList": [{
+					"deptName": "白山妇科门诊",
+					"deptCode": "2240"
+				}]
+			}, {
+				"xkfl": "中医",
+				"deptList": [{
+					"deptName": "白山中医门诊",
+					"deptCode": "2242"
+				}]
+			}]
+		}, {
+			"yq": "长江路分部(儿保)",
+			"xkflList": [{
+				"xkfl": "儿保",
+				"deptList": [{
+					"deptName": "长江路儿保门诊",
+					"deptCode": "1023"
+				}, {
+					"deptName": "儿保门诊2",
+					"deptCode": "2122"
+				}]
+			}, {
+				"xkfl": "生殖",
+				"deptList": [{
+					"deptName": "长江生殖健康门诊",
+					"deptCode": "1111"
+				}]
+			}, {
+				"xkfl": "产科",
+				"deptList": [{
+					"deptName": "长江产科门诊",
+					"deptCode": "2210"
+				}, {
+					"deptName": "长江产科专家门诊",
+					"deptCode": "2223"
+				}]
+			}, {
+				"xkfl": "中医",
+				"deptList": [{
+					"deptName": "中西医结合康复中心",
+					"deptCode": "2209"
+				}]
+			}, {
+				"xkfl": "盆底",
+				"deptList": [{
+					"deptName": "长江产妇营养门诊",
+					"deptCode": "2222"
+				}, {
+					"deptName": "长江产后42天检查",
+					"deptCode": "2221"
+				}, {
+					"deptName": "长江路妇科盆底",
+					"deptCode": "2124"
+				}]
+			}, {
+				"xkfl": "口腔",
+				"deptList": [{
+					"deptName": "长江口腔门诊",
+					"deptCode": "1024"
+				}]
+			}, {
+				"xkfl": "眼科",
+				"deptList": [{
+					"deptName": "眼科门诊",
+					"deptCode": "1025"
+				}]
+			}, {
+				"xkfl": "心理",
+				"deptList": [{
+					"deptName": "心理健康门诊",
+					"deptCode": "2183"
+				}]
+			}]
+		}, {
+			"yq": "友好分部",
+			"xkflList": [{
+				"xkfl": "妇科",
+				"deptList": [{
+					"deptName": "友好妇科门诊",
+					"deptCode": "2187"
+				}]
+			}, {
+				"xkfl": "产科",
+				"deptList": [{
+					"deptName": "友好产科门诊",
+					"deptCode": "2186"
+				}]
+			}, {
+				"xkfl": "中医",
+				"deptList": [{
+					"deptName": "友好中医门诊",
+					"deptCode": "2188"
+				}]
+			}, {
+				"xkfl": "乳腺",
+				"deptList": [{
+					"deptName": "友好乳腺门诊",
+					"deptCode": "2189"
+				}]
+			}, {
+				"xkfl": "生殖",
+				"deptList": [{
+					"deptName": "友好男科",
+					"deptCode": "1134"
+				}]
+			}]
+		}]
+	},
+	"resultCode": "0",
+	"time": "2021-08-29 11:20:46",
+	"status": "200"
+}
