@@ -8,7 +8,7 @@ from utils.fiddler_session import RawToPython
 
 imp_templ = u'\033[1;33;44m{}\033[0m'
 
-fast_timeout = 1 or FAST_TIMEOUT
+fast_timeout = HARD_TIMEOUT or FAST_TIMEOUT
 
 
 def submit(department_id, doctor_id, good_time):
