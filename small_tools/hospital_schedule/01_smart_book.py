@@ -38,18 +38,20 @@ def save_file(func):
 
 
 def replace_app_access_token():
-    if 'UGlpFAlTvmwL9XWK4x2GLpjqxC8m2yyljYfCCVYaF4w' == APP_ACCESS_TOKEN:
-        print '--> replace_app_access_token: same token'
-        return
-    for _path, _, _files in os.walk(FILE_PATH):
+    for _path, _, _files in os.walk('./fuchan_head_src'):
         for _file in _files:
             head = os.path.join(_path, _file)
             print '--> replace app_access_token:', head
             with open(head) as f:
                 head_data = f.read()
             head_data = head_data.replace('UGlpFAlTvmwL9XWK4x2GLpjqxC8m2yyljYfCCVYaF4w', APP_ACCESS_TOKEN)
-            with open(head, 'wb+') as f:
-                f.write(head_data)
+            to_path = os.path.join(FILE_PATH, _file)
+            if os.path.exists(to_path):
+                with open(to_path) as f:
+                    to_data = f.read()
+            if to_data != head_data:
+                with open(to_path, 'wb+') as f:
+                    f.write(head_data)
 
 
 def check_card_no(is_one=True):

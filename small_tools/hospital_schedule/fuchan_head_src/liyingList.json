@@ -1,0 +1,408 @@
+{
+	"result": {
+		"doctorDateTimeList": [{
+			"dateTime": "2021-09-03 07:30:00",
+			"timeIndexNo": "1",
+			"time": "07:30",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:33:00",
+			"timeIndexNo": "2",
+			"time": "07:33",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:36:00",
+			"timeIndexNo": "3",
+			"time": "07:36",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:39:00",
+			"timeIndexNo": "4",
+			"time": "07:39",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:42:00",
+			"timeIndexNo": "5",
+			"time": "07:42",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:45:00",
+			"timeIndexNo": "6",
+			"time": "07:45",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:48:00",
+			"timeIndexNo": "7",
+			"time": "07:48",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:51:00",
+			"timeIndexNo": "8",
+			"time": "07:51",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:54:00",
+			"timeIndexNo": "9",
+			"time": "07:54",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 07:57:00",
+			"timeIndexNo": "10",
+			"time": "07:57",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:00:00",
+			"timeIndexNo": "11",
+			"time": "08:00",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:03:00",
+			"timeIndexNo": "12",
+			"time": "08:03",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:06:00",
+			"timeIndexNo": "13",
+			"time": "08:06",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:09:00",
+			"timeIndexNo": "14",
+			"time": "08:09",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:12:00",
+			"timeIndexNo": "15",
+			"time": "08:12",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:15:00",
+			"timeIndexNo": "16",
+			"time": "08:15",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:18:00",
+			"timeIndexNo": "17",
+			"time": "08:18",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:21:00",
+			"timeIndexNo": "18",
+			"time": "08:21",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:24:00",
+			"timeIndexNo": "19",
+			"time": "08:24",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:27:00",
+			"timeIndexNo": "20",
+			"time": "08:27",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:30:00",
+			"timeIndexNo": "21",
+			"time": "08:30",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:33:00",
+			"timeIndexNo": "22",
+			"time": "08:33",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:36:00",
+			"timeIndexNo": "23",
+			"time": "08:36",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:39:00",
+			"timeIndexNo": "24",
+			"time": "08:39",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:42:00",
+			"timeIndexNo": "25",
+			"time": "08:42",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:45:00",
+			"timeIndexNo": "26",
+			"time": "08:45",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:48:00",
+			"timeIndexNo": "27",
+			"time": "08:48",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:51:00",
+			"timeIndexNo": "28",
+			"time": "08:51",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:54:00",
+			"timeIndexNo": "29",
+			"time": "08:54",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 08:57:00",
+			"timeIndexNo": "30",
+			"time": "08:57",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:00:00",
+			"timeIndexNo": "31",
+			"time": "09:00",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:03:00",
+			"timeIndexNo": "32",
+			"time": "09:03",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:06:00",
+			"timeIndexNo": "33",
+			"time": "09:06",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:09:00",
+			"timeIndexNo": "34",
+			"time": "09:09",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:12:00",
+			"timeIndexNo": "35",
+			"time": "09:12",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:15:00",
+			"timeIndexNo": "36",
+			"time": "09:15",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:18:00",
+			"timeIndexNo": "37",
+			"time": "09:18",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:21:00",
+			"timeIndexNo": "38",
+			"time": "09:21",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:24:00",
+			"timeIndexNo": "39",
+			"time": "09:24",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:27:00",
+			"timeIndexNo": "40",
+			"time": "09:27",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:30:00",
+			"timeIndexNo": "41",
+			"time": "09:30",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:33:00",
+			"timeIndexNo": "42",
+			"time": "09:33",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:36:00",
+			"timeIndexNo": "43",
+			"time": "09:36",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:39:00",
+			"timeIndexNo": "44",
+			"time": "09:39",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:42:00",
+			"timeIndexNo": "45",
+			"time": "09:42",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:45:00",
+			"timeIndexNo": "46",
+			"time": "09:45",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:48:00",
+			"timeIndexNo": "47",
+			"time": "09:48",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:51:00",
+			"timeIndexNo": "48",
+			"time": "09:51",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:54:00",
+			"timeIndexNo": "49",
+			"time": "09:54",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}, {
+			"dateTime": "2021-09-03 09:57:00",
+			"timeIndexNo": "50",
+			"time": "09:57",
+			"hospitalName": "妇幼保健院总院",
+			"roomId": "40",
+			"hospitalCode": "03",
+			"status": "0"
+		}]
+	},
+	"resultCode": "0",
+	"time": "2021-08-29 16:14:48",
+	"status": "200"
+}
