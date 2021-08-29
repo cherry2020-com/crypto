@@ -11,7 +11,7 @@ imp_templ = u'\033[1;33;44m{}\033[0m'
 fast_timeout = HARD_TIMEOUT or FAST_TIMEOUT
 
 
-def submit(department_id, doctor_id, good_time):
+def submit(good_time):
     if good_time is None:
         print u'--> 没有可预约的时间, 终止请求'
         return 'none'
@@ -58,6 +58,6 @@ if __name__ == '__main__':
         li_json = json.loads(f.read())
     while True:
         for good_time in li_json['result']['doctorDateTimeList']:
-            _type = submit("2237", "1222", good_time)
+            _type = submit(good_time)
             if _type == 'success':
                 break
