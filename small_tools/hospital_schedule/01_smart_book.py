@@ -8,7 +8,7 @@ import time
 from functools import wraps
 
 from small_tools.hospital_schedule import FILE_PATH, APP_ACCESS_TOKEN, HAS_CARD, DEPARTMENT, HOSPITAL, DOCTOR, \
-    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT
+    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT
 from utils.fiddler_session import RawToPython
 
 
@@ -232,6 +232,7 @@ if __name__ == '__main__':
         time.sleep(1)
     all_datetime = check_docker_datetime(department_id, docker_id)
     good_time, all_datetime = get_good_time(all_datetime)
+    error_count = 0
     while True:
         _type = submit(department_id, docker_id, good_time)
         if _type == 'success':
@@ -240,8 +241,11 @@ if __name__ == '__main__':
             good_time, all_datetime = get_good_time(all_datetime)
         elif _type == 'none':
             break
-        # elif _type == 'error':
-        #     pass
+        elif _type == 'error':
+            error_count += 1
+            if error_count == ERROR_COUNT:
+                error_count = 0
+                good_time, all_datetime = get_good_time(all_datetime)
         # elif _type == 'what?':
         #     pass
     check_card_no(is_one=False)
