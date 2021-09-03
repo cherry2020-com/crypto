@@ -256,6 +256,7 @@ if __name__ == '__main__':
         else:
             print u'--> 未发现医生({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
         time.sleep(sleep_s)
+        check_card_no(is_one=True)
     good_time, all_datetime = get_good_time(all_datetime)
     error_count = 0
     while True:
