@@ -104,7 +104,7 @@ def get_docker_id(department_id):
     body_data = json.loads(req.body_data['data'])
     body_data['hasCard'] = "1" if HAS_CARD else "0"
     body_data['deptCode'] = department_id or DEPARTMENT
-    req.set_param(req_param={"data": json.dumps(body_data)})
+    req.set_param(req_param={"data": json.dumps(body_data, ensure_ascii=False).encode('utf-8')})
     req_data = req.requests(timeout=SLOW_TIMEOUT)
     docker_id = None
     for doctor in req_data.json()['result']['doctorList']:
@@ -125,7 +125,7 @@ def check_docker_date(department_id, doctor_id):
     body_data['hasCard'] = "1" if HAS_CARD else "0"
     body_data['deptCode'] = department_id or DEPARTMENT
     body_data['doctorId'] = doctor_id or DOCTOR
-    req.set_param(req_param={"data": json.dumps(body_data)})
+    req.set_param(req_param={"data": json.dumps(body_data, ensure_ascii=False).encode('utf-8')})
     req_data = req.requests(timeout=SLOW_TIMEOUT)
     is_allow = False
     all_allow_date = []
@@ -149,7 +149,7 @@ def check_docker_datetime(department_id, doctor_id):
     body_data['deptCode'] = department_id or DEPARTMENT
     body_data['doctorId'] = doctor_id or DOCTOR
     body_data['date'] = DATE
-    req.set_param(req_param={"data": json.dumps(body_data)})
+    req.set_param(req_param={"data": json.dumps(body_data, ensure_ascii=False).encode('utf-8')})
     req_data = req.requests(timeout=SLOW_TIMEOUT)
     all_datetime = []
     is_none_time = True
@@ -205,7 +205,7 @@ def submit(department_id, doctor_id, good_time):
     body_data['timeIndexNo'] = good_time['timeIndexNo']
     body_data['deptName'] = DEPARTMENT
     body_data['doctorName'] = DOCTOR
-    req.set_param(req_param={"data": json.dumps(body_data)})
+    req.set_param(req_param={"data": json.dumps(body_data, ensure_ascii=False).encode('utf-8')})
     try:
         req_data = req.requests(timeout=FAST_TIMEOUT)
         req_json = req_data.json()
