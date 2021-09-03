@@ -44,7 +44,6 @@ def replace_app_access_token():
     for _path, _, _files in os.walk('./fuchan_head_src'):
         for _file in _files:
             head = os.path.join(_path, _file)
-            print '--> replace app_access_token:', head
             with open(head) as f:
                 head_data = f.read()
             head_data = head_data.replace('UGlpFAlTvmwL9XWK4x2GLpjqxC8m2yyljYfCCVYaF4w', APP_ACCESS_TOKEN)
@@ -53,6 +52,7 @@ def replace_app_access_token():
                 with open(to_path) as f:
                     to_data = f.read()
             if to_data != head_data:
+                print '--> replace app_access_token:', head
                 with open(to_path, 'wb+') as f:
                     f.write(head_data)
 
@@ -256,7 +256,7 @@ if __name__ == '__main__':
         else:
             print u'--> 未发现医生({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
         time.sleep(sleep_s)
-        check_card_no(is_one=True)
+        # check_card_no(is_one=True)
     good_time, all_datetime = get_good_time(all_datetime)
     error_count = 0
     while True:
@@ -274,4 +274,4 @@ if __name__ == '__main__':
                 good_time, all_datetime = get_good_time(all_datetime)
         # elif _type == 'what?':
         #     pass
-    check_card_no(is_one=False)
+    # check_card_no(is_one=False)
