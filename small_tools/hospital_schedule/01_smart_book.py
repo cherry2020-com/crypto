@@ -9,7 +9,7 @@ from functools import wraps
 import random
 
 from small_tools.hospital_schedule import FILE_PATH, APP_ACCESS_TOKEN, HAS_CARD, DEPARTMENT, HOSPITAL, DOCTOR, \
-    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT
+    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT, TIME_RANOM_RANGE
 from utils.fiddler_session import RawToPython
 
 
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     _, department_id = get_department_id()
 
     while True:
-        sleep_s = random.randint(3, 8)
+        sleep_s = random.randint(*TIME_RANOM_RANGE)
         _, docker_id = get_docker_id(department_id)
         if docker_id:
             _, is_allow, all_date = check_docker_date(department_id, docker_id)
@@ -254,7 +254,7 @@ if __name__ == '__main__':
             else:
                 print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
         else:
-            print u'--> 未发现医生，随机延时{}秒后将再次请求'.format(sleep_s)
+            print u'--> 未发现医生({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
         time.sleep(sleep_s)
     good_time, all_datetime = get_good_time(all_datetime)
     error_count = 0
