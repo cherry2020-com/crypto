@@ -6,6 +6,7 @@ import os
 import pickle
 import time
 from functools import wraps
+import random
 
 from small_tools.hospital_schedule import FILE_PATH, APP_ACCESS_TOKEN, HAS_CARD, DEPARTMENT, HOSPITAL, DOCTOR, \
     SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT
@@ -31,8 +32,10 @@ def save_file(func):
                 res = pickle.load(f)
         else:
             res = func(*args, **kwargs)
-            with open(path, 'wb+') as f:
-                pickle.dump(res, f)
+            is_save = res[0]
+            if is_save:
+                with open(path, 'wb+') as f:
+                    pickle.dump(res, f)
         return res
     return wrapper
 
@@ -89,7 +92,7 @@ def get_department_id(from_file=False):
                     department_id = dep2['deptCode']
     assert department_id
     print '--> get_department_id: ', DEPARTMENT, department_id
-    return department_id
+    return True, department_id
 
 
 @save_file
@@ -109,8 +112,7 @@ def get_docker_id(department_id):
             print imp_templ.format(_str)
         else:
             print u'--> get_docker_id:', doctor['doctorName'], doctor['doctorId'], doctor['doctorProfession']
-    assert docker_id
-    return docker_id
+    return docker_id is not None, docker_id
 
 
 @save_file
@@ -124,14 +126,16 @@ def check_docker_date(department_id, doctor_id):
     req.set_param(req_param={"data": json.dumps(body_data)})
     req_data = req.requests(timeout=SLOW_TIMEOUT)
     is_allow = False
+    all_allow_date = []
     for each in req_data.json()['result']['doctorDateList']:
+        all_allow_date.append(each['date'])
         if each['date'] == DATE:
             _str = u'!!> get_docker_date_list: {}, {}'.format(DOCTOR, each['date'])
             print imp_templ.format(_str)
             is_allow = True
         else:
             print u'--> get_docker_date_list:', DOCTOR, each['date']
-    return is_allow
+    return is_allow, is_allow, all_allow_date
 
 
 @save_file
@@ -146,13 +150,14 @@ def check_docker_datetime(department_id, doctor_id):
     req.set_param(req_param={"data": json.dumps(body_data)})
     req_data = req.requests(timeout=SLOW_TIMEOUT)
     all_datetime = []
+    is_none_time = True
     for each in req_data.json()['result']['doctorDateTimeList']:
         if IS_DEBUG_TIME:
             each['status'] = 1
         if int(each['status']) == 1:
-            print '-->check_docker_datetime: {}'.format(each['time'])
             all_datetime.append(each)
-    return all_datetime
+            is_none_time = False
+    return bool(all_datetime), is_none_time, all_datetime
 
 
 def get_good_time(all_datetime):
@@ -223,14 +228,34 @@ def submit(department_id, doctor_id, good_time):
 if __name__ == '__main__':
     replace_app_access_token()
     check_card_no(is_one=True)
-    department_id = get_department_id()
-    docker_id = get_docker_id(department_id)
+    _, department_id = get_department_id()
+
     while True:
-        is_allow = check_docker_date(department_id, docker_id)
-        if is_allow:
-            break
-        time.sleep(1)
-    all_datetime = check_docker_datetime(department_id, docker_id)
+        sleep_s = random.randint(3, 8)
+        _, docker_id = get_docker_id(department_id)
+        if docker_id:
+            _, is_allow, all_date = check_docker_date(department_id, docker_id)
+            if all_date:
+                print u'--> 医生({})可选日期: {}'.format(DOCTOR, all_date)
+            else:
+                print u'--> 医生({})无选日期'.format(DOCTOR, all_date)
+            if is_allow:
+                _, is_none_time, all_datetime = check_docker_datetime(department_id, docker_id)
+                if all_datetime:
+                    times = [x['time'] for x in all_datetime]
+                    print u'--> 医生({})可选时间: {}'.format(DOCTOR, times)
+                    break
+                else:
+                    if is_none_time:
+                        print u'--> 找到({})的({})的准确时间表，但已经预约满！随机延时{}秒后将再次请求'.format(
+                            DOCTOR, DATE, sleep_s)
+                    else:
+                        print u'--> 未发现({})的({})的准确时间表，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+            else:
+                print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+        else:
+            print u'--> 未发现医生，随机延时{}秒后将再次请求'.format(sleep_s)
+        time.sleep(sleep_s)
     good_time, all_datetime = get_good_time(all_datetime)
     error_count = 0
     while True:

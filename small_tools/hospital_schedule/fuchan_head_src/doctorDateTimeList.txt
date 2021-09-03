@@ -11,4 +11,4 @@ Referer: https://app.dfj0411.cn/mobile/register/register.html?yg_showTitle=0
 Content-Length: 134
 Accept-Language: zh-cn
 
-data={"deptCode":"1016","hasCard":1,"doctorId":"2111","date":"2021-09-02","longitude":"121.51619140625","latitude":"38.8725208875868"}
+data={"deptCode":"1016","hasCard":1,"doctorId":"2111","date":"2021-09-02","longitude":"121.57715898357","latitude":"38.9347608085865"}
