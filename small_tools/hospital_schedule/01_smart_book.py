@@ -19,7 +19,7 @@ imp_templ = u'\033[1;33;44m{}\033[0m'
 def save_file(func):
     @wraps(func)  # 保持原函数名不变
     def wrapper(*args, **kwargs):
-        print '--> start: ', func.__name__
+
         base_path = './fuchan_tmp'
         if not os.path.exists(base_path):
             os.mkdir(base_path)
@@ -28,9 +28,11 @@ def save_file(func):
             os.mkdir(path)
         path = os.path.join(path, func.__name__)
         if os.path.exists(path):
+            print '--> cache: ', func.__name__
             with open(path) as f:
                 res = pickle.load(f)
         else:
+            print '--> start: ', func.__name__
             res = func(*args, **kwargs)
             is_save = res[0]
             if is_save:
@@ -231,32 +233,35 @@ if __name__ == '__main__':
     _, department_id = get_department_id()
 
     while True:
-        sleep_s = random.randint(*TIME_RANOM_RANGE)
-        _, docker_id = get_docker_id(department_id)
-        if docker_id:
-            _, is_allow, all_date = check_docker_date(department_id, docker_id)
-            if all_date:
-                print u'--> 医生({})可选日期: {}'.format(DOCTOR, all_date)
-            else:
-                print u'--> 医生({})无选日期'.format(DOCTOR, all_date)
-            if is_allow:
-                _, is_none_time, all_datetime = check_docker_datetime(department_id, docker_id)
-                if all_datetime:
-                    times = [x['time'] for x in all_datetime]
-                    print u'--> 医生({})可选时间: {}'.format(DOCTOR, times)
-                    break
+        try:
+            sleep_s = random.randint(*TIME_RANOM_RANGE)
+            _, docker_id = get_docker_id(department_id)
+            if docker_id:
+                _, is_allow, all_date = check_docker_date(department_id, docker_id)
+                if all_date:
+                    print u'--> 医生({})可选日期: {}'.format(DOCTOR, all_date)
                 else:
-                    if is_none_time:
-                        print u'--> 找到({})的({})的准确时间表，但已经预约满！随机延时{}秒后将再次请求'.format(
-                            DOCTOR, DATE, sleep_s)
+                    print u'--> 医生({})无选日期'.format(DOCTOR, all_date)
+                if is_allow:
+                    _, is_none_time, all_datetime = check_docker_datetime(department_id, docker_id)
+                    if all_datetime:
+                        times = [x['time'] for x in all_datetime]
+                        print u'--> 医生({})可选时间: {}'.format(DOCTOR, times)
+                        break
                     else:
-                        print u'--> 未发现({})的({})的准确时间表，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+                        if is_none_time:
+                            print u'--> 找到({})的({})的准确时间表，但已经预约满！随机延时{}秒后将再次请求'.format(
+                                DOCTOR, DATE, sleep_s)
+                        else:
+                            print u'--> 未发现({})的({})的准确时间表，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+                else:
+                    print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
             else:
-                print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
-        else:
-            print u'--> 未发现医生({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
-        time.sleep(sleep_s)
-        # check_card_no(is_one=True)
+                print u'--> 医生列表为空，({} {})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+            time.sleep(sleep_s)
+            # check_card_no(is_one=True)
+        except Exception as e:
+            print '--> Unknow Error: {}'.format(e)
     good_time, all_datetime = get_good_time(all_datetime)
     error_count = 0
     while True:
