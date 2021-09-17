@@ -9,7 +9,8 @@ from functools import wraps
 import random
 
 from small_tools.hospital_schedule import FILE_PATH, APP_ACCESS_TOKEN, HAS_CARD, DEPARTMENT, HOSPITAL, DOCTOR, \
-    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT, TIME_RANOM_RANGE
+    SLOW_TIMEOUT, DATE, TIME, FAST_TIMEOUT, IS_DEBUG_TIME, IS_DEBUG_SUBMIT, ERROR_COUNT, RUSH_TIME, \
+    RUSH_TIME_MINUTES_EARLY, RUSH_TIME_MINUTES_LAG, FAST_TIME_RANDOM_RANGE, TIME_RANDOM_RANGE
 from utils.fiddler_session import RawToPython
 
 
@@ -227,6 +228,17 @@ def submit(department_id, doctor_id, good_time):
         return 'error'
 
 
+def get_time_random_range():
+    today = datetime.date.today().strftime('%Y-%m-%d')
+    rush_time = datetime.datetime.strptime('{} {}'.format(today, RUSH_TIME), '%Y-%m-%d %H:%M:%S')
+    rush_time_minutes_early = rush_time - datetime.timedelta(minutes=RUSH_TIME_MINUTES_EARLY)
+    rush_time_minutes_lag = rush_time + datetime.timedelta(minutes=RUSH_TIME_MINUTES_LAG)
+    if rush_time_minutes_early <= datetime.datetime.now() <= rush_time_minutes_lag:
+        return FAST_TIME_RANDOM_RANGE
+    return TIME_RANDOM_RANGE
+
+
+
 if __name__ == '__main__':
     replace_app_access_token()
     check_card_no(is_one=True)
@@ -234,7 +246,7 @@ if __name__ == '__main__':
     while True:
         while True:
             try:
-                sleep_s = random.randint(*TIME_RANOM_RANGE)
+                sleep_s = random.randint(*get_time_random_range())
                 _, docker_id = get_docker_id(department_id)
                 if docker_id:
                     _, is_allow, all_date = check_docker_date(department_id, docker_id)
