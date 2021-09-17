@@ -140,7 +140,7 @@ def check_docker_date(department_id, doctor_id):
     return is_allow, is_allow, all_allow_date
 
 
-@save_file
+# @save_file
 def check_docker_datetime(department_id, doctor_id):
     head = os.path.join(FILE_PATH, 'doctorDateTimeList.txt')
     req = RawToPython(head)
@@ -231,52 +231,54 @@ if __name__ == '__main__':
     replace_app_access_token()
     check_card_no(is_one=True)
     _, department_id = get_department_id()
-
     while True:
-        try:
-            sleep_s = random.randint(*TIME_RANOM_RANGE)
-            _, docker_id = get_docker_id(department_id)
-            if docker_id:
-                _, is_allow, all_date = check_docker_date(department_id, docker_id)
-                if all_date:
-                    print u'--> 医生({})可选日期: {}'.format(DOCTOR, all_date)
-                else:
-                    print u'--> 医生({})无选日期'.format(DOCTOR, all_date)
-                if is_allow:
-                    _, is_none_time, all_datetime = check_docker_datetime(department_id, docker_id)
-                    if all_datetime:
-                        times = [x['time'] for x in all_datetime]
-                        print u'--> 医生({})可选时间: {}'.format(DOCTOR, times)
-                        break
+        while True:
+            try:
+                sleep_s = random.randint(*TIME_RANOM_RANGE)
+                _, docker_id = get_docker_id(department_id)
+                if docker_id:
+                    _, is_allow, all_date = check_docker_date(department_id, docker_id)
+                    if all_date:
+                        print u'--> 医生({})可选日期: {}'.format(DOCTOR, all_date)
                     else:
-                        if is_none_time:
-                            print u'--> 找到({})的({})的准确时间表，但已经预约满！随机延时{}秒后将再次请求'.format(
-                                DOCTOR, DATE, sleep_s)
+                        print u'--> 医生({})无选日期'.format(DOCTOR, all_date)
+                    if is_allow:
+                        _, is_none_time, all_datetime = check_docker_datetime(department_id, docker_id)
+                        if all_datetime:
+                            times = [x['time'] for x in all_datetime]
+                            print u'--> 医生({})可选时间: {}'.format(DOCTOR, times)
+                            break
                         else:
-                            print u'--> 未发现({})的({})的准确时间表，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+                            if is_none_time:
+                                print u'--> 找到({})的({})的准确时间表，但已经预约满！随机延时{}秒后将再次请求'.format(
+                                    DOCTOR, DATE, sleep_s)
+                            else:
+                                print u'--> 未发现({})的({})的准确时间表，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+                    else:
+                        print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
                 else:
-                    print u'--> 未发现({})的可预约时间({})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
-            else:
-                print u'--> 医生列表为空，({} {})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
-            time.sleep(sleep_s)
-            # check_card_no(is_one=True)
-        except Exception as e:
-            print '--> Unknow Error: {}'.format(e)
-    good_time, all_datetime = get_good_time(all_datetime)
-    error_count = 0
-    while True:
-        _type = submit(department_id, docker_id, good_time)
+                    print u'--> 医生列表为空，({} {})，随机延时{}秒后将再次请求'.format(DOCTOR, DATE, sleep_s)
+                time.sleep(sleep_s)
+                # check_card_no(is_one=True)
+            except Exception as e:
+                print '--> Unknow Error: {}'.format(e)
+        good_time, all_datetime = get_good_time(all_datetime)
+        error_count = 0
+        while True:
+            _type = submit(department_id, docker_id, good_time)
+            if _type == 'success':
+                break
+            elif _type == 'fail':
+                good_time, all_datetime = get_good_time(all_datetime)
+            elif _type == 'none':
+                break
+            elif _type == 'error':
+                error_count += 1
+                if error_count == ERROR_COUNT:
+                    error_count = 0
+                    good_time, all_datetime = get_good_time(all_datetime)
+            # elif _type == 'what?':
+            #     pass
         if _type == 'success':
             break
-        elif _type == 'fail':
-            good_time, all_datetime = get_good_time(all_datetime)
-        elif _type == 'none':
-            break
-        elif _type == 'error':
-            error_count += 1
-            if error_count == ERROR_COUNT:
-                error_count = 0
-                good_time, all_datetime = get_good_time(all_datetime)
-        # elif _type == 'what?':
-        #     pass
-    # check_card_no(is_one=False)
+        # check_card_no(is_one=False)
